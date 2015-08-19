@@ -1,0 +1,52 @@
+<ion-view view-title="个人设置">
+    <ion-nav-bar class="bar-positive" align-title="center">
+       
+        <h1 class="title">个人设置</h1>
+       
+    </ion-nav-bar>
+    <ion-content class="stable-bg">
+        <div class="list ">
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow"  ui-sref="login" ng-if="!loginName">
+                <img ng-src="img/commentfailure_logout.jpg" style="width:100%">
+                 <p ng-if="!processing">立即登录</p>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow " ui-sref="basicInfo" ng-if="loginName">
+                <img ng-src="{{currentUser.avatar_url}}" style="width:100%">
+                <div class="row">
+                    <div class="col">
+                        <h2 ng-bind="currentUser.loginname">-</h2>
+                        <p>积分:{{currentUser.score}}</p>
+                        <p>等级:5星</p>
+                    </div>
+                </div>
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+        </div>
+        <div class="list ">
+            <a class="item item-icon-left item-icon-right" ui-sref="myGift">
+                <i class="icon ion-ios-cart energized"></i>我的礼品
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+            <a class="item item-icon-left item-icon-right" ui-sref="honorRanking.local">
+                <i class="icon ion-podium calm"></i>荣誉排名
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+            <a class="item item-icon-left item-icon-right wg-box-shadow " ui-sref="help">
+                <i class="icon ion-heart assertive"></i>求助与帮助
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+        </div>
+        <div class="list ">
+            <a class="item item-icon-left item-icon-right wg-box-shadow " ui-sref="myTeam">
+                <i class="icon ion-person-stalker calm"></i>我的团队
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+        </div>
+        <div class="list  wg-logoutBtn padding" ng-if="loginName">
+            <button class="button button-block button-outline button-positive" ng-click="logout()">
+                退出登录
+            </button>
+        </div>
+    </ion-content>
+</ion-view>

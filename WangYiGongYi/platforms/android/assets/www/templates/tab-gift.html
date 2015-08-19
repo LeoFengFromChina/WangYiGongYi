@@ -1,0 +1,37 @@
+<ion-view view-title="礼品店">
+   <ion-header-bar class="bar-positive" align-title="center">
+        <h1 class="title">礼品店</h1>
+    </ion-header-bar>
+    <ion-content class="stable-bg">
+        <ion-slide-box on-slide-changed="slideHasChanged($index)" class="slidebox" auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;">
+            <ion-slide>
+                <div class="box">
+                    <img ng-src="./img/gift_banner1.jpg" alt="微光公益" style="width:100%"></div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box">
+                    <img ng-src="./img/gift_banner2.jpg" alt="微光公益" style="width:100%"></div>
+            </ion-slide>
+            <ion-slide>
+                <div class="box">
+                    <img ng-src="./img/gift_banner3.jpg" alt="微光公益" style="width:100%"></div>
+            </ion-slide>
+             <ion-slide>
+                <div class="box">
+                    <img ng-src="./img/gift_banner4.jpg" alt="微光公益" style="width:100%"></div>
+            </ion-slide>
+             <ion-slide>
+                <div class="box">
+                    <img ng-src="./img/gift_banner5.jpg" alt="微光公益" style="width:100%"></div>
+            </ion-slide>
+        </ion-slide-box>
+        <div class="row" collection-repeat="gs in gifts">
+            <a class="col col-33" ng-repeat="gift in gs" style="width:33%; display: block;" href="#/gift/{{gift.id}}" >
+            	<img ng-src="{{gift.img}}" style="width:100%;" >
+            	<div>{{gift.name}}</div>
+            </a>
+
+        </div>
+       
+    </ion-content>
+</ion-view>

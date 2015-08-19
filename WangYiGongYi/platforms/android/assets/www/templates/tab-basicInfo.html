@@ -1,0 +1,43 @@
+<ion-view view-title="基本信息">
+ <ion-nav-bar class="bar-positive" align-title="center">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content class="stable-bg">
+        <div class="list ">
+            <a class="item item-avatar-right text-midel" href="#">
+                <img ng-src="{{currentUser.avatar_url}}" style="width:100%"> 头像
+            </a>
+            <a class="item" ui-sref="userName">
+                名称<span class="item-note">{{currentUser.loginname}}</span> 
+            </a>
+            <a class="item" ui-sref="address">
+                常住地址
+            </a>
+            <a class="item" ui-sref="phone">
+                电话<span class="item-note">13580530583</span>
+            </a>
+            <a class="item" ui-sref="email">
+                邮箱<span class="item-note">491238861@qq.com</span>
+            </a>
+            <a class="item" ui-sref="expertise">
+                擅长领域<span class="item-note">webapp开发</span>
+            </a>
+            <a class="item" ui-sref="serviceSillingness">
+                服务意愿<span class="item-note">很高</span>
+            </a>
+            <a class="item wg-box-shadow" ui-sref="feedback">
+                意见反馈<span class="item-note"></span>
+            </a>
+        </div>
+        <div class="list ">
+            <a class="item" ng-click="showActionsheet()">
+                性别<span class="item-note" ng-bind="genter"></span> 
+            </a>
+            <a class="item" ui-sref="area">
+                地区<span class="item-note">广东广州</span>
+            </a>
+        </div>
+       
+    </ion-content>
+</ion-view>

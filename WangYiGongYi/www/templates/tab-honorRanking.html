@@ -1,0 +1,16 @@
+<ion-view title="荣誉排行">
+ <ion-nav-bar class="bar-positive" align-title="center">
+        <ion-nav-back-button>
+        </ion-nav-back-button>
+    </ion-nav-bar>
+    <ion-content>
+        <ion-tabs class="tabs-icon-top tabs-color-active-balanced tabs-light">
+            <ion-tab title="本区排行" icon-off="ion-ios-home-outline" icon-on="ion-ios-home" ui-sref="honorRanking.local" nav-direction="back">
+                <ion-nav-view name="rank-local"></ion-nav-view>
+            </ion-tab>
+            <ion-tab title="全国排行" icon-off="ion-star-outline" icon-on="ion-star" ui-sref="honorRanking.all" nav-direction="back">
+                <ion-nav-view name="rank-all"></ion-nav-view>
+            </ion-tab>
+        </ion-tabs>
+    </ion-content>
+</ion-view>

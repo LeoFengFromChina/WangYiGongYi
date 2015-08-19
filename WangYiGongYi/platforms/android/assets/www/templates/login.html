@@ -1,0 +1,31 @@
+<ion-view view-title="登录">
+    <ion-header-bar class="bar-dark">
+        <div class="buttons">
+            <button class=" button icon-left ion-ios-arrow-back button-clear" ui-sref="account">返回</button>
+        </div>
+        <h1 class="title">微光公益用户登录</h1>
+        <div class="buttons">
+            <button class="button button-clear" ui-sref="reg">注册</button>
+        </div>
+    </ion-header-bar>
+    <ion-content>
+        <form  name="login" ng-enter="doLogin()">
+            <div class="list">
+                <label class="item item-input">
+                    <span class="input-label">账号:</span>
+                    <input type="text" ng-model="loginData.username" placeholder="请输入账号" required>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">密码:</span>
+                    <input type="password" ng-model="loginData.password" placeholder="请输入密码" required>
+                </label>
+            </div>
+            <div class="padding">
+
+                <button class="button button-block button-positive" ng-click=doLogin() ng-disabled=login.$invalid>登录</button>
+
+                <a class="button-block text-right calm" ui-sref=forgotten>忘记密码?</a>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>
