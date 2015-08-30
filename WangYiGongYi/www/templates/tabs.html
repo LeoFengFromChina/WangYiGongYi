@@ -3,21 +3,40 @@ Create tabs with an icon and label, using the tabs-positive style.
 Each tab's child <ion-nav-view> directive will have its own
 navigation history that also transitions its views in and out.
 -->
-<ion-tabs class="tabs-icon-top tabs-color-active-positive tabs-light">
+<!-- <ion-tabs class="tabs-icon-top tabs-color-active-positive" style="-webkit-transition-duration: 5s; transition-duration: 5s; -webkit-transform: translate3d(0%, 0px, 0px);">
 
-    <ion-tab title="首页" icon-off="ion-ios-home-outline" icon-on="ion-ios-home-outline" ui-sref="topics" nav-direction="back">
-        <ion-nav-view name="tab-topics" animation="slide-left-right-ios7"></ion-nav-view>
-    </ion-tab>
+  Dashboard Tab
+  <ion-tab title="首页" icon-off="ion-ios-home-outline" icon-on="ion-ios-home-outline" ng-click="topics()" >
+    <ion-nav-view name="tab-topics" style="transition-duration: 5s;-moz-transition-duration: 5s;-webkit-transition-duration: 5s; -o-transition-duration: 5s; "></ion-nav-view>
+  </ion-tab>
+  Chats Tab
+  <ion-tab title="消息" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes-outline" ng-click="chats()" >
+    <ion-nav-view name="tab-chats" style="transition-duration: 5s;-moz-transition-duration: 5s;-webkit-transition-duration: 5s; -o-transition-duration: 5s; "></ion-nav-view>
+  </ion-tab>
+  <ion-tab title="礼品店" icon-off="ion-ios-cart-outline" icon-on="ion-ios-cart-outline"  ng-click="gift()" >
+    <ion-nav-view name="tab-gift"></ion-nav-view>
+  </ion-tab>
+  Account Tab
+  <ion-tab title="个人设置" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear-outline" ng-click="account()" >
+    <ion-nav-view name="tab-account" style="transition-duration: 5s;-moz-transition-duration: 5s;-webkit-transition-duration: 5s; -o-transition-duration: 5s; "></ion-nav-view>
+  </ion-tab>
 
-    <ion-tab title="消息" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes-outline" ui-sref="chats" nav-direction="back">
-        <ion-nav-view name="tab-chats" animation="slide-left-right-ios7"></ion-nav-view>
-    </ion-tab>
- 
-    <ion-tab title="礼品店" icon-off="ion-ios-cart-outline" icon-on="ion-ios-cart-outline" ui-sref="gift" nav-direction="back">
-        <ion-nav-view name="tab-gift" animation="slide-left-right-ios7"></ion-nav-view>
-    </ion-tab>
- 
-    <ion-tab title="个人设置" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear-outline" ui-sref="account" nav-direction="back">
-        <ion-nav-view name="tab-account" animation="slide-left-right-ios7"></ion-nav-view>
-    </ion-tab>
+</ion-tabs> -->
+
+<ion-tabs class="tabs-icon-top tabs-color-active-positive tabs-light" ng-class="tabsHidden">
+
+  <ion-tab title="首页" icon-off="ion-ios-home-outline" icon-on="ion-ios-home-outline" ui-sref="tab.topics" >
+    <ion-nav-view name="tab-topics"></ion-nav-view>
+  </ion-tab>
+  <ion-tab title="消息" icon-off="ion-ios-chatboxes-outline" icon-on="ion-ios-chatboxes-outline" ui-sref="tab.chats" >
+    <ion-nav-view name="tab-chats"></ion-nav-view>
+  </ion-tab>
+  <ion-tab title="礼品店" icon-off="ion-ios-cart-outline" icon-on="ion-ios-cart-outline" ui-sref="tab.gitf" >
+    <ion-nav-view name="tab-gitf"></ion-nav-view>
+  </ion-tab>
+  <ion-tab title="个人设置" icon-off="ion-ios-gear-outline" icon-on="ion-ios-gear-outline"  ui-sref="tab.account" >
+    <ion-nav-view name="tab-account"></ion-nav-view>
+  </ion-tab>
+
+
 </ion-tabs>

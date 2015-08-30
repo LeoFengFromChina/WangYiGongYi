@@ -1,28 +1,65 @@
 <ion-view view-title="注册">
-    <ion-header-bar class="bar-dark">
+   <!--  <ion-header-bar class="bar-dark">
         <div class="buttons">
-            <button class=" button icon-left ion-ios-arrow-back button-clear" ui-sref="login">登录</button>
+            <button class=" button icon-left ion-ios-arrow-back button-clear" ui-sref="tab.login">登录</button>
         </div>
         <h1 class="title">注册</h1>
-    </ion-header-bar>
+    </ion-header-bar> -->
+
+    <ion-nav-buttons side="left">
+        <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
+    </ion-nav-buttons>
+   
     <ion-content>
-        <form  name=reg>
+        <form name=reg>
             <div class="list">
+                <a class="item item-input item-avatar-right headImg_40 text-midel" href="#" style="padding-top:6px;padding-bottom:6px;">
+                    <img ng-src="{{mideApp_user.avatar_url||'img/commentfailure.jpg'}}" style="width:100%"> 头像
+                </a>
                 <label class="item item-input">
                     <span class="input-label">账号:</span>
-                    <input type="text" ng-model="regData.username" placeholder="请输入账号" required>
+                    <input type="text" ng-model="mideApp_user.username" placeholder="请输入账号" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">密码:</span>
-                    <input type="password" ng-model="regData.password" placeholder="请输入密码" required>
+                    <input type="password" ng-model="mideApp_user.password" placeholder="请输入密码" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">确认密码:</span>
-                    <input type="password" ng-model="regData.confirmPassword" placeholder="请输入密码" required>
+                    <input type="password" ng-model="mideApp_user.confirmPassword" placeholder="再输入密码" required>
+                </label>
+                <label class="item item-input">
+
+                    <span class="input-label">性别:</span>
+
+                    <input type="text" ng-model="mideApp_user.gender" placeholder="请选择性别"  ng-click="showGendersheet()" readonly="readonly" class="light" style = "background:#fff">
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">生日日期:</span>
+                    <input type="text" ng-model="mideApp_user.birthday" placeholder="请选择日期" required>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">联系电话:</span>
+                    <input type="text" ng-model="regData.phoneNumber" placeholder="请输入电话号码" required>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">邮箱:</span>
+                    <input type="text" ng-model="regData.email" placeholder="请输入邮箱" required>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">QQ:</span>
+                    <input type="text" ng-model="regData.QQnumber" placeholder="请输入QQ号码" required>
                 </label>
             </div>
             <div class="padding">
-                <button class="button button-block button-positive"  ng-click=doLogin() ng-disabled=reg.$invalid>立即注册</button>
+                <div class="row">
+                    <dov class="col"><a class="button button-block button-positive " ng-click=doReg() ng-disabled=reg.$invalid>提交</a>
+                    </dov>
+                    <dov class="col">
+                        <a class="button button-block button-positive" ng-disabled=reg.$invalid ng-click="regMore()">完善其他</a>
+                    </dov>
+                </div>
+                <!-- <button class="button button-block button-positive" ng-click=doLogin() ng-disabled=reg.$invalid>立即注册</button> -->
             </div>
         </form>
     </ion-content>
