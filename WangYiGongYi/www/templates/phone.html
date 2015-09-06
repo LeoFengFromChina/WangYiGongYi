@@ -1,18 +1,21 @@
 <ion-view view-title="更改电话">
-    <ion-nav-bar class="bar-dark">
-        <ion-nav-back-button class="button-clear">返回</ion-nav-back-button>
-       
-        <ion-nav-buttons side="primary">
-            <button class="button button-balanced" ng-click="doSomething()">
-                保存
-            </button>
-        </ion-nav-buttons>
-    </ion-nav-bar>
-    <ion-content class="stable-bg">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
+    </ion-nav-buttons>
+
+    <ion-content class="light-bg has-header  has-footer">
+     <form name="myForm">
         <div class="list">
             <label class="item item-input">
-                <input type="text" placeholder="电话">
+                <input type="number" placeholder="电话" ng-model="mideApp_user.phoneNumber" required>
+            </label>
+             <label class="item tips_item">
+               <div>准确的电话号码可以更好的让好友联系您</div>
             </label>
         </div>
+        <div class="padding">
+                 <button class="button button-block button-positive" ng-click=save() ng-disabled="myForm.$invalid ">保存</button>
+            </div>
+        </form>
     </ion-content>
 </ion-view>

@@ -5,39 +5,42 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'angularMoment'])
     .constant("$ionicLoadingConfig", {
         template: '<div class="ion-load-c loading-icon"></div>加载中...'
     })
-    .run(function($ionicHistory, $ionicPlatform, $http, $ionicLoading, $timeout) {
-        $ionicPlatform.ready(function() {
-            // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
-            // for form inputs)
-            if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
-                cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
-                cordova.plugins.Keyboard.disableScroll(true);
 
-            }
-            if (window.StatusBar) {
-                // org.apache.cordova.statusbar required
-                StatusBar.styleLightContent();
-            }
+.run(function($ionicHistory, $ionicPlatform, $http, $ionicLoading, $timeout,amMoment) {
+    $ionicPlatform.ready(function() {
+        // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
+        // for form inputs)
+        if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
+            cordova.plugins.Keyboard.hideKeyboardAccessoryBar(true);
+            cordova.plugins.Keyboard.disableScroll(true);
 
-        });
+        }
+        if (window.StatusBar) {
+            // org.apache.cordova.statusbar required
+            StatusBar.styleLightContent();
+        }
+         // set moment locale
+    amMoment.changeLocale('zh-cn');
+
+    });
 
 
 
-        MideApp.setMyIonicLoading($ionicLoading);
-        MideApp.setMyHttp($http);
-        MideApp.setMyTimeout($timeout);
-        MideApp.setMyionicHistory($ionicHistory);
-        $ionicHistory.nextViewOptions({
-            disableBack: true
-        });
-        $ionicPlatform.registerBackButtonAction(function() {
-            MideApp.backward('tabs-show');
-        }, 5000);
-    })
+    MideApp.setMyIonicLoading($ionicLoading);
+    MideApp.setMyHttp($http);
+    MideApp.setMyTimeout($timeout);
+    MideApp.setMyionicHistory($ionicHistory);
+    $ionicHistory.nextViewOptions({
+        disableBack: true
+    });
+    $ionicPlatform.registerBackButtonAction(function() {
+        MideApp.backward('tabs-show');
+    }, 5000);
+})
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
     $ionicConfigProvider.views.maxCache(0);
@@ -49,8 +52,8 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     $ionicConfigProvider.platform.android.navBar.alignTitle('center');
     $ionicConfigProvider.backButton.text(' ').icon('ion-ios-arrow-back');
 
-     $ionicConfigProvider.scrolling.jsScrolling(false);
-
+    // $ionicConfigProvider.platform.ios.scrolling.jsScrolling(false);
+    // $ionicConfigProvider.platform.android.scrolling.jsScrolling(false);
 
     // Ionic uses AngularUI Router which uses the concept of states
     // Learn more here: https://github.com/angular-ui/ui-router
@@ -70,7 +73,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     .state('tab', {
         url: '/tab',
-        abstract: true,
+        // abstract: true,
 
         views: {
             'main-view': {
@@ -82,211 +85,282 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
     // Each tab has its own nav history stack:
 
-    .state('tab.topics', {
+    .state('topics', {
             url: '/topics',
             views: {
-                'tab-topics': {
+                'main-view': {
                     templateUrl: 'templates/tab-topics.html',
                     controller: 'TopicsCtrl'
                 }
             }
         })
-        .state('tab.topic', {
+        .state('topic', {
             url: '/topics/:topicId',
             views: {
-                'tab-topics': {
+                'main-view': {
                     templateUrl: 'templates/topic.html',
                     controller: 'TopicCtrl'
                 }
             }
         })
-        .state('tab.chats', {
+        .state('newTopic', {
+            url: '/newTopic',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/newTopic.html',
+                    controller: 'NewTopicCtrl'
+                }
+            }
+        })
+        .state('newHelp', {
+            url: '/newHelp',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/newHelp.html',
+                    controller: 'NewHelpCtrl'
+                }
+            }
+        })
+        .state('chats', {
             url: '/chats',
             views: {
-                'tab-chats': {
+                'main-view': {
                     templateUrl: 'templates/tab-chats.html',
                     controller: 'ChatsCtrl'
                 }
             }
         })
-        .state('tab.chat-detail', {
+        .state('chat-detail', {
             url: '/chats/:chatId',
             views: {
-                'tab-chats': {
+                'main-view': {
                     templateUrl: 'templates/chat-detail.html',
                     controller: 'ChatDetailCtrl'
                 }
             }
         })
-        .state('tab.gitf', {
-            url: '/gitf',
+        .state('gift', {
+            url: '/gift',
             views: {
-                'tab-gitf': {
-                    templateUrl: 'templates/tab-gitf.html',
+                'main-view': {
+                    templateUrl: 'templates/tab-gift.html',
                     controller: 'GitfCtrl'
                 }
             }
         })
-        .state('tab.giftDetail', {
+        .state('giftDetail', {
             url: '/gift/:giftId',
             views: {
-                'tab-gift': {
+                'main-view': {
                     templateUrl: 'templates/gift-detail.html',
                     controller: 'GiftDetailCtrl'
                 }
             }
         })
-        .state('tab.account', {
+        .state('account', {
             url: '/account',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/tab-account.html',
                     controller: 'AccountCtrl'
                 }
             }
         })
-        .state('tab.basicInfo', {
+        .state('basicInfo', {
             url: '/basicInfo',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/tab-basicInfo.html',
                     controller: 'BasicInfoCtrl'
                 }
             }
         })
-        .state('tab.login', {
+        .state('login', {
             url: '/login',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/login.html',
                     controller: 'LoginCtrl'
                 }
             }
         })
-        .state('tab.reg', {
+        .state('reg', {
             url: '/reg',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/reg.html',
                     controller: 'RegCtrl'
                 }
             }
         })
-        .state('tab.userName', {
+        .state('userName', {
             url: '/userName',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/userName.html',
                     // controller: 'AccountCtrl'
                 }
             }
         })
-        .state('tab.address', {
+        .state('address', {
             url: '/address',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/address.html',
-                    // controller: 'AccountCtrl'
+                    controller: 'AddressCtrl'
                 }
             }
         })
-        .state('tab.phone', {
+        .state('phone', {
             url: '/phone',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/phone.html',
-                    // controller: 'AccountCtrl'
+                    controller: 'PhoneCtrl'
                 }
             }
         })
-        .state('tab.email', {
+        .state('email', {
             url: '/email',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/email.html',
-                    // controller: 'AccountCtrl'
+                    controller: 'EmailCtrl'
                 }
             }
         })
-        .state('tab.expertise', {
-            url: '/expertise',
+        .state('qq', {
+            url: '/qq',
             views: {
-                'tab-account': {
-                    templateUrl: 'templates/expertise.html',
-                    // controller: 'AccountCtrl'
+                'main-view': {
+                    templateUrl: 'templates/qq.html',
+                    controller: 'QQCtrl'
                 }
             }
         })
-        .state('tab.serviceSillingness', {
-            url: '/serviceSillingness',
+        .state('weixinNumber', {
+            url: '/weixinNumber',
             views: {
-                'tab-account': {
-                    templateUrl: 'templates/serviceSillingness.html',
-                    // controller: 'AccountCtrl'
+                'main-view': {
+                    templateUrl: 'templates/weixinNumber.html',
+                    controller: 'WeixinNumberCtrl'
                 }
             }
         })
-        .state('tab.feedback', {
+        .state('education', {
+            url: '/education',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/education.html',
+                    controller: 'EducationCtrl'
+                }
+            }
+        })
+        .state('profession', {
+            url: '/profession',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/profession.html',
+                    controller: 'ProfessionCtrl'
+                }
+            }
+        })
+        .state('speciality', {
+            url: '/speciality',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/speciality.html',
+                    controller: 'SpecialityCtrl'
+                }
+            }
+        })
+        .state('intention', {
+            url: '/intention',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/intention.html',
+                    controller: 'IntentionCtrl'
+                }
+            }
+        })
+        .state('feedback', {
             url: '/feedback',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/feedback.html',
                     // controller: 'AccountCtrl'
                 }
             }
         })
-        .state('tab.gender', {
+        .state('gender', {
             url: '/gender',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/gender.html',
                     // controller: 'AccountCtrl'
                 }
             }
         })
-        .state('tab.area', {
-            url: '/area',
+        .state('region', {
+            url: '/region',
             views: {
-                'tab-account': {
-                    templateUrl: 'templates/area.html',
+                'main-view': {
+                    templateUrl: 'templates/region.html',
+                    controller: 'RegionCtrl'
+                }
+            }
+        })
+        .state('identity', {
+            url: '/identity',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/identity.html',
+                    controller: 'IdentityCtrl'
+                }
+            }
+        })
+        .state('intentionTime', {
+            url: '/intentionTime',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/intentionTime.html',
+                    controller: 'IntentionTimeCtrl'
+                }
+            }
+        })
+        .state('myGift', {
+            url: '/myGift',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/tab-myGift.html',
                     // controller: 'AccountCtrl'
                 }
             }
         })
 
-    .state('tab.myGift', {
-        url: '/myGift',
-        views: {
-            'tab-account': {
-                templateUrl: 'templates/tab-myGift.html',
-                // controller: 'AccountCtrl'
-            }
-        }
-    })
-
-    .state('tab.help', {
+    .state('help', {
         url: '/help',
         views: {
-            'tab-account': {
+            'main-view': {
                 templateUrl: 'templates/tab-help.html',
                 // controller: 'AccountCtrl'
             }
         }
     })
 
-    .state('tab.myTeam', {
+    .state('myTeam', {
             url: '/myTeam',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/tab-myTeam.html',
                     // controller: 'AccountCtrl'
                 }
             }
         })
-        .state('tab.regMore', {
+        .state('regMore', {
             url: '/regMore',
             views: {
-                'tab-account': {
+                'main-view': {
                     templateUrl: 'templates/regMore.html',
                     controller: 'RegMoreCtrl'
                 }

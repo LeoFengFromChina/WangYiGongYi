@@ -5,8 +5,10 @@
   The Friends service returns an array of friend data
 -->
 <ion-view view-title="{{gift.name}}">
-
-    <ion-content class="padding">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
+    </ion-nav-buttons>
+    <ion-content class="padding  has-footer">
         <div class="row  row-center">
             <div class="col col-50">
                 <img ng-src="{{gift.img}}" style="width:100%">

@@ -1,11 +1,14 @@
 <ion-view title="网益公益">
-   
-    <ion-content>
-        <script type="text/javascript">
-        console.log('Topics-view');
-        </script>
-        <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
-        </ion-refresher>
+    <!-- <ion-nav-buttons side="left">
+        <button class="button button-clear" ng-click="downloadImg()">下载{{downloadProgress}}
+</button>
+    </ion-nav-buttons> -->
+   <!--  <ion-nav-buttons side="right">
+        <button class="button button-clear" ui-sref="addtopic">求助</button>
+    </ion-nav-buttons> -->
+    <ion-content class="has-header  has-footer " has-bouncing="true" delegate-handle="mainScroll">
+        <!-- <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
+        </ion-refresher> -->
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="slidebox" auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;">
             <ion-slide>
                 <div class="box blue">
@@ -20,24 +23,41 @@
                     <img ng-src="./img/wg_banner3.jpg" alt="微光公益" style="width:100%"></div>
             </ion-slide>
         </ion-slide-box>
-        <div class="padding">
-            <button class="button button-block button-positive" ui-sref="tab.newtopic">
-                发布求助
-            </button>
+        
+        <div class="">
+            <div class="row">
+                <div class="col">
+                    <button class="button button-block button-positive" ui-sref="newTopic">
+                        我要求助
+                    </button>
+                </div>
+                <div class="col">
+                    <button class="button button-block button-positive" ui-sref="newHelp">
+                        我要助人
+                    </button>
+                </div>
+            </div>
         </div>
-        <ion-list class="topics">
-            <ion-item class="item-avatar" collection-repeat="topic in topics" href="#/tab/topics/{{topic.id}}" collection-item-width="'100%'" collection-item-height="65px">
-                <img ng-src="{{topic.author.avatar_url}}">
+        <div class=" list topics">
+            <!--    <div class="item item-divider">求助列表</div> -->
+            <a class="item item-avatar" collection-repeat="topic in config.topics" href="#/topics/{{topic.id}}" collection-item-width="'100%'" collection-item-height="65px">
+                <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img>
                 <!-- reset-img   -->
                 <h2>{{topic.title}}</h2>
+               
                 <p class="summary">
-                    <span ng-if="!topic.top && !topic.good" class="tab">{{topic.tab}}</span>
-                    <span ng-if="topic.top" class="tab hl">置顶</span>
-                    <span ng-if="topic.good && !topic.top" class="tab hl">精华</span> {{topic.author.loginname}}
-                    <span class="item-note ago" am-time-ago="topic.last_reply_at">
+               
+                    <span ng-if="topic.status==1" class="tab status1">求助中</span>
+                    <span ng-if="topic.status==2" class="tab status2">已承接</span>
+                    <span ng-if="topic.status==3" class="tab status3">帮助中</span>
+                    <span ng-if="topic.status==4" class="tab status4">已完成</span> 
+ <span  class="tab">求助者:</span> {{topic.author.author_name}}
+                    <span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix">
           </span>
                 </p>
-            </ion-item>
-        </ion-list>
+            </a>
+        </div>
+        <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="config.infinite" spinner="spiral" class="wg_spinner">></ion-infinite-scroll>
+        <!-- <ion-spinner class="topic-spinner ng-hide" ng-show="!topics" ng-style="{'top':getHalfHeight()+'px'}"></ion-spinner> -->
     </ion-content>
 </ion-view>

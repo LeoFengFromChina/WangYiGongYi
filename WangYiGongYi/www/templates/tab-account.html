@@ -1,12 +1,12 @@
 <ion-view view-title="网益公益">
-    <ion-content class="stable-bg">
+    <ion-content class="stable-bg has-footer">
         <div class="list ">
-            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow" ui-sref="tab.login" ng-if="!mideApp_user.username">
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow" ui-sref="login" ng-if="!mideApp_user.username">
                 <img ng-src="img/commentfailure_logout.jpg" style="width:100%">
                 <p ng-if="!processing">立即登录</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
-            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow "  ng-if="mideApp_user.username">
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow " ng-if="mideApp_user.username">
                 <img ng-src="{{mideApp_user.avatar_url}}" style="width:100%">
                 <div class="row">
                     <div class="col">
@@ -19,64 +19,78 @@
             </a>
         </div>
         <div class="list">
-            <label class="item item-input">
-                <span class="input-label">性别:</span>
-                <input type="text" ng-model="mideApp_user.gender" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">生日日期:</span>
-                <input type="text" ng-model="mideApp_user.birthday" placeholder="请选择日期" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">联系电话:</span>
-                <input type="text" ng-model="mideApp_user.phoneNumber" placeholder="请输入电话号码" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">邮箱:</span>
-                <input type="text" ng-model="mideApp_user.email" placeholder="请输入邮箱" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">QQ:</span>
-                <input type="text" ng-model="mideApp_user.QQnumber" placeholder="请输入QQ号码" readonly="readonly" class="light" style="background:#fff">
-            </label>
+            <a class="item " href="javascript:;" ng-click="showActionsheet()">
+                性别:
+                <span class="item-note">{{mideApp_user.gender}}</span>
+                 
+            </a>
+            <a class="item " href="javascript:;" ng-click="deadline()">
+                 生日日期:
+                <span class="item-note">{{mideApp_user.birthday |date:"yyyy-MM-dd"}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="phone">
+                 联系电话:
+                <span class="item-note">{{mideApp_user.phoneNumber}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="email">
+                邮箱:
+                <span class="item-note">{{mideApp_user.email}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="qq">
+                 QQ:
+                <span class="item-note">{{mideApp_user.QQnumber}}</span>
+                 
+            </a>
         </div>
         <div class="list">
-            <label class="item item-input">
-                <span class="input-label">所属地区:</span>
-                <input type="text" ng-model="mideApp_user.region" placeholder="请输入所属地区" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">身份证号:</span>
-                <input type="text" ng-model="mideApp_user.identity " placeholder="请输入身份证号" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">常住地址:</span>
-                <input type="password" ng-model="mideApp_user.address" placeholder="再输入常住地址" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">微信号码:</span>
-                <input type="text" ng-model="mideApp_user.weixinNumber" placeholder="请输入微信号码" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">学历:</span>
-                <input type="text" ng-model="mideApp_user.education" placeholder="请输入学历" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">专业:</span>
-                <input type="text" ng-model="mideApp_user.profession" placeholder="请输入专业" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">特长:</span>
-                <input type="text" ng-model="mideApp_user.speciality" placeholder="请输入特长" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">选择服务意愿:</span>
-                <input type="text" ng-model="mideApp_user.intention" placeholder="选择服务意愿" readonly="readonly" class="light" style="background:#fff">
-            </label>
-            <label class="item item-input">
-                <span class="input-label">选择服务时间:</span>
-                <input type="text" ng-model="mideApp_user.intentionTime" placeholder="选择服务时间" readonly="readonly" class="light" style="background:#fff">
-            </label>
+            <a class="item " ui-sref="region">
+                所属地区:
+                <span class="item-note">{{mideApp_user.region}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="identity">
+                 身份证号:
+                <span class="item-note">{{mideApp_user.identity}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="address">
+                 常住地址:
+                <span class="item-note">{{mideApp_user.address}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="weixinNumber">
+                微信号码:
+                <span class="item-note">{{mideApp_user.weixinNumber}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="education">
+                 学历:
+                <span class="item-note">{{mideApp_user.education}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="profession">
+                 专业:
+                <span class="item-note">{{mideApp_user.profession}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="speciality">
+                 特长:
+                <span class="item-note">{{mideApp_user.speciality}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="intention">
+                选择服务意愿:
+                <span class="item-note">{{mideApp_user.intention}}</span>
+                 
+            </a>
+            <a class="item " ui-sref="intentionTime">
+                 选择服务时间:
+                <span class="item-note">{{mideApp_user.intentionTime}}</span>
+                 
+            </a>
         </div>
         <div class="list  wg-logoutBtn padding" ng-if="mideApp_user.username">
             <button class="button button-block button-outline button-positive" ng-click="logout()">

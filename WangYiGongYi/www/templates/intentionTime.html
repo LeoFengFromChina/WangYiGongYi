@@ -1,0 +1,21 @@
+<ion-view view-title="更改服务时间">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
+    </ion-nav-buttons>
+
+    <ion-content class="light-bg has-header  has-footer">
+     <form name="myForm">
+        <div class="list">
+            <label class="item item-input">
+                <input type="text" placeholder="服务时间" ng-model="mideApp_user.intentionTime" required>
+            </label>
+             <label class="item tips_item">
+               <div>准确的服务时间可以更好的让好友了解您</div>
+            </label>
+        </div>
+        <div class="padding">
+                 <button class="button button-block button-positive" ng-click=save() ng-disabled="myForm.$invalid ">保存</button>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -5,12 +5,24 @@
     <ion-nav-buttons side="left">
         <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
     </ion-nav-buttons>
-    <ion-content has-bouncing="true" padding="false" class="has-header no-footer" delegate-handle="mainScroll">
-        <div class="list card">
-            <div class="item item-avatar">
-                <img src="./img/userImages/7659710.jpg">
-                <h2>公益人士</h2>
-                <p>发布时间:2015-08-08</p>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear icon " ng-click="help()">我要助他</button>
+    </ion-nav-buttons>
+    <ion-content has-bouncing="true" padding="false" class="has-header  no-footer" delegate-handle="mainScroll">
+        <div class="list card topics">
+            <div class="item item-avatar" >
+                <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img>
+                <!-- reset-img   -->
+                <h2>{{topic.title}}</h2>
+                <p class="summary">
+                    <span ng-if="topic.status==1" class="tab status1">求助中</span>
+                    <span ng-if="topic.status==2" class="tab status2">已承接</span>
+                    <span ng-if="topic.status==3" class="tab status3">帮助中</span>
+                    <span ng-if="topic.status==4" class="tab status4">已完成</span>
+                    <span class="tab">求助者:</span> {{topic.author.author_name}}
+                    <span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix">
+          </span>
+                </p>
             </div>
             <div class="item item-body">
                 <p>
@@ -28,30 +40,12 @@
                 <img class="full-image" src="./img/topicsImg/1.jpg">
                 <img class="full-image" src="./img/topicsImg/2.jpg">
                 <img class="full-image" src="./img/topicsImg/3.jpg">
-                <img class="full-image" src="./img/topicsImg/1.jpg">
-                <img class="full-image" src="./img/topicsImg/2.jpg">
-                <img class="full-image" src="./img/topicsImg/3.jpg">
-                <img class="full-image" src="./img/topicsImg/1.jpg">
-                <img class="full-image" src="./img/topicsImg/2.jpg">
-                <img class="full-image" src="./img/topicsImg/3.jpg">
-                <img class="full-image" src="./img/topicsImg/1.jpg">
-                <img class="full-image" src="./img/topicsImg/2.jpg">
-                <img class="full-image" src="./img/topicsImg/3.jpg">
-                <img class="full-image" src="./img/topicsImg/1.jpg">
-                <img class="full-image" src="./img/topicsImg/2.jpg">
-                <img class="full-image" src="./img/topicsImg/3.jpg">
-                <img class="full-image" src="./img/topicsImg/1.jpg">
-                <img class="full-image" src="./img/topicsImg/2.jpg">
-                <img class="full-image" src="./img/topicsImg/3.jpg">
                 <p>
                     照顾小孩一天，妈妈住院处理其他事情，谢谢大家的帮忙。公益活动大家做。
                 </p>
-                <p>
-                    <a href="#" class="subdued">1 Like</a>
-                    <a href="#" class="subdued">5 Comments</a>
-                </p>
+                
             </div>
-            <div class="item tabs tabs-secondary tabs-icon-left">
+           <!--  <div class="item tabs tabs-secondary tabs-icon-left">
                 <a class="tab-item" href="#">
                     <i class="icon ion-thumbsup"></i> Like
                 </a>
@@ -61,7 +55,8 @@
                 <a class="tab-item" href="#">
                     <i class="icon ion-share"></i> Share
                 </a>
-            </div>
+            </div> -->
         </div>
+        
     </ion-content>
 </ion-view>

@@ -23,7 +23,7 @@ var MideApp = function() {
     var $timeout = null;
     /* End */
 
-    var backward = function(tabshow) {
+    var backward = function() {
         switch (BackManner) {
             case 'exit':
                 navigator.app.exitApp();
@@ -33,7 +33,7 @@ var MideApp = function() {
                 break;
             case 'back':
                 $ionicHistory.goBack();
-                $scope.$root.tabsHidden = tabshow;
+                // $scope.$root.tabsHidden = tabshow;
                 break;
             case 'wait':
                 $state.go('menus.job-main');
@@ -74,6 +74,16 @@ var MideApp = function() {
     }();
 
     var LocCache = function() {
+        // set: function(key, data) {
+        //       return window.localStorage.setItem(key, window.JSON.stringify(data));
+        //   },
+        //   get: function(key) {
+
+        //       return window.JSON.parse(window.localStorage.getItem(key));
+        //   },
+        //   remove: function(key) {
+        //       return window.localStorage.removeItem(key);
+        //   }
         var data = {};
         var conn = {};
         conn.save = function(key, val) {
@@ -83,7 +93,7 @@ var MideApp = function() {
                     'ttl': Date.now(),
                     'val': val
                 };
-                localStorage[key] = JSON.stringify(data[key]);
+                window.localStorage.setItem(key, window.JSON.stringify(data[key]));
                 return data[key];
             } catch (e) {
                 return false;
@@ -92,7 +102,7 @@ var MideApp = function() {
         conn.load = function(key, ttl) {
             try {
                 key = ('&' == key.substring(0, 1)) ? key : '~' + key;
-                data[key] = JSON.parse(localStorage[key]);
+                data[key] = window.JSON.parse(window.localStorage.getItem(key));;
                 return (data[key] && (data[key].ttl > Date.now() - (ttl || 60 * 60 * 24 * 365) * 1000)) ? data[key].val : false;
             } catch (e) {
                 return false;
@@ -102,7 +112,8 @@ var MideApp = function() {
             prefix = prefix || '~';
             Object.keys(localStorage).forEach(function(key) {
                 if (key.substring(0, 1) == prefix) {
-                    localStorage.removeItem(key);
+                    window.localStorage.removeItem(key);
+                    // localStorage.removeItem(key);
                 }
             });
         }
@@ -252,12 +263,12 @@ var MideApp = function() {
         $menusScope = obj;
     }
 
-    var intoMyController = function(scope, state, tabshow) {
+    var intoMyController = function(scope, state) {
         $scope = scope;
         $state = state;
         $scope.myConfig = myConfig;
         $scope.back = function(tabshow) {
-            backward(tabshow);
+            backward();
         };
         $scope.$on("$destroy", function() {
             exitMyController();
@@ -330,10 +341,29 @@ var MideApp = function() {
         };
     }
 
+
+    var downloadfile = function(cordovaFileTransfer,url, targetName,successCallback,errCallback,progress) {
+        document.addEventListener('deviceready', function() {
+
+            var targetPath = cordova.file.externalDataDirectory + targetName;
+            var trustHosts = true
+            var options = {};
+           cordovaFileTransfer.download(url, targetPath, options, trustHosts)
+                .then(function(result) {
+                    successCallback(result);
+
+                }, function(err) {
+                    errCallback(err);
+                }, function(progress) {
+                    progress(progress);
+                });
+
+        }, false);
+    }
     initWebSocket();
 
     var mideapp = {}
-
+    mideapp.downloadfile = downloadfile;
     mideapp.backward = backward;
     mideapp.isOnline = isOnline;
     mideapp.myLogger = myLogger;
@@ -366,3 +396,6 @@ var MideApp = function() {
 }();
 
 var mideApp_user = null;
+
+
+
