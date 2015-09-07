@@ -67,7 +67,7 @@ angular.module('starter.controllers', [])
             //     });
             // });
         }
-        downloadFile('https://www.baidu.com/img/baidu_jgylogo3.gif', 'baidu');
+        // downloadFile('https://www.baidu.com/img/baidu_jgylogo3.gif', 'baidu');
         $state.go('topics');
     })
     .controller('TabCtrl', function($scope, $state) {
@@ -179,7 +179,7 @@ angular.module('starter.controllers', [])
                         "title": "照顾小孩求助",
                         "addtime": "2015-08-21T02:33:00.896Z",
                         "finishtime": "2015-08-21T02:33:00.896Z",
-                         "status": 2
+                        "status": 2
 
 
                     }, {
@@ -198,7 +198,7 @@ angular.module('starter.controllers', [])
                         "title": "照顾小孩求助",
                         "addtime": "2015-08-21T02:33:00.896Z",
                         "finishtime": "2015-08-21T02:33:00.896Z",
-                         "status": 2
+                        "status": 2
 
 
                     }, {
@@ -217,7 +217,7 @@ angular.module('starter.controllers', [])
                         "title": "照顾小孩求助",
                         "addtime": "2015-08-21T02:33:00.896Z",
                         "finishtime": "2015-08-21T02:33:00.896Z",
-                         "status": 3
+                        "status": 3
 
 
                     }, {
@@ -236,7 +236,7 @@ angular.module('starter.controllers', [])
                         "title": "照顾小孩求助",
                         "addtime": "2015-08-21T02:33:00.896Z",
                         "finishtime": "2015-08-21T02:33:00.896Z",
-                         "status": 4
+                        "status": 4
 
 
                     }]
@@ -324,6 +324,7 @@ angular.module('starter.controllers', [])
         MideApp.setBackManner('back');
         MideApp.intoMyController($scope, $state);
         $scope.$root.tabsHidden = "tabs-hide";
+
         $scope.finished = true;
         $scope.topic = {
             "id": "1",
@@ -384,16 +385,115 @@ angular.module('starter.controllers', [])
         };
 
     })
-    .controller('NewTopicCtrl', function($scope, $state) {
+    .controller('NewTopicCtrl', function($scope, $state, $ionicActionSheet, $ionicLoading) {
         MideApp.setBackManner('back');
         MideApp.intoMyController($scope, $state);
         $scope.$root.tabsHidden = "tabs-hide";
 
+        $scope.tipic = {
+            "title": '',
+            "content": ''
+        };
+
+        $scope.from_invalid =! ($scope.tipic.title != '' && $scope.tipic.content != '');
+        $scope.showActionsheet = function(info) {
+            if (typeof info == 'undefined') {
+                info = "";
+            };
+            $ionicActionSheet.show({
+                titleText: '确定' + info + '？',
+                buttons: [{
+                    text: '是'
+                }, {
+                    text: '否'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        MideApp.httpGet('/user/oukeye', function(data) {
+
+                            mideApp_user = {};
+                            $ionicLoading.hide();
+                            MideApp.myNotice(info + '成功')
+                        });
+                    } else {
+                        return true;
+                    }
+
+
+
+
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
     })
-    .controller('NewHelpCtrl', function($scope, $state) {
+    .controller('NewHelpCtrl', function($scope, $state, $ionicActionSheet, $ionicLoading) {
         MideApp.setBackManner('back');
         MideApp.intoMyController($scope, $state);
         $scope.$root.tabsHidden = "tabs-hide";
+
+
+        $scope.help = {
+            "title": '',
+            "content": ''
+        };
+
+        $scope.from_invalid = !($scope.help.title != '' && $scope.help.content != '');
+
+        $scope.showActionsheet = function(info) {
+            if (typeof info == 'undefined') {
+                info = "";
+            };
+            $ionicActionSheet.show({
+                titleText: '确定' + info + '？',
+                buttons: [{
+                    text: '是'
+                }, {
+                    text: '否'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        MideApp.httpGet('/user/oukeye', function(data) {
+
+                            mideApp_user = {};
+                            $ionicLoading.hide();
+                            MideApp.myNotice(info + '成功')
+                        });
+                    } else {
+                        return true;
+                    }
+
+
+
+
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
 
     })
     .controller('ChatsCtrl', function($scope, $state) {
@@ -451,63 +551,63 @@ angular.module('starter.controllers', [])
 
         var _allGift = [{
             id: 0,
-            name: 'Ben Sparrow',
+            name: '充电宝与耳塞',
             lastText: 'You on your way?',
             img: './img/gift1.jpg'
         }, {
             id: 1,
-            name: 'Ben Sparrow',
+            name: '纪念公仔',
             lastText: 'You on your way?',
             img: './img/gift2.jpg'
         }, {
             id: 2,
-            name: 'Ben Sparrow',
+            name: '迷你音箱',
             lastText: 'You on your way?',
             img: './img/gift3.jpg'
         }, {
             id: 3,
-            name: 'Ben Sparrow',
+            name: '白色安卓手机数据线',
             lastText: 'You on your way?',
             img: './img/gift4.jpg'
         }, {
             id: 4,
-            name: 'Ben Sparrow',
+            name: '充电宝与迷你风扇',
             lastText: 'You on your way?',
             img: './img/gift5.jpg'
         }, {
             id: 5,
-            name: 'Ben Sparrow',
+            name: "手机耳塞",
             lastText: 'You on your way?',
             img: './img/gift6.jpg'
         }, {
             id: 6,
-            name: 'Ben Sparrow',
+            name: '手机耳塞',
             lastText: 'You on your way?',
             img: './img/gift7.jpg'
         }, {
             id: 7,
-            name: 'Ben Sparrow',
+            name: '电脑包',
             lastText: 'You on your way?',
             img: './img/gift8.jpg'
         }, {
             id: 8,
-            name: 'Ben Sparrow',
+            name: '充电宝',
             lastText: 'You on your way?',
             img: './img/gift9.jpg'
         }];
 
-        $scope.gitfs = [];
-        var _g = [];
-        for (var i in _allGift) {
-            _g.push(_allGift[i]);
-            if ((i + 1) % 3 == 0) {
-                $scope.gitfs.push(_g);
-                _g = [];
-            }
+        $scope.gitfs = _allGift;
+        // var _g = [];
+        // for (var i in _allGift) {
+        //     _g.push(_allGift[i]);
+        //     if ((i + 1) % 3 == 0) {
+        //         $scope.gitfs.push(_g);
+        //         _g = [];
+        //     }
 
-        }
+        // }
     })
-    .controller('GiftDetailCtrl', function($scope, $state, $stateParams) {
+    .controller('GiftDetailCtrl', function($scope, $state, $stateParams, $ionicActionSheet, $ionicLoading) {
         MideApp.setBackManner('back');
         MideApp.intoMyController($scope, $state);
         $scope.$root.tabsHidden = "tabs-hide";
@@ -518,6 +618,46 @@ angular.module('starter.controllers', [])
             lastText: 'You on your way?',
             img: './img/gift2.jpg'
         };
+        $scope.showActionsheet = function() {
+            $ionicActionSheet.show({
+                titleText: '确定兑换？',
+                buttons: [{
+                    text: '是'
+                }, {
+                    text: '否'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        MideApp.httpGet('/user/oukeye', function(data) {
+
+                            mideApp_user = {};
+                            $ionicLoading.hide();
+                            MideApp.myNotice('兑换成功')
+                        });
+                    } else {
+                        return true;
+                    }
+
+
+
+
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+
     })
     .controller('AccountCtrl', function($scope, $rootScope, $state, $log, $ionicActionSheet, $ionicLoading, $filter) {
         MideApp.setBackManner('back');
@@ -1194,5 +1334,73 @@ angular.module('starter.controllers', [])
         }
 
     })
+    .controller('ForgetPasswordCtrl', function($scope, $state, $ionicLoading) {
 
-;
+        $scope.forget = {};
+
+        MideApp.setBackManner('back');
+        MideApp.intoMyController($scope, $state);
+        $scope.$root.tabsHidden = "tabs-hide";
+
+        $scope.post = function() {
+            MideApp.httpGet('/user/oukeye', function(data) {
+
+                MideApp.LocCache.save("myEmail", $scope.forget.myEmail);
+                $ionicLoading.hide();
+                MideApp.myNotice('发送成功')
+                $state.go("forgetCode");
+            });
+        }
+
+    })
+    .controller('ForgetCodeCtrl', function($scope, $state, $ionicLoading) {
+
+        $scope.myEmail = MideApp.LocCache.load("myEmail") || '';
+        $scope.code = '';
+        MideApp.setBackManner('back');
+        MideApp.intoMyController($scope, $state);
+        $scope.$root.tabsHidden = "tabs-hide";
+
+        $scope.post = function() {
+            MideApp.httpGet('/user/oukeye', function(data) {
+
+                $ionicLoading.hide();
+                MideApp.myNotice('验证成功')
+                $state.go("resetPassword");
+            });
+        }
+
+    })
+    .controller('ResetPasswordCtrl', function($scope, $state, $ionicLoading) {
+
+        $scope.pwd = {};
+        MideApp.setBackManner('back');
+        MideApp.intoMyController($scope, $state);
+        $scope.$root.tabsHidden = "tabs-hide";
+
+        $scope.post = function() {
+            if ($scope.pwd.newPassWord1 != $scope.pwd.newPassWord2) {
+                MideApp.myNotice('两密码不一致');
+            } else {
+                MideApp.httpGet('/user/oukeye', function(data) {
+
+                    $ionicLoading.hide();
+                    MideApp.myNotice('成功')
+                    $state.go("login");
+                    return true;
+                });
+            }
+
+        }
+
+    })
+    .controller('MyGiftCtrl', function($scope, $state, $ionicLoading) {
+
+        $scope.pwd = {};
+        MideApp.setBackManner('back');
+        MideApp.intoMyController($scope, $state);
+        $scope.$root.tabsHidden = "tabs-hide";
+
+
+
+    });

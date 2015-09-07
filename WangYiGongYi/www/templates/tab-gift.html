@@ -1,5 +1,5 @@
-<ion-view view-title="网益公益">   
-    <ion-content class="stable-bg">
+<ion-view view-title="网益公益">
+    <ion-content class="stable-bg has-footer" has-bouncing="true">
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="slidebox" auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;">
             <ion-slide>
                 <div class="box">
@@ -13,22 +13,21 @@
                 <div class="box">
                     <img ng-src="./img/gift_banner3.jpg" alt="微光公益" style="width:100%"></div>
             </ion-slide>
-             <ion-slide>
+            <ion-slide>
                 <div class="box">
                     <img ng-src="./img/gift_banner4.jpg" alt="微光公益" style="width:100%"></div>
             </ion-slide>
-             <ion-slide>
+            <ion-slide>
                 <div class="box">
                     <img ng-src="./img/gift_banner5.jpg" alt="微光公益" style="width:100%"></div>
             </ion-slide>
         </ion-slide-box>
-        <div class="row" collection-repeat="gs in gitfs">
-            <a class="col col-33" ng-repeat="gift in gs" style="width:33%; display: block;" href="#/tab/gift/{{gift.id}}" >
-                <img ng-src="{{gift.img}}" style="width:100%;" >
-                <div>{{gift.name}}</div>
-            </a>
+        <div style="width:100%;">
 
+        <a class="" ng-repeat="gift in gitfs" href="#/gift/{{gift.id}}" style="width:33%; display:block; float:left;padding:10px;text-decoration: none;">
+            <img ng-src="{{gift.img}}" style="width:100%;">
+            <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift.name}}</div>
+        </a>
         </div>
-       
     </ion-content>
 </ion-view>

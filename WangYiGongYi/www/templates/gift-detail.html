@@ -8,7 +8,7 @@
     <ion-nav-buttons side="left">
         <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
     </ion-nav-buttons>
-    <ion-content class="padding  has-footer">
+    <ion-content class="padding  no-footer" has-bouncing="true">
         <div class="row  row-center">
             <div class="col col-50">
                 <img ng-src="{{gift.img}}" style="width:100%">
@@ -31,7 +31,7 @@
                 This is a "Facebook" styled Card. The header is created from a Thumbnail List item, the content is from a card-body consisting of an image and paragraph text. The footer consists of tabs, icons aligned left, within the card-footer.
             </p>
         </div>
-        <button class="button button-block button-positive">
+        <button class="button button-block button-positive" ng-click="showActionsheet()">
             确认兑换
         </button>
     </ion-content>

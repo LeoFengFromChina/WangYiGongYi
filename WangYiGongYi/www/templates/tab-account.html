@@ -1,5 +1,5 @@
 <ion-view view-title="网益公益">
-    <ion-content class="stable-bg has-footer">
+    <ion-content class="stable-bg has-footer" has-bouncing="true">
         <div class="list ">
             <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow" ui-sref="login" ng-if="!mideApp_user.username">
                 <img ng-src="img/commentfailure_logout.jpg" style="width:100%">
@@ -18,7 +18,32 @@
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
         </div>
+        <div class="list ">
+
+            <a class="item item-icon-left item-icon-right" ui-sref="myGift">
+                <i class="icon ion-ios-cart calm"></i>我的礼品
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+            <a class="item item-icon-left item-icon-right" ui-sref="honorRanking.local">
+                <i class="icon ion-podium calm"></i>荣誉排名
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+            <a class="item item-icon-left item-icon-right wg-box-shadow " ui-sref="help">
+                <i class="icon ion-heart assertive"></i>求助与帮助
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+        </div>
+        <div class="list ">
+            <a class="item item-icon-left item-icon-right wg-box-shadow " ui-sref="myTeam">
+                <i class="icon ion-person-stalker calm"></i>我的团队
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+        </div>
         <div class="list">
+          <a class="item  item-divider item-icon-left item-icon-right ">
+                <i class="icon ion-ios-list positive"></i>个人信息
+                <i class="icon ion-chevron-down icon-accessory"></i>
+            </a>
             <a class="item " href="javascript:;" ng-click="showActionsheet()">
                 性别:
                 <span class="item-note">{{mideApp_user.gender}}</span>

@@ -229,6 +229,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
+        .state('forgetPassword', {
+            url: '/forgetPassword',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/forgetPassword.html',
+                    controller: 'ForgetPasswordCtrl'
+                }
+            }
+        })
+         .state('forgetCode', {
+            url: '/forgetCode',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/forgetCode.html',
+                    controller: 'ForgetCodeCtrl'
+                }
+            }
+        })
+          .state('resetPassword', {
+            url: '/resetPassword',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/resetPassword.html',
+                    controller: 'ResetPasswordCtrl'
+                }
+            }
+        })
         .state('qq', {
             url: '/qq',
             views: {
@@ -333,7 +360,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             views: {
                 'main-view': {
                     templateUrl: 'templates/tab-myGift.html',
-                    // controller: 'AccountCtrl'
+                    controller: 'MyGiftCtrl'
                 }
             }
         })
