@@ -3,7 +3,11 @@
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
         <ion-list>
+<<<<<<< HEAD
             <ion-item class="item-remove-animate item-avatar item-icon-right" collection-repeat="chat in chats" type="item-text-wrap" ng-click="showChatModal(chat.id)">
+=======
+            <ion-item class="item-remove-animate item-avatar item-icon-right" collection-repeat="chat in chats" type="item-text-wrap" href="#/chats/{{chat.id}}">
+>>>>>>> origin/master
                 <img ng-src="{{chat.face}}">
                 <h2>{{chat.name}}</h2>
                 <p>{{chat.lastText}}</p>

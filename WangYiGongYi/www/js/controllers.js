@@ -506,7 +506,187 @@ angular.module('starter.controllers', [])
         // }
 
     })
+<<<<<<< HEAD
     .controller('ChatsCtrl', function($scope, $state, $ionicModal, $ionicScrollDelegate) {
+=======
+    .controller('TopicCtrl', function($scope, $state, $ionicActionSheet, $ionicLoading) {
+        MideApp.setBackManner('back');
+        MideApp.intoMyController($scope, $state);
+        $scope.$root.tabsHidden = "tabs-hide";
+
+        $scope.finished = true;
+        $scope.topic = {
+            "id": "1",
+            "author": {
+                "author_id": "1",
+                "author_name": "求助者姓名",
+                "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
+            },
+            "helper": {
+                "helper_id": "1",
+                "helper_name": "帮助者姓名",
+                "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
+            },
+            "content": "<div class=\"markdown-text\"><p>周末时间照顾孤儿院的孩子，可以帮忙辅导教学，心理辅导孩子，还可以卷正物资，和孩子做活动，教育孩子，让孩子健康成长</p><img class=\"full-image\" src=\"./img/topicsImg/1.jpg\"><img class=\"full-image\" src=\"./img/topicsImg/2.jpg\"><img class=\"full-image\" src=\"./img/topicsImg/3.jpg\"></div>",
+            "title": "照顾孤儿院的孩子",
+            "addtime": "2015-08-21T02:33:00.896Z",
+            "finishtime": "2015-08-21T02:33:00.896Z",
+            "status": 2
+        }
+
+        $scope.help = function() {
+            $ionicActionSheet.show({
+                titleText: '确认承接？',
+                buttons: [{
+                    text: '承接'
+                }, {
+                    text: '再看看'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        MideApp.httpGet('/user/oukeye', function(data) {
+
+                            mideApp_user = {};
+                            $ionicLoading.hide();
+                            MideApp.myNotice('承接成功')
+                        });
+                    } else {
+                        return true;
+                    }
+
+                    return true;
+
+
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+
+    })
+    .controller('NewTopicCtrl', function($scope, $state, $ionicActionSheet, $ionicLoading) {
+        MideApp.setBackManner('back');
+        MideApp.intoMyController($scope, $state);
+        $scope.$root.tabsHidden = "tabs-hide";
+
+        $scope.tipic = {
+            "title": '',
+            "content": ''
+        };
+
+        $scope.from_invalid =! ($scope.tipic.title != '' && $scope.tipic.content != '');
+        $scope.showActionsheet = function(info) {
+            if (typeof info == 'undefined') {
+                info = "";
+            };
+            $ionicActionSheet.show({
+                titleText: '确定' + info + '？',
+                buttons: [{
+                    text: '是'
+                }, {
+                    text: '否'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        MideApp.httpGet('/user/oukeye', function(data) {
+
+                            mideApp_user = {};
+                            $ionicLoading.hide();
+                            MideApp.myNotice(info + '成功')
+                        });
+                    } else {
+                        return true;
+                    }
+
+
+
+
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+    })
+    .controller('NewHelpCtrl', function($scope, $state, $ionicActionSheet, $ionicLoading) {
+        MideApp.setBackManner('back');
+        MideApp.intoMyController($scope, $state);
+        $scope.$root.tabsHidden = "tabs-hide";
+
+
+        $scope.help = {
+            "title": '',
+            "content": ''
+        };
+
+        $scope.from_invalid = !($scope.help.title != '' && $scope.help.content != '');
+
+        $scope.showActionsheet = function(info) {
+            if (typeof info == 'undefined') {
+                info = "";
+            };
+            $ionicActionSheet.show({
+                titleText: '确定' + info + '？',
+                buttons: [{
+                    text: '是'
+                }, {
+                    text: '否'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        MideApp.httpGet('/user/oukeye', function(data) {
+
+                            mideApp_user = {};
+                            $ionicLoading.hide();
+                            MideApp.myNotice(info + '成功')
+                        });
+                    } else {
+                        return true;
+                    }
+
+
+
+
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+
+    })
+    .controller('ChatsCtrl', function($scope, $state) {
+>>>>>>> origin/master
         MideApp.setBackManner('back');
         MideApp.intoMyController($scope, $state);
         $scope.$root.tabsHidden = "tabs-show";
@@ -627,6 +807,7 @@ angular.module('starter.controllers', [])
             img: './img/gift9.jpg'
         }];
 
+<<<<<<< HEAD
         $scope.gifts = _allGift;
         //我要助人
         $ionicModal.fromTemplateUrl('templates/gift-detail.html', {
@@ -690,6 +871,18 @@ angular.module('starter.controllers', [])
                 cssClass: "wg-sheet"
             });
         };
+=======
+        $scope.gitfs = _allGift;
+        // var _g = [];
+        // for (var i in _allGift) {
+        //     _g.push(_allGift[i]);
+        //     if ((i + 1) % 3 == 0) {
+        //         $scope.gitfs.push(_g);
+        //         _g = [];
+        //     }
+
+        // }
+>>>>>>> origin/master
     })
     .controller('GiftDetailCtrl', function($scope, $state, $stateParams, $ionicActionSheet, $ionicLoading) {
         MideApp.setBackManner('back');
@@ -1635,6 +1828,7 @@ angular.module('starter.controllers', [])
         $scope.$root.tabsHidden = "tabs-hide";
 
 
+<<<<<<< HEAD
 
     })
     .controller('FeedbackCtrl', function($scope, $state, $ionicLoading) {
@@ -1645,5 +1839,7 @@ angular.module('starter.controllers', [])
         $scope.$root.tabsHidden = "tabs-hide";
 
 
+=======
+>>>>>>> origin/master
 
     });

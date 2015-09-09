@@ -24,10 +24,17 @@
         </ion-slide-box>
         <div style="width:100%;">
 
+<<<<<<< HEAD
         <div class="" ng-repeat="gift in gifts"  style="width:33%; display:block; float:left;padding:10px;text-decoration: none;" ng-click="showGiftModal(gift.id)">
             <img ng-src="{{gift.img}}" style="width:100%;">
             <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift.name}}</div>
         </div>
+=======
+        <a class="" ng-repeat="gift in gitfs" href="#/gift/{{gift.id}}" style="width:33%; display:block; float:left;padding:10px;text-decoration: none;">
+            <img ng-src="{{gift.img}}" style="width:100%;">
+            <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift.name}}</div>
+        </a>
+>>>>>>> origin/master
         </div>
     </ion-content>
 </ion-view>

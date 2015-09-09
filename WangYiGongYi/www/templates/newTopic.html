@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <ion-modal-view>
 
     <ion-header-bar class=" bar-positive nav-title-slide-full">
@@ -12,10 +13,24 @@
     <ion-content padding="false" class="has-header no-footer" has-bouncing="true">
         <div class="list">
             <!-- <label class="item item-input" focus-me style="border:0px;">
+=======
+<ion-view title="我要求助发布">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
+    </ion-nav-buttons>
+    <div class="title">{{from_invalid}}</div>
+    <ion-nav-buttons side="right">
+        <button class="button button-clear" ng-click="showActionsheet('提交')" >提交</button>
+    </ion-nav-buttons>
+    <ion-content padding="false" class="has-header no-footer" delegate-handle="mainScroll">
+        <div class="list">
+            <label class="item item-input" focus-me style="border:0px;">
+>>>>>>> origin/master
                 <input type="text" placeholder="发布您的标题"  ng-model="tipic.title"></input>
             </label>
             <label class="item item-input"  style="border:0px;">
                 <textarea placeholder="请发布您的求助信息......"  ng-model="tipic.content"></textarea>
+<<<<<<< HEAD
             </label> -->
             <label class="item item-input">
                 <span class="input-label">主题:</span>
@@ -56,3 +71,9 @@
         </div>
     </ion-content>
 </ion-modal-view>
+=======
+            </label>
+        </div>
+    </ion-content>
+</ion-view>
+>>>>>>> origin/master

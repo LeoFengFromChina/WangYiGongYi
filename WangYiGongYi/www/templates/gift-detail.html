@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
@@ -10,6 +11,29 @@
             <div class="row row-center ">
                 <div class="col col-50 ">
                     <img ng-src="{{gift.img}} " style="width:100% ">
+=======
+<!--
+  This template loads for the 'tab.friend-detail' state (app.js)
+  'friend' is a $scope variable created in the FriendsCtrl controller (controllers.js)
+  The FriendsCtrl pulls data from the Friends service (service.js)
+  The Friends service returns an array of friend data
+-->
+<ion-view view-title="{{gift.name}}">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
+    </ion-nav-buttons>
+    <ion-content class="padding  no-footer" has-bouncing="true">
+        <div class="row  row-center">
+            <div class="col col-50">
+                <img ng-src="{{gift.img}}" style="width:100%">
+            </div>
+            <div class="col">
+                <div class="row">
+                    <div class="col">{{gift.id}}</div>
+                </div>
+                <div class="row">
+                    <div class="col">{{gift.name}}</div>
+>>>>>>> origin/master
                 </div>
                 <div class="col ">
                     <div class="row ">
@@ -33,5 +57,17 @@
                 确认兑换
             </button>
         </div>
+<<<<<<< HEAD
+=======
+        <div class="item item-body">
+            <h3>说明:</h3>
+            <p>
+                This is a "Facebook" styled Card. The header is created from a Thumbnail List item, the content is from a card-body consisting of an image and paragraph text. The footer consists of tabs, icons aligned left, within the card-footer.
+            </p>
+        </div>
+        <button class="button button-block button-positive" ng-click="showActionsheet()">
+            确认兑换
+        </button>
+>>>>>>> origin/master
     </ion-content>
 </ion-modal-view>
