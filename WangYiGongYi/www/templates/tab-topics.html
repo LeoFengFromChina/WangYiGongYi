@@ -2,8 +2,8 @@
     <!-- <ion-nav-buttons side="left">
         <button class="button button-clear" ng-click="downloadImg()">下载{{downloadProgress}}
 </button>
-    </ion-nav-buttons> -->
-   <!--  <ion-nav-buttons side="right">
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
         <button class="button button-clear" ui-sref="addtopic">求助</button>
     </ion-nav-buttons> -->
     <ion-content class="has-header  has-footer " has-bouncing="true" delegate-handle="mainScroll">
@@ -27,12 +27,12 @@
         <div class="">
             <div class="row">
                 <div class="col">
-                    <button class="button button-block button-positive" ui-sref="newTopic">
+                    <button class="button button-block button-positive" ng-click="showNewTopicModal()">
                         我要求助
                     </button>
                 </div>
                 <div class="col">
-                    <button class="button button-block button-positive" ui-sref="newHelp">
+                    <button class="button button-block button-positive" ng-click="showNewHelpModal()">
                         我要助人
                     </button>
                 </div>
@@ -40,7 +40,7 @@
         </div>
         <div class=" list topics">
             <!--    <div class="item item-divider">求助列表</div> -->
-            <a class="item item-avatar" collection-repeat="topic in config.topics" href="#/topics/{{topic.id}}" collection-item-width="'100%'" collection-item-height="65px">
+            <div class="item item-avatar" collection-repeat="topic in config.topics"  collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.id)">
                 <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img>
                 <!-- reset-img   -->
                 <h2>{{topic.title}}</h2>
@@ -55,7 +55,7 @@
                     <span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix">
           </span>
                 </p>
-            </a>
+            </div>
         </div>
         <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="config.infinite" spinner="spiral" class="wg_spinner">></ion-infinite-scroll>
         <!-- <ion-spinner class="topic-spinner ng-hide" ng-show="!topics" ng-style="{'top':getHalfHeight()+'px'}"></ion-spinner> -->

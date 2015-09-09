@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'angularMoment'])
+angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'angularMoment','ngSanitize'])
     .constant("$ionicLoadingConfig", {
         template: '<div class="ion-load-c loading-icon"></div>加载中...'
     })
@@ -94,33 +94,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
-        .state('topic', {
-            url: '/topics/:topicId',
-            views: {
-                'main-view': {
-                    templateUrl: 'templates/topic.html',
-                    controller: 'TopicCtrl'
-                }
-            }
-        })
-        .state('newTopic', {
-            url: '/newTopic',
-            views: {
-                'main-view': {
-                    templateUrl: 'templates/newTopic.html',
-                    controller: 'NewTopicCtrl'
-                }
-            }
-        })
-        .state('newHelp', {
-            url: '/newHelp',
-            views: {
-                'main-view': {
-                    templateUrl: 'templates/newHelp.html',
-                    controller: 'NewHelpCtrl'
-                }
-            }
-        })
+      
         .state('chats', {
             url: '/chats',
             views: {
@@ -145,15 +119,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 'main-view': {
                     templateUrl: 'templates/tab-gift.html',
                     controller: 'GitfCtrl'
-                }
-            }
-        })
-        .state('giftDetail', {
-            url: '/gift/:giftId',
-            views: {
-                'main-view': {
-                    templateUrl: 'templates/gift-detail.html',
-                    controller: 'GiftDetailCtrl'
                 }
             }
         })
@@ -229,6 +194,33 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
+        .state('forgetPassword', {
+            url: '/forgetPassword',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/forgetPassword.html',
+                    controller: 'ForgetPasswordCtrl'
+                }
+            }
+        })
+         .state('forgetCode', {
+            url: '/forgetCode',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/forgetCode.html',
+                    controller: 'ForgetCodeCtrl'
+                }
+            }
+        })
+          .state('resetPassword', {
+            url: '/resetPassword',
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/resetPassword.html',
+                    controller: 'ResetPasswordCtrl'
+                }
+            }
+        })
         .state('qq', {
             url: '/qq',
             views: {
@@ -288,7 +280,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             views: {
                 'main-view': {
                     templateUrl: 'templates/feedback.html',
-                    // controller: 'AccountCtrl'
+                    controller: 'FeedbackCtrl'
                 }
             }
         })
@@ -333,7 +325,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             views: {
                 'main-view': {
                     templateUrl: 'templates/tab-myGift.html',
-                    // controller: 'AccountCtrl'
+                    controller: 'MyGiftCtrl'
                 }
             }
         })

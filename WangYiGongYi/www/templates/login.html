@@ -17,16 +17,16 @@
                 </label> -->
                 <label class="item item-input">
                     <span class="input-label">账号:</span>
-                    <input type="text" ng-model="mideApp_user.username" placeholder="请输入账号" required>
+                    <input type="text" ng-model="mideApp_user.username" name="username" placeholder="请输入账号" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">密码:</span>
-                    <input type="password" ng-model="mideApp_user.password" placeholder="请输入密码" required>
+                    <input type="password" ng-model="mideApp_user.password" name="password" placeholder="请输入密码" required>
                 </label>
             </div>
             <div class="padding">
                 <button class="button button-block button-positive" ng-click=doLogin() ng-disabled=login.$invalid>登录</button>
-                <a class="button-block text-right calm" ui-sref="forgotten">忘记密码?</a>
+                <a class="button-block text-right calm" ui-sref="forgetPassword">忘记密码?</a>
             </div>
         </form>
     </ion-content>

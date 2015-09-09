@@ -6,9 +6,9 @@
     <ion-content class=' has-footer'>
         <form name=reg>
             <div class="list">
-                <a class="item item-input item-avatar-right headImg_40 text-midel" href="#" style="padding-top:6px;padding-bottom:6px;">
+                <div class="item item-input item-avatar-right headImg_40 text-midel"  style="padding-top:6px;padding-bottom:6px;" ng-click="showGetImagesheet()">
                     <img ng-src="{{mideApp_user.avatar_url||'img/commentfailure.jpg'}}" style="width:100%"> 头像
-                </a>
+                </div>
                 <label class="item item-input">
                     <span class="input-label">账号:</span>
                     <input type="text" ng-model="mideApp_user.username" placeholder="请输入账号" required>
@@ -27,9 +27,11 @@
 
                     <input type="text" ng-model="mideApp_user.gender" placeholder="请选择性别"  ng-click="showGendersheet()" readonly="readonly" class="light" style = "background:#fff">
                 </label>
-                <label class="item item-input">
-                    <span class="input-label">生日日期:</span>
-                    <input type="text" ng-model="mideApp_user.birthday" placeholder="请选择日期" required>
+                <label class="item item-input" ng-click="getDate()">
+                    <span class="input-label">出身年月:</span>
+                     <span class="" ng-show="mideApp_user.birthday">{{mideApp_user.birthday|date:"yyyy-MM-dd"}}</span>
+                      <span class="tips-info" ng-show="!mideApp_user.birthday">请选择日期</span>
+                    <!-- <input type="text" ng-model="mideApp_user.birthday" placeholder="请选择日期" required> -->
                 </label>
                 <label class="item item-input">
                     <span class="input-label">联系电话:</span>
@@ -49,10 +51,9 @@
                     <dov class="col"><a class="button button-block button-positive " ng-click=doReg() ng-disabled=reg.$invalid>提交</a>
                     </dov>
                     <dov class="col">
-                        <a class="button button-block button-positive" ng-disabled=reg.$invalid ng-click="regMore()">完善其他</a>
+                        <a class="button button-block button-positive"  ng-click="showReForHelpModal()" ng-disabled=reg.$invalid>注册求助者</a>
                     </dov>
                 </div>
-                <!-- <button class="button button-block button-positive" ng-click=doLogin() ng-disabled=reg.$invalid>立即注册</button> -->
             </div>
         </form>
     </ion-content>
