@@ -1,5 +1,11 @@
-<ion-view view-title="网益公益">
+ <ion-header-bar class="bar-positive">
+
+    <h1 class="title">网益公益</h1>
+ </ion-header-bar>
+<ion-view >
     <ion-content class="stable-bg has-footer" has-bouncing="true">
+        <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
+        </ion-refresher>
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="slidebox" auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;">
             <ion-slide>
                 <div class="box">
@@ -23,18 +29,10 @@
             </ion-slide>
         </ion-slide-box>
         <div style="width:100%;">
-
-<<<<<<< HEAD
-        <div class="" ng-repeat="gift in gifts"  style="width:33%; display:block; float:left;padding:10px;text-decoration: none;" ng-click="showGiftModal(gift.id)">
-            <img ng-src="{{gift.img}}" style="width:100%;">
-            <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift.name}}</div>
-        </div>
-=======
-        <a class="" ng-repeat="gift in gitfs" href="#/gift/{{gift.id}}" style="width:33%; display:block; float:left;padding:10px;text-decoration: none;">
-            <img ng-src="{{gift.img}}" style="width:100%;">
-            <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift.name}}</div>
-        </a>
->>>>>>> origin/master
+            <div class="" ng-repeat="gift in gifts" style="width:33%; display:block; float:left;padding:10px;text-decoration: none;" ng-click="showGiftModal(gift.id)">
+                <img ng-src="{{gift.img}}" style="width:100%;">
+                <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift.name}}</div>
+            </div>
         </div>
     </ion-content>
 </ion-view>

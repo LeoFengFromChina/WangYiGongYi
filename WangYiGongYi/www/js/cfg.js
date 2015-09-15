@@ -19,11 +19,12 @@ var MideApp = function() {
     var $http = null;
     var $state = null;
     var $scope = null;
+    var $rootScope =null;
     var $menusScope = null;
     var $timeout = null;
     /* End */
 
-    var backward = function() {
+    var backward = function(tabshow) {
         switch (BackManner) {
             case 'exit':
                 navigator.app.exitApp();
@@ -33,7 +34,7 @@ var MideApp = function() {
                 break;
             case 'back':
                 $ionicHistory.goBack();
-                // $scope.$root.tabsHidden = tabshow;
+                getMyRootScope().tabsHidden = tabshow;
                 break;
             case 'wait':
                 $state.go('menus.job-main');
@@ -262,13 +263,18 @@ var MideApp = function() {
     var setMenusScope = function(obj) {
         $menusScope = obj;
     }
-
+    var setMyRootScope = function(obj) {
+        $rootScope = obj;
+    }
+    var getMyRootScope = function(){
+        return  $rootScope;
+    }
     var intoMyController = function(scope, state) {
         $scope = scope;
         $state = state;
         $scope.myConfig = myConfig;
         $scope.back = function(tabshow) {
-            backward();
+            backward(tabshow);
         };
         $scope.$on("$destroy", function() {
             exitMyController();
@@ -388,7 +394,8 @@ var MideApp = function() {
     mideapp.setMyHttp = setMyHttp;
     mideapp.setMyTimeout = setMyTimeout;
     mideapp.setMenusScope = setMenusScope;
-
+    mideapp.setMyRootScope = setMyRootScope;
+    mideapp.getMyRootScope = getMyRootScope;
     mideapp.intoMyController = intoMyController;
     mideapp.exitMyController = exitMyController;
 

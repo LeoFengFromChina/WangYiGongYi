@@ -1,14 +1,11 @@
-<ion-view title="网益公益">
-    <!-- <ion-nav-buttons side="left">
-        <button class="button button-clear" ng-click="downloadImg()">下载{{downloadProgress}}
-</button>
-    </ion-nav-buttons>
-    <ion-nav-buttons side="right">
-        <button class="button button-clear" ui-sref="addtopic">求助</button>
-    </ion-nav-buttons> -->
-    <ion-content class="has-header  has-footer " has-bouncing="true" delegate-handle="mainScroll">
-        <!-- <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
-        </ion-refresher> -->
+ <ion-header-bar class="bar-positive">
+    <h1 class="title">网益公益</h1>
+ </ion-header-bar>
+<ion-view >
+    <ion-content class=" has-footer " has-bouncing="true" delegate-handle="mainScroll">
+       <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
+
+        </ion-refresher>
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="slidebox" auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;">
             <ion-slide>
                 <div class="box blue">
@@ -51,13 +48,13 @@
                     <span ng-if="topic.status==2" class="tab status2">已承接</span>
                     <span ng-if="topic.status==3" class="tab status3">帮助中</span>
                     <span ng-if="topic.status==4" class="tab status4">已完成</span> 
- <span  class="tab">求助者:</span> {{topic.author.author_name}}
+ <span  class="tab">发起人:</span> {{topic.author.author_name}}
                     <span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix">
           </span>
                 </p>
             </div>
         </div>
-        <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="config.infinite" spinner="spiral" class="wg_spinner">></ion-infinite-scroll>
+        <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="config.infinite" spinner="spiral" class="wg_spinner"></ion-infinite-scroll>
         <!-- <ion-spinner class="topic-spinner ng-hide" ng-show="!topics" ng-style="{'top':getHalfHeight()+'px'}"></ion-spinner> -->
     </ion-content>
 </ion-view>

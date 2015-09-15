@@ -1,0 +1,11 @@
+<div class="bar bar-header bar-positive">
+    <a class="button icon-left ion-ios-arrow-left button-clear button-linght" ui-sref="account"></a>
+    <h1 class="title">求助与帮助</h1>
+</div>
+<div class="bar bar-subheader" style="padding:0;">
+    <div class="row" style="padding:0;">
+        <div class="col"><a class="button button-full" ng-class="{'button-positive': tabActive==1, 'button-drak': tabActive!=1}" ui-sref="help.myHelp" style="margin:0;padding-bottom: 0px;padding-top: 0px;border:1px solid #bbbbbb;" ng-click="selectTab(1)">我的求助</a></div>
+        <div class="col"><a class="button button-full" ng-class="{'button-positive': tabActive==2, 'button-drak': tabActive!=2}" ui-sref="help.myAsk" style="margin:0;padding-bottom: 0px;padding-top: 0px;border:1px solid #bbbbbb;" ng-click="selectTab(2)">我的帮助</a></div>
+    </div>
+</div>
+<ion-nav-view name="help-view"></ion-nav-view>

@@ -1,13 +1,12 @@
-<ion-view view-title="网益公益">
-    <ion-content>
+<ion-header-bar class="bar-positive">
+    <h1 class="title">网益公益</h1>
+</ion-header-bar>
+<ion-view>
+    <ion-content class="has-footer" has-bouncing="true">
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
-        <ion-list>
-<<<<<<< HEAD
+        <!-- <ion-list>
             <ion-item class="item-remove-animate item-avatar item-icon-right" collection-repeat="chat in chats" type="item-text-wrap" ng-click="showChatModal(chat.id)">
-=======
-            <ion-item class="item-remove-animate item-avatar item-icon-right" collection-repeat="chat in chats" type="item-text-wrap" href="#/chats/{{chat.id}}">
->>>>>>> origin/master
                 <img ng-src="{{chat.face}}">
                 <h2>{{chat.name}}</h2>
                 <p>{{chat.lastText}}</p>
@@ -15,6 +14,15 @@
                 <ion-option-button class="button-assertive" ng-click="remove(chat)">
                     Delete
                 </ion-option-button>
+            </ion-item>
+        </ion-list> -->
+        <ion-list show-delete="flag.showDelete">
+            <ion-item ng-repeat="chat in chats">
+                <p>{{chat.addtime}}</p>
+                <p style="color:#000;font-weight:bold">{{chat.title}}</p>
+                <p style="color:#000;white-space: pre">{{chat.content}}</p>
+                <ion-option-button class="button-assertive icon ion-close-round" ng-click="deleteItem(chat,chat.id)"></ion-option-button>
+                <ion-delete-button class="ion-minus-circled" ng-click="deleteItem(chat,chat.id)"></ion-delete-button>
             </ion-item>
         </ion-list>
     </ion-content>

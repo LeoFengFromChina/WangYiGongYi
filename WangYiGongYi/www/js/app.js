@@ -10,7 +10,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         template: '<div class="ion-load-c loading-icon"></div>加载中...'
     })
 
-.run(function($ionicHistory, $ionicPlatform, $http, $ionicLoading, $timeout,amMoment) {
+.run(function($ionicHistory,$rootScope, $ionicPlatform, $http, $ionicLoading, $timeout,amMoment) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -34,6 +34,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
     MideApp.setMyHttp($http);
     MideApp.setMyTimeout($timeout);
     MideApp.setMyionicHistory($ionicHistory);
+    MideApp.setMyRootScope($rootScope);
     $ionicHistory.nextViewOptions({
         disableBack: true
     });
@@ -70,31 +71,26 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             }
 
         })
+        .state('tab', {
+            url: '/tab',
+            // abstract: true,
 
-    .state('tab', {
-        url: '/tab',
-        // abstract: true,
-
-        views: {
-            'main-view': {
-                templateUrl: 'templates/tabs.html',
-                controller: 'TabCtrl'
-            }
-        }
-    })
-
-    // Each tab has its own nav history stack:
-
-    .state('topics', {
-            url: '/topics',
             views: {
                 'main-view': {
-                    templateUrl: 'templates/tab-topics.html',
-                    controller: 'TopicsCtrl'
+                    templateUrl: 'templates/tabs.html',
+                    controller: 'TabCtrl'
                 }
             }
         })
-      
+        .state('topics', {
+                url: '/topics',
+                views: {
+                    'main-view': {
+                        templateUrl: 'templates/tab-topics.html',
+                        controller: 'TopicsCtrl'
+                    }
+                }
+        })
         .state('chats', {
             url: '/chats',
             views: {
@@ -203,7 +199,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
-         .state('forgetCode', {
+        .state('forgetCode', {
             url: '/forgetCode',
             views: {
                 'main-view': {
@@ -212,7 +208,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
-          .state('resetPassword', {
+        .state('resetPassword', {
             url: '/resetPassword',
             views: {
                 'main-view': {
@@ -279,7 +275,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             url: '/feedback',
             views: {
                 'main-view': {
-                    templateUrl: 'templates/feedback.html',
+                    templateUrl: 'templates/feedbackList.html',
                     controller: 'FeedbackCtrl'
                 }
             }
@@ -329,35 +325,76 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
-
-    .state('help', {
-        url: '/help',
-        views: {
-            'main-view': {
-                templateUrl: 'templates/tab-help.html',
-                // controller: 'AccountCtrl'
-            }
-        }
-    })
-
-    .state('myTeam', {
-            url: '/myTeam',
+        
+        .state('myTeam', {
+                url: '/myTeam',
+                views: {
+                    'main-view': {
+                        templateUrl: 'templates/myTeam.html',
+                        controller: 'MyTeamCtrl'
+                    }
+                }
+            })
+        .state('rank', {
+            url: '/rank',
+            abstract: true,
             views: {
                 'main-view': {
-                    templateUrl: 'templates/tab-myTeam.html',
-                    // controller: 'AccountCtrl'
+                    templateUrl: 'templates/rank.html',
+                    controller: 'rankCtrl'
                 }
             }
         })
-        .state('regMore', {
-            url: '/regMore',
+        .state('rank.region', {
+            url: '/region',
             views: {
-                'main-view': {
-                    templateUrl: 'templates/regMore.html',
-                    controller: 'RegMoreCtrl'
+                'rank-view': {
+                    templateUrl: 'templates/rankRegion.html',
+                    controller: 'rankCtrl'
                 }
             }
-        });
+        })
+        .state('rank.all', {
+            url: '/all',
+            views: {
+                'rank-view': {
+                    templateUrl: 'templates/rankAll.html',
+                    controller: 'rankCtrl'
+                }
+            }
+        })
+
+        .state('help', {
+            url: '/help',
+            abstract: true,
+            views: {
+                'main-view': {
+                    templateUrl: 'templates/help.html',
+                    controller: 'helpCtrl'
+                }
+            }
+        })
+        // 我的帮助
+        .state('help.myHelp', {
+            url: '/myHelp',
+            views: {
+                'help-view': {
+                    templateUrl: 'templates/myHelp.html',
+                    controller: 'MyHelpCtrl'
+                }
+            }
+        })
+        //我的求助
+        .state('help.myAsk', {
+            url: '/myAsk',
+            views: {
+                'help-view': {
+                    templateUrl: 'templates/myAsk.html',
+                    controller: 'MyAskCtrl'
+                }
+            }
+        })
+        ;
 
     // if none of the above states are matched, use this as the fallback
     $urlRouterProvider.otherwise('/start');
