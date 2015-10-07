@@ -1,0 +1,36 @@
+{
+    "code": 0,
+    "message": "成功",
+    "success": true,
+    "data": [{
+        "id": "1",
+        "ranking": "1",
+        "username": "oky",
+        "addtime": "2015-08-21T02:33:00.896Z",
+        "serverTime": "560"
+    }, {
+        "id": "2",
+        "ranking": "2",
+        "username": "mide",
+        "addtime": "2015-08-21T02:33:00.896Z",
+        "serverTime": "360"
+    }, {
+        "id": "3",
+        "ranking": "3",
+        "username": "张小三",
+        "addtime": "2015-08-21T02:33:00.896Z",
+        "serverTime": "260"
+    }, {
+        "id": "4",
+        "ranking": "4",
+        "username": "李小四",
+        "addtime": "2015-08-21T02:33:00.896Z",
+        "serverTime": "160"
+    }, {
+        "id": "5",
+        "ranking": "5",
+        "username": "王小五",
+        "addtime": "2015-08-21T02:33:00.896Z",
+        "serverTime": "60"
+    }]
+}

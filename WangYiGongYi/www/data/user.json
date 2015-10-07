@@ -1,0 +1,30 @@
+{
+    "code": 0,
+    "message": "成功",
+    "success": true,
+    "data": {
+        "id":1,
+        "username": "oukeye",
+        "password":"123456",
+        "avatar_url": "https://avatars.githubusercontent.com/u/8086489?v=3&s=120",
+        "create_at": "2015-08-11T07:42:33.409Z",
+        "score": 0,
+        "gender": "男",
+        "birthday": "1987-09-09",
+        "phoneNumber": 88888888888,
+        "email": "mide@qq.com",
+        "QQnumber": 491238861,
+        "region": "广州",
+        "identity": 1358053058622,
+        "address": "广州市东圃镇",
+        "weixinNumber": "微信号码",
+        "education": "本科",
+        "profession": "软件技术",
+        "speciality": "计算机WEBApp",
+        "intention": "很高",
+        "intentionTime": "10:00-17:00",
+        "flag": 1
+
+    }
+
+}
