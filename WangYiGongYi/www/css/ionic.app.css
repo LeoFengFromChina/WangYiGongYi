@@ -7949,23 +7949,26 @@ a.button {
 .rank-icon .icon {
   font-size: 24px; }
 
-.myicon-medal-bronze {
+.myicon-medal-3 {
   width: 32px;
   height: 32px;
   background: url(../img/Medal_Bronze_48.png) no-repeat -5px 10px;
-  background-size: 32px 32px; }
+  background-size: 32px 32px;
+  text-indent: 99999px; }
 
-.myicon-medal-slver {
+.myicon-medal-2 {
   width: 32px;
   height: 32px;
   background: url(../img/Medal_Silver_48.png) no-repeat -5px 10px;
-  background-size: 32px 32px; }
+  background-size: 32px 32px;
+  text-indent: 99999px; }
 
-.myicon-medal-gold {
+.myicon-medal-1 {
   width: 32px;
   height: 32px;
   background: url(../img/Medal_Gold_48.png) no-repeat -5px 10px;
-  background-size: 32px 32px; }
+  background-size: 32px 32px;
+  text-indent: 99999px; }
 
 .text-ellipsis {
   overflow: hidden;
@@ -8034,6 +8037,18 @@ a.button {
   border-bottom-right-radius: 2px;
   z-index: 999; }
 
+/*topicModeal page css start*/
+.contactPhone {
+  text-decoration: none;
+  color: #d82a3e; }
+  .contactPhone i {
+    font-size: 20px;
+    color: #d82a3e; }
+  .contactPhone a {
+    text-decoration: none;
+    color: #d82a3e; }
+
+/*topicModeal page css end*/
 /*loading*/
 @keyframes "loading" {
   from {
@@ -8123,3 +8138,11 @@ a.button {
   height: 180px;
   background: url(../img/user-bg.png) center center no-repeat;
   background-size: 100% 100%; }
+
+.nav-bar-tabs-top.hide + .view-container > .tabs-top > .tabs, .tabs.tabs-top {
+  top: 0 !important; }
+
+.bar .title.title-center {
+  text-align: center;
+  left: 55px;
+  right: 55px; }

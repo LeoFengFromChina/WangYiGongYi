@@ -1,9 +1,9 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear" ng-click="closeNewHelpModal()">关闭</button>
+            <button class="button button-clear icon ion-android-close" ng-click="closeNewHelpModal()"></button>
         </div>
-        <h1 class="title">我要助人发布</h1>
+        <h1 class="title title-center">我要助人发布</h1>
         <div class="buttons">
             <button class="button button-clear icon " ng-click="showNewHelpsheet()">提交</button>
         </div>
@@ -12,40 +12,44 @@
         <div class="list">
             <label class="item item-input">
                 <span class="input-label">主题:</span>
-                <input type="text" ng-model="topic.title" placeholder="请输入主题" required>
+                <input type="text" ng-model="newHelp.title" placeholder="请输入主题" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">发起人:</span>
-                <input type="text" ng-model="topic.promoter" placeholder="请输入发起人" required>
+                <input type="text" ng-model="newHelp.promoter" placeholder="请输入发起人" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">联系人:</span>
-                <input type="text" ng-model="topic.contacts" placeholder="请输入联系人" required>
+                <input type="text" ng-model="newHelp.contacts" placeholder="请输入联系人" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">电话:</span>
-                <input type="text" ng-model="topic.phone" placeholder="请输入电话" required>
+                <input type="text" ng-model="newHelp.phone" placeholder="请输入电话" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">时间:</span>
-                <input type="text" ng-model="topic.topicTime" placeholder="请输入时间" required>
+                <input type="text" ng-model="newHelp.topicTime" placeholder="请输入时间" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">区域:</span>
-                <input type="text" ng-model="topic.region" placeholder="请输入区域" required>
+                <input type="text" ng-model="newHelp.region" placeholder="请输入区域" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">类型:</span>
-                <input type="text" ng-model="topic.type" placeholder="请输入类型" required>
+                <input type="text" ng-model="newHelp.type" placeholder="请输入类型" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">时长:</span>
-                <input type="text" ng-model="topic.long" placeholder="请输入时长" required>
+                <input type="text" ng-model="newHelp.long" placeholder="请输入时长" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">详细:</span>
-                <textarea placeholder="请发布您的助人信息......" ng-model="tipic.content"></textarea>
+                <textarea placeholder="请发布您的助人信息......" ng-model="newHelp.content"></textarea>
             </label>
+            <div class="item " ng-click="showGetImagesheet(newHelp)">上传图片</div>
+            <div class="item" ng-repeat="img in newHelp.images_list">
+                <img src="{{img}}" width="100%">
+            </div>
         </div>
     </ion-content>
 </ion-modal-view>

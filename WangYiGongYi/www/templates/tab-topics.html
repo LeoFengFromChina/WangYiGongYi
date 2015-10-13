@@ -1,26 +1,17 @@
- <ion-header-bar class="bar-positive">
+<!--  <ion-header-bar class="bar-positive">
     <h1 class="title">网益公益</h1>
- </ion-header-bar>
-<ion-view >
-    <ion-content class=" has-footer " has-bouncing="true" delegate-handle="mainScroll">
-       <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
-
+ </ion-header-bar> -->
+<ion-view view-title="网益公益">
+    <ion-content class=" has-tabs " has-bouncing="true" delegate-handle="mainScroll">
+        <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
-        <ion-slide-box on-slide-changed="slideHasChanged($index)" class="slidebox" auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;">
-            <ion-slide>
-                <div class="box blue">
-                    <img ng-src="./img/wg_banner1.jpg" alt="微光公益" style="width:100%"></div>
-            </ion-slide>
-            <ion-slide>
-                <div class="box yellow">
-                    <img ng-src="./img/wg_banner2.jpg" alt="微光公益" style="width:100%"></div>
-            </ion-slide>
-            <ion-slide>
-                <div class="box pink">
-                    <img ng-src="./img/wg_banner3.jpg" alt="微光公益" style="width:100%"></div>
-            </ion-slide>
+        <ion-slide-box  class="slidebox"  auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;width:100%;" ng-if="banners" delegate-handle="topicsBanner">
+            <div class="slider-slide" ng-repeat="banner in banners">
+                <div class="box" style="position: relative;">
+                    <img ng-src="{{banner._iconurl}}" alt="微光公益" style="width:100%;height:auto;" />
+                </div>
+            </div>
         </ion-slide-box>
-        
         <div class="">
             <div class="row">
                 <div class="col">
@@ -35,26 +26,23 @@
                 </div>
             </div>
         </div>
-        <div class=" list topics">
+        <div class=" list topics" ng-if="config.topics">
             <!--    <div class="item item-divider">求助列表</div> -->
-            <div class="item item-avatar" collection-repeat="topic in config.topics"  collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.id)">
-                <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img>
+            <div class="item item-avatar" collection-repeat="topic in config.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.HelpRequest._id)">
+                <img ng-src="{{topic.Author._photourl|avatarFilter}}" reset-img />
                 <!-- reset-img   -->
-                <h2>{{topic.title}}</h2>
-               
+                <h2>{{topic.HelpRequest._title}}</h2>
                 <p class="summary">
-               
-                    <span ng-if="topic.status==1" class="tab status1">求助中</span>
-                    <span ng-if="topic.status==2" class="tab status2">已承接</span>
-                    <span ng-if="topic.status==3" class="tab status3">帮助中</span>
-                    <span ng-if="topic.status==4" class="tab status4">已完成</span> 
- <span  class="tab">发起人:</span> {{topic.author.author_name}}
-                    <span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix">
-          </span>
+                    <span ng-if="topic.HelpRequest._status==1" class="tab status1">求助中</span>
+                    <span ng-if="topic.HelpRequest._status==2" class="tab status2">已承接</span>
+                    <span ng-if="topic.HelpRequest._status==3" class="tab status3">帮助中</span>
+                    <span ng-if="topic.HelpRequest._status==4" class="tab status4">已完成</span>
+                    <span class="tab">发起人:</span> {{topic.Author._name}}
+                    <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span>
                 </p>
             </div>
         </div>
         <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="config.infinite" spinner="spiral" class="wg_spinner"></ion-infinite-scroll>
-        <!-- <ion-spinner class="topic-spinner ng-hide" ng-show="!topics" ng-style="{'top':getHalfHeight()+'px'}"></ion-spinner> -->
+        <!-- <ion-spinner class="topic-spinner" ng-show="!config.topics" ng-style="{'top':0px'}"></ion-spinner> -->
     </ion-content>
 </ion-view>

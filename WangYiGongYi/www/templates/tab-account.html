@@ -1,11 +1,10 @@
- <ion-header-bar class="bar-positive">
-    <h1 class="title">网益公益</h1>
- </ion-header-bar>
-<ion-view>
-    <ion-content class="stable-bg has-footer" has-bouncing="true">
-        
+<ion-view view-title="网益公益">
+    <ion-nav-buttons side="right">
+        <button class="button  button-clear button-linght" ng-click="gotoState('tab.reg',false)" ng-if="mideApp_user.flag!=1">注册</button>
+    </ion-nav-buttons>
+    <ion-content class="stable-bg has-tabs" has-bouncing="true" delegate-handle="accountScroll">
         <div class="list ">
-            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow" ui-sref="login" ng-if="mideApp_user.flag!=1">
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow" ng-if="mideApp_user.flag!=1" ng-click="showLoginModal()">
                 <img ng-src="img/commentfailure_logout.jpg" style="width:100%">
                 <p ng-if="!processing" style="height:68px;line-height:68px;">立即登录</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
@@ -23,106 +22,94 @@
             </a>
         </div>
         <div class="list ">
-            <a class="item item-icon-left item-icon-right" ui-sref="myGift">
+            <a class="item item-icon-left item-icon-right" ng-click="gotoState('tab.myGift')">
                 <i class="icon ion-ios-cart calm"></i>我的礼品
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
-            <a class="item item-icon-left item-icon-right" ui-sref="rank.all">
+            <a class="item item-icon-left item-icon-right" ng-click="gotoState('tab.rank')">
                 <i class="icon ion-podium calm"></i>荣誉排名
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
-            <a class="item item-icon-left item-icon-right wg-box-shadow " ui-sref="help.myHelp">
+            <a class="item item-icon-left item-icon-right wg-box-shadow " ng-click="showHelpAndAskModal('ask')">
                 <i class="icon ion-heart assertive"></i>求助与帮助
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
-            <a class="item item-icon-left item-icon-right wg-box-shadow " ui-sref="feedback">
+            <a class="item item-icon-left item-icon-right wg-box-shadow " ng-click="gotoState('tab.feedback')">
                 <i class="icon ion-android-list calm"></i>意见反馈
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
         </div>
         <div class="list ">
-            <a class="item item-icon-left item-icon-right wg-box-shadow " ui-sref="myTeam">
+            <a class="item item-icon-left item-icon-right wg-box-shadow " ng-click="gotoState('tab.myTeam')">
                 <i class="icon ion-person-stalker calm"></i>我的团队
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
         </div>
-        <div class="list" ng-if="mideApp_user.flag==1">
-            <a class="item  item-divider item-icon-left item-icon-right ">
+        <div class="list" ng-if="mideApp_user.flag==1" ng-click="showBasicInfoModal('a')">
+            <div class="item  item-divider item-icon-left item-icon-right ">
                 <i class="icon ion-ios-list positive"></i>个人信息
-                <i class="icon ion-chevron-down icon-accessory"></i>
-            </a>
-            <a class="item " href="javascript:;" ng-click="showActionsheet()">
+                <i class="icon ion-ios-gear-outline "></i>
+            </div>
+            <div class="item ">
                 性别:
                 <span class="item-note">{{mideApp_user.gender}}</span>
-                 
-            </a>
-            <a class="item " href="javascript:;" ng-click="deadline()">
-                 生日日期:
+            </div>
+            <div class="item ">
+                生日日期:
                 <span class="item-note">{{mideApp_user.birthday |date:"yyyy-MM-dd"}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="phone">
-                 联系电话:
+            </div>
+            <div class="item ">
+                联系电话:
                 <span class="item-note">{{mideApp_user.phoneNumber}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="email">
+            </div>
+            <div class="item ">
                 邮箱:
                 <span class="item-note">{{mideApp_user.email}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="qq">
-                 QQ:
+            </div>
+            <div class="item ">
+                QQ:
                 <span class="item-note">{{mideApp_user.QQnumber}}</span>
-                 
-            </a>
+            </div>
         </div>
-        <div class="list" ng-if="mideApp_user.flag==1">
-            <a class="item " ui-sref="region">
+        <div class="list" ng-if="mideApp_user.flag==1" ng-click="showBasicInfoModal('b')">
+            <div class="item ">
                 所属地区:
                 <span class="item-note">{{mideApp_user.region}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="identity">
-                 身份证号:
+            </div>
+            <div class="item ">
+                身份证号:
                 <span class="item-note">{{mideApp_user.identity}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="address">
-                 常住地址:
+            </div>
+            <div class="item ">
+                常住地址:
                 <span class="item-note">{{mideApp_user.address}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="weixinNumber">
+            </div>
+            <div class="item ">
                 微信号码:
                 <span class="item-note">{{mideApp_user.weixinNumber}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="education">
-                 学历:
+            </div>
+        </div>
+        <div class="list" ng-if="mideApp_user.flag==1" ng-click="showBasicInfoModal('c')">
+            <div class="item ">
+                学历:
                 <span class="item-note">{{mideApp_user.education}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="profession">
-                 专业:
+            </div>
+            <div class="item ">
+                专业:
                 <span class="item-note">{{mideApp_user.profession}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="speciality">
-                 特长:
+            </div>
+            <div class="item ">
+                特长:
                 <span class="item-note">{{mideApp_user.speciality}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="intention">
+            </div>
+            <div class="item ">
                 选择服务意愿:
                 <span class="item-note">{{mideApp_user.intention}}</span>
-                 
-            </a>
-            <a class="item " ui-sref="intentionTime">
-                 选择服务时间:
+            </div>
+            <div class="item ">
+                选择服务时间:
                 <span class="item-note">{{mideApp_user.intentionTime}}</span>
-                 
-            </a>
+            </div>
         </div>
         <div class="list  wg-logoutBtn padding" ng-if="mideApp_user.flag==1">
             <button class="button button-block button-outline button-positive" ng-click="logout()">

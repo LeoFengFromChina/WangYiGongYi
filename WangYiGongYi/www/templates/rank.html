@@ -1,11 +1,104 @@
-<div class="bar bar-header bar-positive">
+<!-- <div class="bar bar-header bar-positive">
     <a class="button icon-left ion-ios-arrow-left button-clear button-linght" ui-sref="account"></a>
     <h1 class="title">荣誉排名</h1>
 </div>
 <div class="bar bar-subheader" style="padding:0;">
     <div class="row" style="padding:0;">
-        <div class="col"><a class="button button-full" ng-class="{'button-positive': tabActive==1, 'button-drak': tabActive!=1}" ui-sref="rank.all" style="margin:0;padding-bottom: 0px;padding-top: 0px;border:1px solid #bbbbbb;" ng-click="selectTab(1)">全国排行</a></div>
-        <div class="col"><a class="button button-full" ng-class="{'button-positive': tabActive==2, 'button-drak': tabActive!=2}" ui-sref="rank.region" style="margin:0;padding-bottom: 0px;padding-top: 0px;border:1px solid #bbbbbb;" ng-click="selectTab(2)">区域排行</a></div>
+        <div class="col"><a class="button button-full" ng-class="{'button-positive': tabActive==1, 'button-drak': tabActive!=1}" ui-sref="tab.rank.all" style="margin:0;padding-bottom: 0px;padding-top: 0px;border:1px solid #bbbbbb;" ng-click="selectTab(1)">全国排行</a></div>
+        <div class="col"><a class="button button-full" ng-class="{'button-positive': tabActive==2, 'button-drak': tabActive!=2}" ui-sref="tab.rank.region" style="margin:0;padding-bottom: 0px;padding-top: 0px;border:1px solid #bbbbbb;" ng-click="selectTab(2)">区域排行</a></div>
     </div>
 </div>
-<ion-nav-view name="rank-view"></ion-nav-view>
+<ion-nav-view name="rank-view"></ion-nav-view> -->
+<ion-view view-title="荣誉排名">
+    <ion-nav-buttons side="left">
+        <button class="button button-clear icon ion-ios-arrow-back" ng-click="back()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+    <button class="button button-clear button-light" ng-click="openRankPopover($event)">{{currentRank.label}}</button>
+  </ion-nav-buttons>
+    <ion-content class="light-bg has-header no-footer" has-bouncing="true">
+          <div class="list">
+            <a class="item item-icon-left rank-icon" href="#"  collection-repeat="rank in rankList ">
+                <i class="icon  myicon-medal-{{rank.ranking}}">{{rank.ranking}}</i>{{rank.username}}
+                 <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>{{rank.serverTime}}小时</span>
+            </a>
+            <!-- <a class="item item-icon-left rank-icon " href="#">
+                <i class="icon  myicon-medal-slver"></i>王五1
+                 <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>80小时</span>
+            </a>
+            <a class="item item-icon-left rank-icon" href="#">
+                <i class="icon  myicon-medal-bronze"> </i>李四1
+                 <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>40小时</span>
+            </a>
+            <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">4</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">5</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">6</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">7</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">8</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">9</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">10</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">11</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">12</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">13</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">14</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">15</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">16</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">17</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">18</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">19</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a>
+           <a class="item item-icon-left rank-icon" href="#">
+               <i class="icon  ">20</i> 赵六1
+                <span class="item-note positive"><i style="font-size:10px;color:#cccccc;">服务时长:</i>30小时</span>
+           </a> -->
+        </div>
+    </ion-content>
+</ion-view>
+

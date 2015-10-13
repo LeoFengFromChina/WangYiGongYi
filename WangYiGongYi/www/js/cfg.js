@@ -7,7 +7,8 @@ var Patterns = {
 
 
 var MideApp = function() {
-    var API_Host = 'http://ionichina.com/api/v1'; //http://api.yibeiban.com:8888';
+    var API_Host = 'http://oukeye.github.io/'; //http://api.yibeiban.com:8888';
+    var API_Home="http://192.168.1.101/"
     var API_Lock = false;
 
     /* To be inited or changed in ctrl */
@@ -19,7 +20,7 @@ var MideApp = function() {
     var $http = null;
     var $state = null;
     var $scope = null;
-    var $rootScope =null;
+    var $rootScope = null;
     var $menusScope = null;
     var $timeout = null;
     /* End */
@@ -46,7 +47,7 @@ var MideApp = function() {
 
     var isOnline = function() {
         return true;
-        // return navigator && navigator.connection && navigator.connection.type != Connection.NONE;
+         // return navigator && navigator.connection && navigator.connection.type != Connection.NONE;
     };
     //var myLogger = function(i){return console.log(JSON.stringify(i));};
     var myLogger = function() {
@@ -109,13 +110,19 @@ var MideApp = function() {
                 return false;
             }
         }
-        conn.clear = function(prefix) {
+        conn.clear = function(clear_key, prefix) {
             prefix = prefix || '~';
             Object.keys(localStorage).forEach(function(key) {
-                if (key.substring(0, 1) == prefix) {
-                    window.localStorage.removeItem(key);
-                    // localStorage.removeItem(key);
+                if (typeof(clear_key) == 'undefined') {
+                    if (key.substring(0, 1) == prefix) {
+                        window.localStorage.removeItem(key);
+                    }
+                } else {
+                    if (key == prefix + clear_key) {
+                        window.localStorage.removeItem(key);
+                    }
                 }
+
             });
         }
         return conn;
@@ -124,14 +131,22 @@ var MideApp = function() {
     var SqlCache = function() {
         var conn = {};
         conn.save = function(key, val, callback) {
-            MySQLite && MySQLite.saveRecords('cache', [{
-                'key': key,
-                'val': JSON.stringify(val),
-                'ttl': Date.now()
-            }], callback);
+
+            if (typeof(MySQLite) != "undefined") {
+                alert("JSON.stringify(val) :" + JSON.stringify(val).length);
+                MySQLite && MySQLite.saveRecords('cache', [{
+                    'key': key,
+                    'val': JSON.stringify(val),
+                    'ttl': Date.now()
+                }], callback);
+
+
+            }
+
         }
         conn.load = function(key, ttl, callback) {
             var wrapper = function(res) {
+
                 if (!res.rows || !res.rows.item(0) || !res.rows.item(0).val) {
                     return callback(false);
                 }
@@ -141,11 +156,13 @@ var MideApp = function() {
                 }
                 return callback(json);
             }
-            MySQLite && MySQLite.findRecords('cache', "WHERE `key` = '#key#' AND `ttl` > #ttl#".replace('#key#', key).replace('#ttl#', Date.now() - (ttl * 1000 || 0)), wrapper);
+            if (typeof(MySQLite) != "undefined") {
+                MySQLite && MySQLite.findRecords('cache', "WHERE `key` = '#key#' AND `ttl`< #ttl#".replace('#key#', key).replace('#ttl#', Date.now() - (ttl * 1000 || 0)), wrapper);
+
+            }
         }
         return conn;
     }();
-
     var myNotice = function(msg, timeout, prev, post) {
         $ionicLoading.show({
             template: msg
@@ -170,7 +187,7 @@ var MideApp = function() {
 
         LocCache.save('&remote:' + target, LocCache.load('&remote:' + target) + 1);
 
-        $http.post(API_Host + target, JSON.stringify(params), {
+        $http.post(API_Home + target, JSON.stringify(params), {
             'timeout': 10000
         }).success(function(data) {
             API_Lock = false;
@@ -191,11 +208,7 @@ var MideApp = function() {
 
 
     var ajaxPost = function(target, params, done, fail) {
-        myRemote(target, {
-            'id_ybb': "mide", //mideApp_user.profile.id_ybb,
-            'secret': "mideAppSecret", //mideApp_user.profile.secret,
-            'params': params
-        }, done, fail);
+        myRemote(target, params, done, fail);
     }
 
     var myGetData = function(target, done, fail) {
@@ -208,7 +221,7 @@ var MideApp = function() {
         }
         API_Lock = lock;
 
-        LocCache.save('&remote:' + target, LocCache.load('&remote:' + target) + 1);
+        // LocCache.save('&remote:' + target, LocCache.load('&remote:' + target) + 1);
         $http({
             method: 'GET',
             url: API_Host + target
@@ -216,17 +229,18 @@ var MideApp = function() {
         success(function(data, status, headers, config) {
             API_Lock = false;
             if (status) {
-                done && done(data.data);
+                done && done(data);
             } else {
+
                 $ionicLoading.hide();
-                fail ? fail(data) : myNotice(data ? data.errmsg : '发生错误');
+                fail ? fail(data) : myNotice(data ? data.errmsg : '发生错误' + status);
             }
         }).
         error(function(data, status, headers, config) {
             API_Lock = false;
             if (true) {
                 $ionicLoading.hide();
-                fail ? fail(data) : myNotice(data ? data.errmsg : '网络错误');
+                fail ? fail(data) : myNotice(data ? data.errmsg : '网络错误' + status);
             }
         });
 
@@ -266,8 +280,8 @@ var MideApp = function() {
     var setMyRootScope = function(obj) {
         $rootScope = obj;
     }
-    var getMyRootScope = function(){
-        return  $rootScope;
+    var getMyRootScope = function() {
+        return $rootScope;
     }
     var intoMyController = function(scope, state) {
         $scope = scope;
@@ -348,13 +362,13 @@ var MideApp = function() {
     }
 
 
-    var downloadfile = function(cordovaFileTransfer,url, targetName,successCallback,errCallback,progress) {
+    var downloadfile = function(cordovaFileTransfer, url, targetName, successCallback, errCallback, progress) {
         document.addEventListener('deviceready', function() {
 
             var targetPath = cordova.file.externalDataDirectory + targetName;
             var trustHosts = true
             var options = {};
-           cordovaFileTransfer.download(url, targetPath, options, trustHosts)
+            cordovaFileTransfer.download(url, targetPath, options, trustHosts)
                 .then(function(result) {
                     successCallback(result);
 
@@ -365,6 +379,35 @@ var MideApp = function() {
                 });
 
         }, false);
+    }
+
+    var writeFile = function(cordovaFile, targetFileName, data, replace) {
+        document.addEventListener('deviceready', function() {
+
+            cordovaFile.writeFile(cordova.file.externalDataDirectory, targetFileName, data, replace)
+                .then(function(success) {
+                    // alert("success is "+success);
+                    // for (var o in success) {
+                    //     alert("cordovaFile.writeFile success：" + success[o]);
+
+                    // }
+                }, function(error) {
+                    // alert("error is "+error);
+                    // for (var o in error) {
+                    //     alert("cordovaFile.writeFile error" + error[o]);
+
+                    // }
+                }, true);
+        });
+    };
+
+    var readAsText = function(cordovaFile, targetFileName, successCallback, errorCallback) {
+        cordovaFile.readAsText(cordova.file.externalDataDirectory, targetFileName)
+            .then(function(success) {
+                successCallback && successCallback(success);
+            }, function(error) {
+                errorCallback && errorCallback(error);
+            });
     }
     initWebSocket();
 
@@ -399,10 +442,9 @@ var MideApp = function() {
     mideapp.intoMyController = intoMyController;
     mideapp.exitMyController = exitMyController;
 
+    mideapp.writeFile = writeFile;
+    mideapp.readAsText = readAsText;
     return mideapp;
 }();
 
 var mideApp_user = null;
-
-
-

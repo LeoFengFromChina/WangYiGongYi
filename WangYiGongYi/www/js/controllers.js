@@ -4,194 +4,74 @@ angular.module('starter.controllers', [])
         console.log("typeof MideApp is" + typeof MideApp);
         MideApp.intoMyController($scope, $rootScope, $state);
 
+        // Wait for Cordova to load
+        //  document.addEventListener("deviceready", onDeviceReady, false);
 
-        // var guideByUser = function(user) {
-        //     if (user.profile && user.profile.step == 1) {
-        //         $state.go('topics');
+        // Cordova is ready
+        /* function onDeviceReady() {
+             // var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
 
-        //     } else {
-        //         $state.go('topics');
-        //     }
-        // };
+             var db = window.sqlitePlugin.openDatabase("database.sqlite3");
 
-        // if (mideApp_user) {
-        //     return guideByUser(mideApp_user);
-        // }
+             db.transaction(function(tx) {
+                 tx.executeSql('CREATE TABLE IF NOT EXISTS cache (id INTEGER primary key, key TEXT,val TEXT, ttl DATETIME)');
+             });
+             var MySQLite = getSQLiteClass(db);
+             MideApp.setMySQLite(MySQLite);
 
-        document.addEventListener("deviceready", onDeviceReady, false);
+             $state.go("tab.topics");
+             return;
+         }*/
+        $state.go("tab.topics");
 
-        function onDeviceReady() {
-            alert(cordova.file);
-            // var MySQLite = getSQLiteClass(window.sqlitePlugin.openDatabase("database.sqlite3"));
-            // Yibeiban.setMySQLite(MySQLite);
-            // MySQLite.findRecords('user_profile', '', function(res) {
-            //     var profile = res.rows.length && res.rows.item(0);
-            //     if (!profile || !profile.id_ybb) {
-            //         return $ionicPopup.alert({
-            //             title: '授权错误'
-            //         });
-            //     }
-
-            //     ybb_user = Yibeiban.LocCache.load('User');
-            //     if (ybb_user) {
-            //         return guideByUser(ybb_user);
-            //     }
-
-            //     var fields = ['id_ybb', 'secret', 'gender', 'work_year', 'edu_level', 'current_salary', 'expected_salary', 'step', 'id_member', 'first_name', 'company', 'current_position', 'school', 'avatar', 'fake_name', 'city', 'job_requirement', 'industry_1', 'industry_2', 'device_type', 'device_code', 'contacts'];
-            //     var params = {
-            //         'id_ybb': profile.id_ybb,
-            //         'secret': profile.secret,
-            //         'params': fields
-            //     };
-            //     Yibeiban.myRemote('/user/profile/view', params, function(data) {
-            //         ybb_user = {};
-            //         ybb_user.profile = MySQLite.createRow('user_profile', data.result);
-            //         ybb_user.contacts = [];
-            //         data.result.contacts.sort(function(a, b) {
-            //             return a.contact_type > b.contact_type ? 1 : -1;
-            //         });
-            //         for (i in data.result.contacts) {
-            //             ybb_user.contacts.push(MySQLite.createRow('user_contact', data.result.contacts[i]));
-            //         }
-            //         var params = {
-            //             'id_ybb': profile.id_ybb,
-            //             'secret': profile.secret
-            //         };
-            //         Yibeiban.myRemote('/user/privacy/view', params, function(data) {
-            //             ybb_user.privacy = MySQLite.createRow('user_privacy', data.result);
-            //             Yibeiban.LocCache.save('User', ybb_user);
-            //             if (ybb_user) {
-            //                 return guideByUser(ybb_user);
-            //             }
-            //         });
-            //     });
-            // });
-        }
-        // downloadFile('https://www.baidu.com/img/baidu_jgylogo3.gif', 'baidu');
-        $state.go('tab.topics');
     })
     .controller('TabCtrl', function($scope, $rootScope, $state) {
-        console.log('TabCtrl');
-        $scope.topics = function() {
-            // mideApp.MemCache.save('job-main', false);
-            $state.go('topics');
-        };
-        $scope.chats = function() {
-            // mideApp.MemCache.save('say-list', false);
-            $state.go('chats');
-        };
-        $scope.gift = function() {
-            // mideApp.MemCache.save('msg-list', false);
-            $state.go('gitf');
-        };
-        $scope.account = function() {
-            $state.go('account');
-        };
+
     })
-    .controller('TopicsCtrl', function($http, $ionicActionSheet, $scope, $state, $rootScope, $cordovaFileTransfer, $ionicScrollDelegate, $cordovaFile, $ionicLoading, $ionicModal, $filter, Tools) {
+    .controller('TopicsCtrl', function($http, $ionicActionSheet, $scope, $state,
+        $rootScope, $cordovaFileTransfer, $ionicScrollDelegate, $cordovaFile,
+        $ionicLoading, $ionicModal, $filter, $timeout, $cordovaNetwork, $cordovaImagePicker,
+        $ionicSlideBoxDelegate, Tools) {
         MideApp.setBackManner('exit');
         $rootScope.tabsHidden = "tabs-show";
         MideApp.intoMyController($scope, $rootScope, $state);
 
-        // MideApp.downloadfile($cordovaFileTransfer, 'http://oukeye.github.io/testdata/topics.json', 'data/topics.json', function(result) {
-        //     alert("成功"+result);
-        // }, function(result) {
-        //     alert("失败"+result);
-        // }, function(result) {
-        //     alert("处理中"+result);
-        // });
-        // var json = '[{"name":"zhangSan", "password":"123"},{"name":"liSi", "password":"321"}]';
-        // $scope.topics = angular.fromJson(json);;
-        // document.addEventListener('deviceready', function() {
+        var load_banner = function(callback) {
+            try {
+                if (!$cordovaNetwork.isOnline()) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, "banners.json")
+                        .then(function(success) {
+                            $scope.banners = angular.fromJson(success);
+                            var _handle = $ionicSlideBoxDelegate.$getByHandle("topicsBanner");
+                            if (_handle._instances.length != 0) {
+                                _handle.update();
+                            }
 
-        //     var url = 'http://oukeye.github.io/testdata/topics.json';
-        //     var targetPath = cordova.file.externalDataDirectory + 'data/topics.json';
-        //     var trustHosts = true
-        //     var options = {};
-        //     alert(targetPath);
-        //     $cordovaFileTransfer.download(url, targetPath, options, trustHosts)
-        //         .then(function(result) {
-        //             alert("成功" + result);
-        //             $cordovaFile.readAsText(cordova.file.externalDataDirectory, 'data/topics.json')
-        //                 .then(function(success) {
-        //                     alert('success' + angular.fromJson);
-        //                     $scope.topics = angular.fromJson(success);;
-        //                     alert('success' + $scope.topics);
-        //                 }, function(error) {
-        //                     alert('error' + error);
-        //                 });
-        //         }, function(err) {
-        //             alert("失败" + result);
-        //         }, function(progress) {
-        //             alert("处理中" + result);
-        //         });
-
-        // }, false);
-        // 
-        // Create the login modal that we will use later
-        $ionicModal.fromTemplateUrl('templates/topicModal.html', {
-            scope: $scope,
-            animation: 'slide-in-right'
-        }).then(function(modal) {
-            $scope.topicModal = modal;
-        });
-
-        // Triggered in the login modal to close it
-        $scope.closeTopicModal = function() {
-            $scope.topicModal.hide();
-        };
-
-        // Open the login modal
-        $scope.showTopicModal = function(topicId) {
-            $scope.topicShowId = {
-                "id": topicId
-            };
-            $ionicScrollDelegate.scrollTop();
-            $scope.topicModal.show();
-        };
-        $scope.$on('$destroy', function() {
-            $scope.topicModal.remove();
-        });
-        $scope.help = function() {
-            $ionicActionSheet.show({
-                titleText: '确认承接？',
-                buttons: [{
-                    text: '承接'
-                }, {
-                    text: '再看看'
-                }, ],
-                destructiveText: '',
-                cancelText: "取消",
-                cancel: function() {
-                    console.log('CANCELLED');
-                },
-                buttonClicked: function(index) {
-
-                    if (index == 0) {
-                        $ionicLoading.show();
-                        MideApp.httpGet('/user/oukeye', function(data) {
-
-                            mideApp_user = {};
-                            $ionicLoading.hide();
-                            $scope.closeTopicModal();
-                            MideApp.myNotice('承接成功')
-                        });
-                    } else {
-                        return true;
-                    }
-
-                    return true;
+                            callback && callback();
+                        }, function(error) {});
+                    return MideApp.myNotice('暂无网络连接...');
+                }
+            } catch (e) {
+                // console.log(e);
+            }
+            MideApp.httpGet('wygyData/Banner.json', function(data) {
+                // $scope.banners = [];
+                $scope.banners = data.data;
+                $scope.isShowBanner = false;
+                var _handle = $ionicSlideBoxDelegate.$getByHandle("topicsBanner");
+                if (_handle._instances.length != 0) {
+                    _handle.update();
+                }
+                MideApp.writeFile($cordovaFile, 'banners.json', JSON.stringify(data.data), true);
+                callback && callback();
+            }, function() {
 
 
-                },
-                destructiveButtonClicked: function() {
-                    console.log('DESTRUCT');
-                    return true;
-                },
-                cssClass: "wg-sheet"
             });
-        };
-
+        }
+        load_banner();
+        $scope.newTopic = {};
+        $scope.newTopic.images_list = [];
         //我要求助
         $ionicModal.fromTemplateUrl('templates/newTopic.html', {
             scope: $scope,
@@ -207,10 +87,28 @@ angular.module('starter.controllers', [])
 
         // Open the login modal
         $scope.showNewTopicModal = function() {
+            var mideApp_user = MideApp.LocCache.load('User') || null;
+            if (!mideApp_user) {
+                $state.go("tab.account");
+                return false;
+            } else {
+                $ionicScrollDelegate.scrollTop();
+                $scope.newTopicModal.show();
+            }
 
-            $ionicScrollDelegate.scrollTop();
-            $scope.newTopicModal.show();
         };
+        $scope.callphone = function(number) {
+            try {
+                navigator.callphone.call(function(success) {
+                    alert(success);
+                }, function(error) {
+                    alert(errors);
+                }, number);
+            } catch (e) {
+
+            }
+
+        }
         $scope.showNewTopicsheet = function(info) {
             if (typeof info == 'undefined') {
                 info = "";
@@ -231,20 +129,17 @@ angular.module('starter.controllers', [])
 
                     if (index == 0) {
                         $ionicLoading.show();
-                        MideApp.httpGet('/user/oukeye', function(data) {
-
-                            mideApp_user = {};
+                        MideApp.httpGet('mideData/user.json', function(data) {
+                            $scope.closeNewTopicModal();
+                            $scope.newTopic = {};
                             $ionicLoading.hide();
 
                             MideApp.myNotice(info + '成功')
-                            $scope.closeNewTopicModal();
+
                         });
                     } else {
                         return true;
                     }
-
-
-
 
                     return true;
                 },
@@ -273,13 +168,23 @@ angular.module('starter.controllers', [])
 
         // Open the login modal
         $scope.showNewHelpModal = function() {
+            var mideApp_user = MideApp.LocCache.load('User') || null;
+            if (!mideApp_user) {
+                $state.go("tab.account");
+                return false;
+            } else {
+                $ionicScrollDelegate.scrollTop();
+                $scope.newHelpModal.show();
+            }
 
-            $ionicScrollDelegate.scrollTop();
-            $scope.newHelpModal.show();
         };
         $scope.$on('$destroy', function() {
             $scope.newHelpModal.remove();
         });
+
+        $scope.newHelp = {};
+        $scope.newHelp.images_list = [];
+
         $scope.showNewHelpsheet = function(info) {
             if (typeof info == 'undefined') {
                 info = "";
@@ -300,20 +205,17 @@ angular.module('starter.controllers', [])
 
                     if (index == 0) {
                         $ionicLoading.show();
-                        MideApp.httpGet('/user/oukeye', function(data) {
-
-                            mideApp_user = {};
+                        MideApp.httpGet('mideData/user.json', function(data) {
+                            $scope.closeNewHelpModal();
+                            $scope.newHelp = {};
                             $ionicLoading.hide();
 
                             MideApp.myNotice(info + '成功')
-                            $scope.closeNewHelpModal();
+
                         });
                     } else {
                         return true;
                     }
-
-
-
 
                     return true;
                 },
@@ -324,7 +226,94 @@ angular.module('starter.controllers', [])
                 cssClass: "wg-sheet"
             });
         };
-        $scope.config = MideApp.MemCache.load('topics-list') || {
+
+        var getPicture = function() {
+            document.addEventListener("deviceready", function() {
+
+                var options = {
+                    quality: 90,
+                    destinationType: Camera.DestinationType.DATA_URL,
+                    sourceType: Camera.PictureSourceType.CAMERA,
+                    allowEdit: true,
+                    encodingType: Camera.EncodingType.JPEG,
+                    targetWidth: 100,
+                    targetHeight: 100,
+                    popoverOptions: CameraPopoverOptions,
+                    saveToPhotoAlbum: false
+                };
+
+                $cordovaCamera.getPicture(options).then(function(imageData) {
+                    $timeout(function() {
+                        $scope.mideApp_user_reg.avatar_url = "data:image/jpeg;base64," + imageData;
+                    }, 10);
+
+                }, function(err) {
+                    // error
+                });
+
+            }, false);
+        };
+
+        var getPictures = function(mytopic) {
+            options = {
+                // max images to be selected, defaults to 15. If this is set to 1, upon
+                // selection of a single image, the plugin will return it.
+                maximumImagesCount: 3,
+
+                // max width and height to allow the images to be.  Will keep aspect
+                // ratio no matter what.  So if both are 800, the returned image
+                // will be at most 800 pixels wide and 800 pixels tall.  If the width is
+                // 800 and height 0 the image will be 800 pixels wide if the source
+                // is at least that wide.
+                width: 0,
+                height: 0,
+
+                // quality of resized image, defaults to 100
+                quality: 90
+            };
+
+            window.imagePicker.getPictures(
+                function(imageData) {
+                    $timeout(function() {
+                        mytopic.images_list = imageData;
+                    }, 200);
+
+
+                },
+                function(error) {
+                    alert('Error: ' + error);
+                }, options);
+        };
+
+        $scope.showGetImagesheet = function(mytopic) {
+            $ionicActionSheet.show({
+                buttons: [{
+                    text: '相机'
+                }, {
+                    text: '图库'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+                    if (index == 0) {
+                        getPicture();
+                    } else {
+                        getPictures(mytopic);
+                    }
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+
+        $scope.config = {
             errormsg: false,
             infinite: true,
             number: 10,
@@ -333,151 +322,41 @@ angular.module('starter.controllers', [])
         };
 
         var load_page = function(callback) {
-            if (!MideApp.isOnline()) {
-                return MideApp.myNotice('暂无网络连接...');
+            try {
+                if (!$cordovaNetwork.isOnline()) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, "topics.json")
+                        .then(function(success) {
+                            $scope.config = angular.fromJson(success);
+                            $scope.config.infinite = 0;
+                        }, function(error) {});
+                    callback && callback();
+                    return MideApp.myNotice('暂无网络连接...');
+                }
+            } catch (e) {
+                // console.log(e);
             }
 
-            MideApp.httpGet('/user/oukeye', function(data) {
-
-                var _obj = {
-                    "data": [{
-                        "id": "1",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "ABC君ABC君ABC君ABC君ABC君",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>我们相信这个世界有爱，希望全社会都来帮帮这个孩子，帮帮这个妈妈！我们想到了网络，通过网络能让更多的好心人看到，大家的力量是伟大的，钰林的病肯定就能有救了，希望看到这个帖子的再生“父母”们，能献出自己的爱心，转载给更多的好心人，帮帮小钰林，病情不能再耽误了，钰林的命靠大家了，现在妈妈在省人民医院做第八次化疗，我们全家人在这里深深鞠躬，先谢谢大家了。好人有好报，好人一生平安。孩子父亲，娄建国手机号：13783430073</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084096409640.jpeg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084512681268.jpeg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084634763476.jpeg' alt=''></div>",
-                        "title": "救救这个孩子，救救这个家",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 1,
-                        "startTime": "2015-09-09 09:00:00",
-                        "duration": "3小时",
-                        "serviceType": "服务类型"
-
-                    }, {
-                        "id": "2",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/11486388?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>他就是淮北相山区一个年仅2岁的孩子赵天佑，天佑是一名“极低体重早产儿”，只有1400克，所以刚出生时体质就特别差，再加上小天佑接二连三被查出患有新生儿先天性脑萎缩症，新生儿败血症，新生儿缺氧缺血性脑病等各种新生儿综合症，他的父母只好带着小天佑在医院治疗，可又一个坏消息传来让小天佑的父母孙忠元与赵贝贝差点崩溃，小天佑因抢救的极端需要，他所佩戴的呼吸机使他丧失了视力，为了挽救小天佑的生命，挽救他们的孩子，小天佑的父母咬着牙给小天佑治病，花光积蓄，甚至现在已负债累累，但眼下却仍因缺少治疗费用而无法进行下一步的治疗在家修养，情况非常不乐观，而就在这几天小天佑开始抽搐，他需要去治疗，他是那样一个鲜活可爱的小生命，不能因为没钱而放弃对小天佑的治疗，要知道，一个天使般生命的夭折，是对一个家庭深到骨髓里的打击。</p><p> 救助一个孩子，温暖整个家庭， 同志们，一样的生命一样的梦，一样的真情一样的感动，一分一元甚至百元万元，都凝聚着大家的爱心，都昭示着人间真爱请大家伸出你们的援助之手，奉献您的无限爱意，送去您强有力的支持，让我们行动起来，为小天佑送去希望，让他能健康快乐的成长，同志们，请伸出你们的双手，托起这明天的太阳，为小天佑的明天架起爱的桥梁。</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140506/20140506112615921592.jpg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140506/2014050611260939939.jpg' alt=''></div>",
-                        "title": "别让小天佑失去生命",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 2,
-                        "startTime": "2015-09-09 09:00:00",
-                        "duration": "3小时",
-                        "serviceType": "服务类型"
-
-
-                    }, {
-                        "id": "3",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/9349200?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>六岁的男童等待骨髄移植，高昂的医疗费成了拦路虎一个不幸的家庭又出现在我们面前，父亲是个退伍军人尊纪守法，热于助人。却因小孩范乐祥于去年12月的一天上幼儿园不小心跌倒，一直流鼻血不止，到医院检查，在12月18日添加到日历小乐乐被确诊为急性淋巴细胞白血病。医生告诉我们结果时候，对于我们一个普通的农村家庭来说犹如晴天霹雳，如今儿子已经患有白血病，我们也无力挽回。不得不接受事实，现在经过五个月的化疗，是骨髓移植的最佳时期。却因骨髄移植需要一比高昂的手朮费，如今手术费已成为我们的＂拦路虎＂了。因之前化疗已发费家里的所有积蓄和借款共计二十余万元，现要骨髓移植还需50万元医疗费。多方求助、东凑西凑也是杯水车薪，只好在此恳求社会爱心人士救救我那不幸的孩子。您的慈悲之心换来孩子的新生，你们的一次次转发将给我们父母带来希望。作为孩子的父亲在此跪谢了。谢谢你们。祝各位好心人，一身平安，身体健康。</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140616/20140616094928932893.jpg' alt=''></div>",
-                        "title": "六岁的男童等待骨髄移植，高昂的医疗费成了拦路虎",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 2,
-                        "startTime": "2015-09-09 09:00:00",
-                        "duration": "3小时",
-                        "serviceType": "服务类型"
-
-
-                    }, {
-                        "id": "4",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/7659710?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>花季少女为筹集手术费跪求好心人帮助.陈敏，女，12岁，家住陕西铜川市耀州区小丘镇移村四组。家里有78岁的爷爷、爸爸妈妈和仅4岁的弟弟。在她出生的第三天就被查出患有先天性脊柱侧弯的顽症，为了治病，家里为了给她治病，花去了20多万元，家中负债累累，恳请大家给予帮助。</p><img src='http://www.shilehui.com/UserImage/0/20131017060914412088.JPG' alt=''></div>",
-                        "title": "花季少女为筹集手术费跪求好心人帮助",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 3,
-                        "startTime": "2015-09-09 09:00:00",
-                        "duration": "3小时",
-                        "serviceType": "服务类型"
-
-
-                    }, {
-                        "id": "5",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/2705854?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>彭思睿，男，1岁，家住江苏徐州市邳州市江苏徐州市邳州市徐州市邳州宿羊山镇苏口村。儿子彭思睿五个月查出，宝宝得了家族噬血病，这病必须干细胞移植才能治好宝宝病，手术费用需要几十万，对于农村的我们一辈子都挣不到。但我决不放弃我的宝宝！希望大家救救我的宝贝，我第一个宝宝也是这种病走了，没想到我第二个宝宝也得了噬血病。现在正在医院接受化疗，如果宝宝受到感染了，随时都会复发，时间就是生命，我相信人间有真情，跪求好心人的帮助，医生说不治的话更没希望，希望大家可怜我的宝贝，能伸出援手帮帮我的小宝贝！上天会保佑所有的好心人的！</p><img src='http://www.shilehui.com/UserImage/0/20131013032200560088.PNG' alt=''></div>",
-                        "title": "跪求拯救我6个月患噬血病宝宝",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 4,
-                        "startTime": "2015-09-09 09:00:00",
-                        "duration": "3小时",
-                        "serviceType": "服务类型"
-
-
-                    }]
+            MideApp.httpGet('wygyData/Topics.json' + "?page=" + $scope.config.page, function(data) {
+                if ($scope.config.page == 1) {
+                    $scope.config.topics = data.data;
+                } else {
+                    $scope.config.topics = $scope.config.topics.concat(data.data);
                 }
-
                 $scope.config.page = $scope.config.page + 1;
-                $scope.config.topics = $scope.config.topics.concat(_obj.data);
                 $scope.config.errormsg = !$scope.config.topics.length;
-                $scope.config.infinite = _obj.data.length;
-                $ionicLoading.hide();
-                callback && callback();
-                MideApp.MemCache.save('topics-list', $scope.config);
-                MideApp.LocCache.save('topics-list', $scope.config);
+                $scope.config.infinite = data.data.length > 0;
+                // MideApp.MemCache.save('topics-list', $scope.config);
+                // MideApp.LocCache.save('topics-list', $scope.config);
+                MideApp.writeFile($cordovaFile, "topics.json", JSON.stringify($scope.config), true);
 
-                if ($scope.config.page > 5) {
-                    $scope.config.infinite = 0;
-                }
+                callback && callback();
 
             }, function() {
-                // $scope.$broadcast('scroll.infiniteScrollComplete');
+
             });
-            // Yibeiban.ajaxPost('/gossip/search', params, function(data) {
-            //     $scope.config.page = $scope.config.page + 1;
-            //     $scope.config.gossips = $scope.config.gossips.concat(data.result);
-            //     $scope.config.errormsg = !$scope.config.gossips.length;
-            //     $scope.config.infinite = data.result.length;
-            //     $ionicLoading.hide();
-            //     callback && callback();
-            //     saveCache();
-            // });
+
         };
+
         $scope.moreDataCanBeLoaded = function() {
             return true;
         }
@@ -487,14 +366,89 @@ angular.module('starter.controllers', [])
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             });
         }
-        $scope.doRefresh = function() {
-            $scope.config.topics = [];
-            $scope.config.page = 1;
-            load_page(function() {
-                $scope.$broadcast('scroll.refreshComplete');
-            });
-        }
 
+        $scope.doRefresh = function() {
+            load_banner(function() {
+                $scope.config.page = 1;
+                load_page(function() {
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+            });
+
+        }
+        $scope.doRefresh(); //初始化
+
+        $ionicModal.fromTemplateUrl('templates/topicModal.html', {
+            scope: $scope,
+            animation: 'slide-in-right'
+        }).then(function(modal) {
+            $scope.topicModal = modal;
+        });
+
+        // Triggered in the login modal to close it
+        $scope.closeTopicModal = function() {
+            $scope.topicModal.hide();
+        };
+
+        // Open the login modal
+        $scope.showTopicModal = function(topicId) {
+            $scope.current_topic = $filter("filter")($scope.config.topics, {
+                'HelpRequest._id': topicId
+            });
+            // $ionicScrollDelegate.scrollTop();
+            $ionicScrollDelegate.$getByHandle('topicMainScroll').scrollTop();
+            $scope.topicModal.show();
+        };
+        $scope.$on('$destroy', function() {
+            $scope.topicModal.remove();
+        });
+        $scope.help = function() {
+            $ionicActionSheet.show({
+                titleText: '确认承接？',
+                buttons: [{
+                    text: '承接'
+                }, {
+                    text: '再看看'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        var mideApp_user = MideApp.LocCache.load('User') || null;
+                        if (!mideApp_user) {
+                            $scope.closeTopicModal();
+                            $state.go("tab.account");
+                            return false;
+                        } else {
+                            $ionicLoading.show();
+                            MideApp.httpGet('mideData/user.json', function(data) {
+
+                                mideApp_user = {};
+                                $ionicLoading.hide();
+                                $scope.closeTopicModal();
+                                MideApp.myNotice('承接成功')
+                            });
+                        }
+
+                    } else {
+                        return true;
+                    }
+
+                    return true;
+
+
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
 
         // Tools.checkFile('banner', 'banner1.png', function(success, filepath) {
         //     alert('success:' + success);
@@ -537,43 +491,43 @@ angular.module('starter.controllers', [])
         // }
 
     })
-    .controller('ChatsCtrl', function($scope, $rootScope, $state, $ionicModal, $ionicScrollDelegate, $ionicActionSheet) {
+    .controller('ChatsCtrl', function($scope, $rootScope, $state, $ionicModal, $ionicScrollDelegate, $ionicActionSheet, $timeout) {
         MideApp.setBackManner('back');
         $rootScope.tabsHidden = "tabs-show";
         MideApp.intoMyController($scope, $rootScope, $state);
 
 
         $scope.doRefresh = function() {
-            $scope.$broadcast('scroll.refreshComplete');
-        };
+            var mideApp_user = MideApp.LocCache.load('User') || null;
+            if (mideApp_user) {
+                load_chats(mideApp_user.userId, function() {
+                    $scope.$broadcast('scroll.refreshComplete');
 
-        var chats = [{
-            id: 1,
-            title: '系统消息',
-            content: '你帮助陈阿姨看护孩子的事情已经完成，谢谢你的参与！',
-            addtime: '2015-09-08 10:00:00'
-        }, {
-            id: 2,
-            title: '系统消息',
-            content: '你帮助陈阿姨看护孩子的事情已经完成，谢谢你的参与！',
-            addtime: '2015-09-08 10:00:00'
-        }, {
-            id: 3,
-            title: '系统消息',
-            content: '你帮助陈阿姨看护孩子的事情已经完成，谢谢你的参与！',
-            addtime: '2015-09-08 10:00:00'
-        }, {
-            id: 4,
-            title: '系统消息',
-            content: '你帮助陈阿姨看护孩子的事情已经完成，谢谢你的参与！',
-            addtime: '2015-09-08 10:00:00'
-        }, {
-            id: 5,
-            title: '系统消息',
-            content: '你帮助陈阿姨看护孩子的事情已经完成，谢谢你的参与！',
-            addtime: '2015-09-08 10:00:00'
-        }];
-        $scope.chats = chats;
+                });
+            } else {
+                $scope.$broadcast('scroll.refreshComplete');
+            }
+
+
+        };
+        var load_chats = function(userId, callback) {
+            MideApp.httpGet("mideData/message.json?userId=" + userId, function(data) {
+                if (data.code == 0) {
+                    $scope.chats = data.data;
+                } else {
+                    MideApp.myNotice(data.message);
+                }
+                callback && callback();
+
+            });
+        }
+        var mideApp_user = MideApp.LocCache.load('User') || null;
+        if (mideApp_user) {
+            load_chats(mideApp_user.userId, function() {
+
+            });
+        }
+
         $scope.deleteItem = function(k, id) {
 
             $ionicActionSheet.show({
@@ -591,7 +545,7 @@ angular.module('starter.controllers', [])
                 buttonClicked: function(index) {
 
                     if (index == 0) {
-                        MideApp.httpGet('/user/oukeye', function(data) {
+                        MideApp.httpGet('mideData/user.json', function(data) {
 
                             $scope.arrId = [];
                             $scope.arrId.push(id);
@@ -637,61 +591,78 @@ angular.module('starter.controllers', [])
         });
     })
 
-.controller('GitfCtrl', function($scope, $rootScope, $ionicLoading, $state, $ionicActionSheet, $ionicModal, $ionicScrollDelegate) {
+.controller('GitfCtrl', function($scope, $rootScope, $ionicLoading, $state,
+    $ionicActionSheet, $ionicModal, $ionicScrollDelegate, $cordovaFile, $cordovaNetwork,
+    $timeout, $ionicSlideBoxDelegate) {
     MideApp.setBackManner('back');
     $rootScope.tabsHidden = "tabs-show";
     MideApp.intoMyController($scope, $rootScope, $state);
 
+    var load_giftBanner = function(callback) {
 
-    var _allGift = [{
-        id: 0,
-        name: '充电宝与耳塞',
-        lastText: 'You on your way?',
-        img: './img/gift1.jpg'
-    }, {
-        id: 1,
-        name: '纪念公仔',
-        lastText: 'You on your way?',
-        img: './img/gift2.jpg'
-    }, {
-        id: 2,
-        name: '迷你音箱',
-        lastText: 'You on your way?',
-        img: './img/gift3.jpg'
-    }, {
-        id: 3,
-        name: '白色安卓手机数据线',
-        lastText: 'You on your way?',
-        img: './img/gift4.jpg'
-    }, {
-        id: 4,
-        name: '充电宝与迷你风扇',
-        lastText: 'You on your way?',
-        img: './img/gift5.jpg'
-    }, {
-        id: 5,
-        name: "手机耳塞",
-        lastText: 'You on your way?',
-        img: './img/gift6.jpg'
-    }, {
-        id: 6,
-        name: '手机耳塞',
-        lastText: 'You on your way?',
-        img: './img/gift7.jpg'
-    }, {
-        id: 7,
-        name: '电脑包',
-        lastText: 'You on your way?',
-        img: './img/gift8.jpg'
-    }, {
-        id: 8,
-        name: '充电宝',
-        lastText: 'You on your way?',
-        img: './img/gift9.jpg'
-    }];
+        try {
+            if (!$cordovaNetwork.isOnline()) {
+                $cordovaFile.readAsText(cordova.file.externalDataDirectory, "giftBanner.json")
+                    .then(function(success) {
+                        $scope.giftBanner = angular.fromJson(success);
+                        var _handle = $ionicSlideBoxDelegate.$getByHandle("giftBanner");
+                        if (_handle._instances.length != 0) {
+                            _handle.update();
+                        }
+                    }, function(error) {});
+                callback && callback();
+                return MideApp.myNotice('暂无网络连接...');
+            }
+        } catch (e) {
 
-    $scope.gifts = _allGift;
-    //我要助人
+        }
+
+        MideApp.httpGet('wygyData/Banner.json', function(data) {
+            // $scope.giftBanner=[];
+            $scope.giftBanner = data.data;
+            var _handle = $ionicSlideBoxDelegate.$getByHandle("giftBanner");
+            if (_handle._instances.length != 0) {
+                _handle.update();
+            }
+            // MideApp.MemCache.save('topics-list', $scope.config);
+            // MideApp.LocCache.save('topics-list', $scope.config);
+            MideApp.writeFile($cordovaFile, "giftBanner.json", JSON.stringify($scope.giftBanner), true);
+            callback && callback();
+        }, function() {
+            // $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
+    }
+
+    load_giftBanner();
+
+    var load_gift = function(callback) {
+
+        try {
+            if (!$cordovaNetwork.isOnline()) {
+                $cordovaFile.readAsText(cordova.file.externalDataDirectory, "gifts.json")
+                    .then(function(success) {
+                        $scope.gifts = angular.fromJson(success);
+                    }, function(error) {});
+                callback && callback();
+                return MideApp.myNotice('暂无网络连接...');
+            }
+        } catch (e) {
+
+        }
+
+        MideApp.httpGet('wygyData/AllGiftList.json', function(data) {
+            $scope.gifts = data.data;
+
+            // MideApp.MemCache.save('topics-list', $scope.config);
+            // MideApp.LocCache.save('topics-list', $scope.config);
+            MideApp.writeFile($cordovaFile, "gifts.json", JSON.stringify($scope.config), true);
+            callback && callback();
+        }, function() {
+            // $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
+    };
+    load_gift();
+
     $ionicModal.fromTemplateUrl('templates/gift-detail.html', {
         scope: $scope,
         animation: 'slide-in-right'
@@ -709,7 +680,7 @@ angular.module('starter.controllers', [])
         $scope.giftShowId = {
             "id": giftId
         };
-        $ionicScrollDelegate.scrollTop();
+        $ionicScrollDelegate.$getByHandle('giftDetailScroll').scrollTop();
         $scope.giftModal.show();
     };
     $scope.$on('$destroy', function() {
@@ -734,15 +705,23 @@ angular.module('starter.controllers', [])
             buttonClicked: function(index) {
 
                 if (index == 0) {
-                    $ionicLoading.show();
-                    MideApp.httpGet('/user/oukeye', function(data) {
-
-                        mideApp_user = {};
-                        $ionicLoading.hide();
-
-                        MideApp.myNotice(info + '成功')
+                    var mideApp_user = MideApp.LocCache.load('User') || null;
+                    if (!mideApp_user) {
                         $scope.closeGiftModal();
-                    });
+                        $state.go("tab.account");
+                        return false;
+                    } else {
+                        $ionicLoading.show();
+                        MideApp.httpGet('mideData/user.json', function(data) {
+
+                            mideApp_user = {};
+                            $ionicLoading.hide();
+
+                            MideApp.myNotice(info + '成功')
+                            $scope.closeGiftModal();
+                        });
+                    }
+
                 } else {
                     return true;
                 }
@@ -757,779 +736,1011 @@ angular.module('starter.controllers', [])
         });
     };
     $scope.doRefresh = function() {
-        $scope.$broadcast('scroll.refreshComplete');
-    };
+        load_giftBanner(function() {
+            load_gift(function() {
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+        });
+    }
 })
 
-.controller('AccountCtrl', function($scope, $rootScope, $rootScope, $state, $log, $ionicActionSheet, $ionicLoading, $filter) {
-        MideApp.setBackManner('back');
+.controller('AccountCtrl', function($scope, $rootScope, $rootScope, $state,
+    $log, $ionicActionSheet, $ionicModal, $ionicHistory, $timeout,
+    $ionicLoading, $ionicPopover, $filter, $ionicScrollDelegate) {
+    MideApp.setBackManner('back');
+    $rootScope.tabsHidden = "tabs-show";
+    MideApp.intoMyController($scope, $rootScope, $state);
+
+    // 监听登录
+    $rootScope.$on('app.login', function() {
+        $log.debug('login broadcast handle');
+        // get current user
+        // var currentUser = User.getCurrentUser();
+        $scope.mideApp_user = MideApp.LocCache.load("User") || {};
         $rootScope.tabsHidden = "tabs-show";
-        MideApp.intoMyController($scope, $rootScope, $state);
-
-
-        // 监听登录
-        $rootScope.$on('app.login', function() {
-            $log.debug('login broadcast handle');
-            // get current user
-            // var currentUser = User.getCurrentUser();
-            $scope.mideApp_user = MideApp.LocCache.load("User") || {};
-
-        });
+    });
 
 
 
-        var mideApp_user = MideApp.LocCache.load('User') || {};
+    var mideApp_user = MideApp.LocCache.load('User') || {};
 
-        // if (!mideApp_user.username) { //&& user.username.step == 1
+    // if (!mideApp_user.username) { //&& user.username.step == 1
 
-        //     $state.go('login');
-        //     return true;
-        // }
+    //     $state.go('login');
+    //     return true;
+    // }
 
-        $scope.mideApp_user = mideApp_user;
+    $scope.mideApp_user = mideApp_user;
 
-        $scope.logout = function() {
-                // Show the action sheet
-                var hideSheet = $ionicActionSheet.show({
+    $scope.logout = function() {
+            // Show the action sheet
+            var hideSheet = $ionicActionSheet.show({
 
-                    destructiveText: '退出登录',
-                    titleText: '确定退出当前登录账号么？',
-                    cancelText: '取消',
-                    cancel: function() {
-                        // add cancel code..
-                    },
-                    destructiveButtonClicked: function() {
-                        logout();
-                        return true;
-                    },
-                    cssClass: "wg-sheet"
-                });
-
-            }
-            // logout action
-        var logout = function() {
-            $log.debug('logout button action');
-            // User.logout();
-            $rootScope.$broadcast('app.logout');
-            $scope.mideApp_user = mideApp_user = {};
-            MideApp.LocCache.clear();
-            // track event
-            /* if (window.analytics) {
-                 window.analytics.trackEvent('User', 'logout');
-             }*/
-            // 刷新页面
-            // $ionicHistory.clearHistory();
-            // $ionicHistory.clearCache();
-            $state.go('login');
-
-            // $state.go("setting", {}, {
-            //   reload: true
-            // });
-
-
-        };
-        $scope.showActionsheet = function() {
-            $ionicActionSheet.show({
-                titleText: '请选择性别',
-                buttons: [{
-                    text: '<i class="icon ion-male balanced"></i> 男'
-                }, {
-                    text: '<i class="icon ion-female balanced"></i> 女'
-                }, ],
-                destructiveText: '',
-                cancelText: "取消",
+                destructiveText: '退出登录',
+                titleText: '确定退出当前登录账号么？',
+                cancelText: '取消',
                 cancel: function() {
-                    console.log('CANCELLED');
-                },
-                buttonClicked: function(index) {
-
-                    var gender_arr = ["男", "女"];
-                    if (gender_arr[index] != $scope.mideApp_user.gender) {
-                        $ionicLoading.show();
-                        MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
-                            if (index == 0) {
-                                $scope.mideApp_user.gender = "男";
-                            } else {
-                                $scope.mideApp_user.gender = "女";
-                            }
-                            mideApp_user = {};
-                            $ionicLoading.hide();
-                            MideApp.myNotice('修改成功')
-                        });
-                    }
-
-                    return true;
+                    // add cancel code..
                 },
                 destructiveButtonClicked: function() {
-                    console.log('DESTRUCT');
+                    logout();
                     return true;
                 },
                 cssClass: "wg-sheet"
             });
-        };
 
-        // "设置时间"Event
-        $scope.deadline = function() {
+        }
+        // logout action
+    var logout = function() {
+        $log.debug('logout button action');
+        // User.logout();
+        $rootScope.$broadcast('app.logout');
+        $scope.mideApp_user = mideApp_user = {};
+        MideApp.LocCache.clear();
+        // track event
+        /* if (window.analytics) {
+             window.analytics.trackEvent('User', 'logout');
+         }*/
+        // 刷新页面
+        $ionicHistory.clearHistory();
+        $ionicHistory.clearCache();
+        $ionicScrollDelegate.$getByHandle('accountScroll').scrollTop();
+        $scope.showLoginModal();
 
+    };
+    $scope.showActionsheet = function() {
+        $ionicActionSheet.show({
+            titleText: '请选择性别',
+            buttons: [{
+                text: '<i class="icon ion-male balanced"></i> 男'
+            }, {
+                text: '<i class="icon ion-female balanced"></i> 女'
+            }, ],
+            destructiveText: '',
+            cancelText: "取消",
+            cancel: function() {
+                console.log('CANCELLED');
+            },
+            buttonClicked: function(index) {
 
-            var mydate = new Date();
-            if ($scope.mideApp_user.birthday != "") {
-                mydate = new Date($scope.mideApp_user.birthday);
-            }
-
-            var options = {
-                date: mydate,
-                mode: 'date'
-            };
-
-
-            datePicker.show(options, function(date) {
-
-                var _date = $filter("date")(date);
-                var _birthday = $filter("date")($scope.mideApp_user.birthday);
-
-                if (_date != _birthday) {
-                    MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
-                        $scope.mideApp_user.birthday = date;
-
+                var gender_arr = ["男", "女"];
+                if (gender_arr[index] != $scope.mideApp_user.gender) {
+                    $ionicLoading.show();
+                    MideApp.httpGet('mideData/user.json', function(data) {
+                        if (index == 0) {
+                            $scope.mideApp_user.gender = "男";
+                        } else {
+                            $scope.mideApp_user.gender = "女";
+                        }
                         $ionicLoading.hide();
                         MideApp.myNotice('修改成功')
                     });
                 }
 
+                return true;
+            },
+            destructiveButtonClicked: function() {
+                console.log('DESTRUCT');
+                return true;
+            },
+            cssClass: "wg-sheet"
+        });
+    };
 
-            }, function() {
-                // MideApp.myNotice('修改失败')
+    $ionicModal.fromTemplateUrl('templates/login.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.loginModal = modal;
+    });
+
+    // Triggered in the login modal to close it
+    $scope.closeLoginModal = function() {
+        $scope.loginModal.hide();
+    };
+    $scope.showLoginModal = function() {
+        $scope.loginModal.show();
+        // $ionicScrollDelegate.$getByHandle("loginScroll").scrollTop();
+
+    };
+    $scope.$on('$destroy', function() {
+        $scope.loginModal.remove();
+    });
+    $scope.gotoState = function(stateName, checkLogin) {
+        var _checkLogin = typeof(arguments[1]) != 'undefined' ? arguments[1] : true;
+        if (typeof($scope.mideApp_user.flag) == 'undefined' && _checkLogin) {
+            $scope.showLoginModal();
+        } else {
+            $scope.closeLoginModal();
+            $state.go(stateName);
+        }
+
+    }
+    $scope.doLogin = function() {
+        if (!MideApp.isOnline()) {
+            return MideApp.myNotice('暂无网络连接...');
+        }
+        if ('' == $scope.mideApp_user.username) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user.password) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        // if (!ybb_user.profile.current_salary.toString().match(/^[0-9]+$/) || ybb_user.profile.current_salary < 2000 || ybb_user.profile.current_salary > 500000) {
+        //     return MideApp.myNotice('有效薪资范围：2000-500000');
+        // }
+
+        $ionicLoading.show();
+        // ybb_user.profile.job_requirement = JSON.stringify($scope.job_requirement);
+
+
+        MideApp.httpGet('mideData/user.json', function(data) {
+
+            if (data.code == 0) {
+                var _user = data.data;
+                if (_user.username == $scope.mideApp_user.username && _user.password == $scope.mideApp_user.password) {
+                    $scope.mideApp_user = _user;
+                    MideApp.LocCache.save('User', _user);
+                    MideApp.MemCache.save('User', _user);
+
+                    $ionicLoading.hide();
+                    $rootScope.$broadcast('app.login');
+                    $scope.closeLoginModal();
+                    $state.go("tab.account");
+                } else {
+                    MideApp.myNotice("账号或密码错误");
+                }
+
+            } else {
+                MideApp.myNotice(data.message);
+            }
+
+        });
+    };
+
+    $ionicModal.fromTemplateUrl('templates/basicInfo.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+    }).then(function(modal) {
+        $scope.basicInfoModal = modal;
+    });
+
+    $scope.closeBasicInfoModal = function() {
+        $scope.basicInfoModal.hide();
+    };
+    $scope.showBasicInfoModal = function(isActive) {
+        $scope.isActive = isActive;
+        $scope.mideApp_user_basic = MideApp.LocCache.load('User') || {};
+        $ionicScrollDelegate.$getByHandle('basicInfoScroll').scrollTop();
+        $scope.basicInfoModal.show();
+    };
+    $scope.$on('$destroy', function() {
+        $scope.basicInfoModal.remove();
+    });
+
+    $scope.isActive = "a";
+    $scope.changeTab = function(evt) {
+        var elem = evt.currentTarget;
+        $scope.isActive = elem.getAttributeNode('data-active').value;
+    };
+
+    $scope.changeBasic = function() {
+        if (!MideApp.isOnline()) {
+            return MideApp.myNotice('暂无网络连接...');
+        }
+        if (!$scope.mideApp_user_basic.username) {
+            return MideApp.myNotice('账号未填写...');
+        }
+
+        if (!$scope.mideApp_user_basic.gender) {
+            return MideApp.myNotice('性别未填写...');
+        }
+        if (!$scope.mideApp_user_basic.birthday) {
+            return MideApp.myNotice('出身年月未填写...');
+        }
+        if (!$scope.mideApp_user_basic.phoneNumber) {
+            return MideApp.myNotice('联系电话未填写...');
+        }
+        if (!$scope.mideApp_user_basic.email) {
+            return MideApp.myNotice('邮箱未填写...');
+        }
+        if (!$scope.mideApp_user_basic.QQnumber) {
+            return MideApp.myNotice('QQ未填写...');
+        }
+        $ionicLoading.show();
+        MideApp.httpGet('mideData/user.json', function(data) {
+
+            MideApp.LocCache.save("User", $scope.mideApp_user);
+            $ionicLoading.hide();
+            MideApp.myNotice('修改成功')
+            $scope.closeBasicInfoModal();
+        }, function() {
+            $ionicLoading.hide();
+        });
+
+    }
+    $scope.changeForHelp = function() {
+        if (!MideApp.isOnline()) {
+            return MideApp.myNotice('暂无网络连接...');
+        }
+        if (!$scope.mideApp_user_basic.region) {
+            return MideApp.myNotice('地区未填写...');
+        }
+
+        if (!$scope.mideApp_user_basic.identity) {
+            return MideApp.myNotice('身份证未填写...');
+        }
+        if (!$scope.mideApp_user_basic.birthday) {
+            return MideApp.myNotice('出身年月未填写...');
+        }
+        if (!$scope.mideApp_user_basic.address) {
+            return MideApp.myNotice('常住地址未填写...');
+        }
+        if (!$scope.mideApp_user_basic.weixinNumber) {
+            return MideApp.myNotice('微信未填写...');
+        }
+
+        $ionicLoading.show();
+        MideApp.httpGet('mideData/user.json', function(data) {
+
+            MideApp.LocCache.save("User", $scope.mideApp_user);
+            $ionicLoading.hide();
+            MideApp.myNotice('修改成功')
+            $scope.closeBasicInfoModal();
+        }, function() {
+            $ionicLoading.hide();
+        });
+
+    }
+    $scope.changeVolunteer = function() {
+        if (!MideApp.isOnline()) {
+            return MideApp.myNotice('暂无网络连接...');
+        }
+        if (!$scope.mideApp_user_basic.education) {
+            return MideApp.myNotice('学历未填写...');
+        }
+
+        if (!$scope.mideApp_user_basic.profession) {
+            return MideApp.myNotice('专业未填写...');
+        }
+        if (!$scope.mideApp_user_basic.speciality) {
+            return MideApp.myNotice('特长未填写...');
+        }
+        if (!$scope.mideApp_user_basic.intention) {
+            return MideApp.myNotice('服务意愿未填写...');
+        }
+        if (!$scope.mideApp_user_basic.intentionTime) {
+            return MideApp.myNotice('服务时间未填写...');
+        }
+
+        $ionicLoading.show();
+        MideApp.httpGet('mideData/user.json', function(data) {
+            $scope.mideApp_user = $scope.mideApp_user_basic;
+            MideApp.LocCache.save("User", $scope.mideApp_user);
+            $ionicLoading.hide();
+            MideApp.myNotice('修改成功')
+            $scope.closeBasicInfoModal();
+        }, function() {
+            $ionicLoading.hide();
+        });
+
+    }
+    $scope.showGendersheet = function() {
+        $ionicActionSheet.show({
+            titleText: '性别',
+            buttons: [{
+                text: '<i class="icon ion-male balanced"></i> 男'
+            }, {
+                text: '<i class="icon ion-female balanced"></i> 女'
+            }, ],
+            destructiveText: '',
+            cancelText: "取消",
+            cancel: function() {
+                console.log('CANCELLED');
+            },
+            buttonClicked: function(index) {
+                if (index == 0) {
+                    $scope.mideApp_user_basic.gender = "男";
+                } else {
+                    $scope.mideApp_user_basic.gender = "女";
+                }
+                return true;
+            },
+            destructiveButtonClicked: function() {
+                console.log('DESTRUCT');
+                return true;
+            },
+            cssClass: "wg-sheet"
+        });
+    };
+
+    // "设置时间"Event
+    $scope.getDate = function() {
+
+
+        var mydate = new Date();
+        if (typeof($scope.mideApp_user_basic.birthday) != "undefined") {
+            mydate = new Date($scope.mideApp_user_basic.birthday);
+        }
+
+        var options = {
+            date: mydate,
+            mode: 'date'
+        };
+
+        datePicker.show(options, function(date) {
+            $timeout(function() {
+                $scope.mideApp_user_basic.birthday = date;
+            }, 10);
+
+        }, function(err) {
+            // alert(err)
+            // MideApp.myNotice('修改失败')
+        });
+    }
+
+    ///////////////////////////求助与帮助//////////////////////////////////////
+    $ionicModal.fromTemplateUrl('templates/helpAndAsk.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+    }).then(function(modal) {
+        $scope.helpAndAskModal = modal;
+    });
+    $scope.MyHelpConfig = MideApp.MemCache.load('MyHelp-list') || {
+        errormsg: false,
+        infinite: true,
+        number: 10,
+        page: 1,
+        topics: []
+    };
+
+    $scope.AskConfig = MideApp.MemCache.load('myAsk-list') || {
+        errormsg: false,
+        infinite: true,
+        number: 10,
+        page: 1,
+        topics: []
+    };
+    $scope.closeHelpAndAskModal = function() {
+        $scope.helpAndAskModal.hide();
+    };
+    $scope.showHelpAndAskModal = function(isActive) {
+        if (typeof($scope.mideApp_user.flag) == 'undefined') {
+            $scope.showLoginModal();
+        } else {
+            $scope.helpAndAsk_isActive = isActive;
+            $scope.activeConfig = $scope.AskConfig;
+
+            $ionicScrollDelegate.$getByHandle('helpAndAskScroll').scrollTop();
+            $scope.helpAndAskModal.show();
+        }
+
+    };
+    $scope.$on('$destroy', function() {
+        $scope.helpAndAskModal.remove();
+    });
+
+
+    $scope.helpAndAsk_changeTab = function(evt) {
+        var elem = evt.currentTarget;
+        $scope.helpAndAsk_isActive = elem.getAttributeNode('data-active').value;
+
+        if ($scope.helpAndAsk_isActive == "help") {
+            $scope.activeConfig = $scope.MyHelpConfig;
+            if ($scope.MyHelpConfig.topics.length == 0) {
+                $scope.doRefresh();
+            }
+        } else {
+            $scope.activeConfig = $scope.AskConfig;
+            if ($scope.AskConfig.topics.length == 0) {
+                $scope.doRefresh();
+            }
+        }
+    };
+
+    var load_help_page = function(callback) {
+        if (!MideApp.isOnline()) {
+            return MideApp.myNotice('暂无网络连接...');
+        }
+
+        MideApp.httpGet('mideData/myhelp.json', function(data) {
+
+            $scope.MyHelpConfig.page = $scope.MyHelpConfig.page + 1;
+            $scope.MyHelpConfig.topics = $scope.MyHelpConfig.topics.concat(data.data);
+            $scope.MyHelpConfig.errormsg = !$scope.MyHelpConfig.topics.length;
+            $scope.MyHelpConfig.infinite = data.data.length;
+
+
+            $ionicLoading.hide();
+            callback && callback();
+            MideApp.MemCache.save('MyHelp-list', $scope.MyHelpConfig);
+            MideApp.LocCache.save('MyHelp-list', $scope.MyHelpConfig);
+
+            if ($scope.MyHelpConfig.page > 5) {
+                $scope.MyHelpConfig.infinite = false;
+            }
+            $scope.activeConfig = $scope.MyHelpConfig;
+
+
+        }, function() {
+            // $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
+
+    };
+
+    var load_ask_page = function(callback) {
+        if (!MideApp.isOnline()) {
+            return MideApp.myNotice('暂无网络连接...');
+        }
+
+        MideApp.httpGet('mideData/myask.json', function(data) {
+
+            $scope.AskConfig.page = $scope.AskConfig.page + 1;
+            $scope.AskConfig.topics = $scope.AskConfig.topics.concat(data.data);
+            $scope.AskConfig.errormsg = !$scope.AskConfig.topics.length;
+            $scope.AskConfig.infinite = data.data.length;
+
+
+            $ionicLoading.hide();
+            callback && callback();
+            MideApp.MemCache.save('myAsk-list', $scope.AskConfig);
+            MideApp.LocCache.save('myAsk-list', $scope.AskConfig);
+
+            if ($scope.AskConfig.page > 5) {
+                $scope.AskConfig.infinite = false;
+            }
+            $scope.activeConfig = $scope.AskConfig;
+
+        }, function() {
+            // $scope.$broadcast('scroll.infiniteScrollComplete');
+        });
+
+    };
+    $scope.moreDataCanBeLoaded = function() {
+        return true;
+    }
+    $scope.helpAndAsk_infinite = function() {
+        if ($scope.helpAndAsk_isActive == "help") {
+            load_help_page(function() {
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        } else {
+            load_ask_page(function() {
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             });
         }
 
-    })
-    .controller('LoginCtrl', function($scope, $rootScope, $rootScope, $ionicActionSheet, $ionicLoading, $state, $ionicPopup) {
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
 
-
-        // mideApp_user = MideApp.LocCache.load('User');
-
-        // $scope.mideApp_user = mideApp_user || {};
-        // if (typeof $scope.mideApp_user.username !== 'undefined') {
-        //     $state.go("account");
-        // }
-        $scope.mideApp_user = {};
-        $scope.doLogin = function() {
-            if (!MideApp.isOnline()) {
-                return MideApp.myNotice('暂无网络连接...');
-            }
-            if ('' == $scope.mideApp_user.username) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.password) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            // if (!ybb_user.profile.current_salary.toString().match(/^[0-9]+$/) || ybb_user.profile.current_salary < 2000 || ybb_user.profile.current_salary > 500000) {
-            //     return MideApp.myNotice('有效薪资范围：2000-500000');
-            // }
-
-            $ionicLoading.show();
-            // ybb_user.profile.job_requirement = JSON.stringify($scope.job_requirement);
-
-
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
-                mideApp_user = {};
-                data = {
-                    avatar_url: "https://avatars.githubusercontent.com/u/8086489?v=3&s=120",
-                    create_at: "2015-08-11T07:42:33.409Z",
-                    username: "oukeye",
-                    score: 0,
-                    gender: "男",
-                    birthday: "1987-09-09",
-                    phoneNumber: 88888888888,
-                    email: "mide@qq.com",
-                    QQnumber: 491238861,
-                    region: "广州",
-                    identity: 1358053058622,
-                    address: "广州市东圃镇",
-                    weixinNumber: "微信号码",
-                    education: "本科",
-                    profession: "软件技术",
-                    speciality: "计算机WEBApp",
-                    intention: "很高",
-                    intentionTime: "10:00-17:00",
-                    flag: 1
-
-                }
-                mideApp_user = data;
-                // mideApp_user.avatar_url = data.avatar_url;
-                // mideApp_user.create_at = data.create_at;
-                // mideApp_user.score = data.score;
-
-                // mideApp_user.gender = data.gender;
-                // mideApp_user.birthday = data.birthday;
-                // mideApp_user.phoneNumber = data.phoneNumber;
-                // mideApp_user.email = data.email;
-                // mideApp_user.QQnumber = data.QQnumber;
-                // mideApp_user.region = data.region;
-                // mideApp_user.identity = data.identity;
-                // mideApp_user.address = data.address;
-                // mideApp_user.weixinNumber = data.weixinNumber;
-                // mideApp_user.education = data.education;
-                // mideApp_user.profession = data.profession;
-                // mideApp_user.speciality = data.speciality;
-                // mideApp_user.intention = data.intention;
-                // mideApp_user.intentionTime = data.intentionTime
-                // mideApp_user.intentionTime = data.intentionTime
-
-
-                MideApp.LocCache.save('User', mideApp_user);
-                MideApp.MemCache.save('User', mideApp_user);
-
-                $ionicLoading.hide();
-                $rootScope.$broadcast('app.login');
-                $state.go("account");
+    }
+    $scope.doRefresh = function() {
+        if ($scope.helpAndAsk_isActive == "help") {
+            $scope.MyHelpConfig.topics = [];
+            $scope.MyHelpConfig.page = 1;
+            load_help_page(function() {
+                $scope.$broadcast('scroll.refreshComplete');
             });
-        };
-
-        // 一个提示对话框
-        var showAlert = function(title, template) {
-            var alertPopup = $ionicPopup.alert({
-                title: title,
-                template: template
+        } else {
+            $scope.AskConfig.topics = [];
+            $scope.AskConfig.page = 1;
+            load_ask_page(function() {
+                $scope.$broadcast('scroll.infiniteScrollComplete');
             });
-            alertPopup.then(function(res) {
-                console.log('Thank you for not eating my delicious ice cream cone');
-            });
-        };
+        }
 
-    })
-    .controller('RegCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout, $cordovaCamera, $ionicModal, $ionicScrollDelegate) {
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        $scope.mideApp_user = {};
-        MideApp.intoMyController($scope, $rootScope, $state);
+    }
 
+})
 
-        var getPicture = function() {
-            document.addEventListener("deviceready", function() {
-
-                var options = {
-                    quality: 50,
-                    destinationType: Camera.DestinationType.DATA_URL,
-                    sourceType: Camera.PictureSourceType.CAMERA,
-                    allowEdit: true,
-                    encodingType: Camera.EncodingType.JPEG,
-                    targetWidth: 100,
-                    targetHeight: 100,
-                    popoverOptions: CameraPopoverOptions,
-                    saveToPhotoAlbum: false
-                };
-
-                $cordovaCamera.getPicture(options).then(function(imageData) {
-                    $timeout(function() {
-                        $scope.mideApp_user.avatar_url = "data:image/jpeg;base64," + imageData;
-                    }, 10);
-
-                }, function(err) {
-                    // error
-                });
-
-            }, false);
-        };
-        var getPictures = function() {
-            options = {
-                // max images to be selected, defaults to 15. If this is set to 1, upon
-                // selection of a single image, the plugin will return it.
-                maximumImagesCount: 1,
-
-                // max width and height to allow the images to be.  Will keep aspect
-                // ratio no matter what.  So if both are 800, the returned image
-                // will be at most 800 pixels wide and 800 pixels tall.  If the width is
-                // 800 and height 0 the image will be 800 pixels wide if the source
-                // is at least that wide.
-                width: 100,
-                height: 100,
-
-                // quality of resized image, defaults to 100
-                quality: 80
-            };
-
-            window.imagePicker.getPictures(
-                function(imageData) {
-                    $timeout(function() {
-                        // $scope.mideApp_user.avatar_url = "data:image/jpeg;base64," + imageData;
-                        $scope.mideApp_user.avatar_url = imageData[0];
-                    }, 10);
-
-                },
-                function(error) {
-                    alert('Error: ' + error);
-                }, options);
-        };
-        $scope.showGetImagesheet = function() {
-            $ionicActionSheet.show({
-                // titleText: '性别',
-                buttons: [{
-                    text: '相机'
-                }, {
-                    text: '图库'
-                }, ],
-                destructiveText: '',
-                cancelText: "取消",
-                cancel: function() {
-                    console.log('CANCELLED');
-                },
-                buttonClicked: function(index) {
-                    if (index == 0) {
-                        getPicture();
-                    } else {
-                        getPictures();
-                    }
-                    return true;
-                },
-                destructiveButtonClicked: function() {
-                    console.log('DESTRUCT');
-                    return true;
-                },
-                cssClass: "wg-sheet"
-            });
-        };
-
-        $scope.showGendersheet = function() {
-            $ionicActionSheet.show({
-                titleText: '性别',
-                buttons: [{
-                    text: '<i class="icon ion-male balanced"></i> 男'
-                }, {
-                    text: '<i class="icon ion-female balanced"></i> 女'
-                }, ],
-                destructiveText: '',
-                cancelText: "取消",
-                cancel: function() {
-                    console.log('CANCELLED');
-                },
-                buttonClicked: function(index) {
-                    console.log('BUTTON CLICKED', index);
-                    if (index == 0) {
-                        $scope.mideApp_user.gender = "男";
-                    } else {
-                        $scope.mideApp_user.gender = "女";
-                    }
-                    return true;
-                },
-                destructiveButtonClicked: function() {
-                    console.log('DESTRUCT');
-                    return true;
-                },
-                cssClass: "wg-sheet"
-            });
-        };
-        // "设置时间"Event
-        $scope.getDate = function() {
+.controller('RegCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout, $cordovaCamera, $ionicModal, $ionicScrollDelegate) {
+    MideApp.setBackManner('back');
+    $rootScope.tabsHidden = "tabs-hide";
+    $scope.mideApp_user_reg = {};
+    MideApp.intoMyController($scope, $rootScope, $state);
 
 
-            var mydate = new Date();
-            if (typeof($scope.mideApp_user.birthday) != "undefined") {
-                mydate = new Date($scope.mideApp_user.birthday);
-            }
+    var getPicture = function() {
+        document.addEventListener("deviceready", function() {
 
             var options = {
-                date: mydate,
-                mode: 'date'
+                quality: 50,
+                destinationType: Camera.DestinationType.DATA_URL,
+                sourceType: Camera.PictureSourceType.CAMERA,
+                allowEdit: true,
+                encodingType: Camera.EncodingType.JPEG,
+                targetWidth: 100,
+                targetHeight: 100,
+                popoverOptions: CameraPopoverOptions,
+                saveToPhotoAlbum: false
             };
 
-            datePicker.show(options, function(date) {
+            $cordovaCamera.getPicture(options).then(function(imageData) {
                 $timeout(function() {
-                    $scope.mideApp_user.birthday = date;
+                    $scope.mideApp_user_reg.avatar_url = "data:image/jpeg;base64," + imageData;
                 }, 10);
 
-
-
             }, function(err) {
-                alert(err)
-                    // MideApp.myNotice('修改失败')
+                // error
             });
-        }
 
-        $scope.doReg = function() {
-            if (!MideApp.isOnline()) {
-                return MideApp.myNotice('暂无网络连接...');
-            }
-            if ('' == $scope.mideApp_user.unsename) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.password) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.confirmPassword) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.gender) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.birthday) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.phoneNumber) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.email) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            if ('' == $scope.mideApp_user.QQnumber) {
-                return MideApp.myNotice('尚有内容未填写...');
-            }
-            // if (!ybb_user.profile.current_salary.toString().match(/^[0-9]+$/) || ybb_user.profile.current_salary < 2000 || ybb_user.profile.current_salary > 500000) {
-            //     return MideApp.myNotice('有效薪资范围：2000-500000');
-            // }
+        }, false);
+    };
+    var getPictures = function() {
+        options = {
+            // max images to be selected, defaults to 15. If this is set to 1, upon
+            // selection of a single image, the plugin will return it.
+            maximumImagesCount: 1,
 
-            $ionicLoading.show();
-            // ybb_user.profile.job_requirement = JSON.stringify($scope.job_requirement);
+            // max width and height to allow the images to be.  Will keep aspect
+            // ratio no matter what.  So if both are 800, the returned image
+            // will be at most 800 pixels wide and 800 pixels tall.  If the width is
+            // 800 and height 0 the image will be 800 pixels wide if the source
+            // is at least that wide.
+            width: 100,
+            height: 100,
 
-            //模拟网络请求  实际用post 保存用户信息
-            MideApp.httpGet('/user/oukeye', function(data) {
-                mideApp_user = {};
-                mideApp_user.username = data.username;
-                mideApp_user.avatar_url = data.avatar_url;
-                // mideApp_user.create_at = data.create_at;
-                // mideApp_user.score = data.score;
-                $scope.mideApp_user.avatar_url = data.avatar_url;
-                MideApp.LocCache.save('User', $scope.mideApp_user);
-                MideApp.MemCache.save('User', $scope.mideApp_user);
+            // quality of resized image, defaults to 100
+            quality: 80
+        };
 
-                $scope.closeReForHelpModal();
-                $scope.closeRegVolunteerModal();
-                $ionicLoading.hide();
-
-                MideApp.myNotice('注册成功')
+        window.imagePicker.getPictures(
+            function(imageData) {
                 $timeout(function() {
-                    $state.go("login");
-                }, 1000);
-                // $rootScope.$broadcast('app.login');
+                    // $scope.mideApp_user_reg.avatar_url = "data:image/jpeg;base64," + imageData;
+                    $scope.mideApp_user_reg.avatar_url = imageData[0];
+                }, 10);
 
-            });
-        };
-
-        $scope.regMore = function() {
-            MideApp.LocCache.save('User', mideApp_user);
-            MideApp.MemCache.save('User', mideApp_user);
-            $state.go("regMore", $scope.mideApp_user);
-        }
-
-        $ionicModal.fromTemplateUrl('templates/regForHelp.html', {
-            scope: $scope,
-            animation: 'slide-in-right'
-        }).then(function(modal) {
-            $scope.reForHelpModal = modal;
+            },
+            function(error) {
+                alert('Error: ' + error);
+            }, options);
+    };
+    $scope.showGetImagesheet = function() {
+        $ionicActionSheet.show({
+            buttons: [{
+                text: '相机'
+            }, {
+                text: '图库'
+            }, ],
+            destructiveText: '',
+            cancelText: "取消",
+            cancel: function() {
+                console.log('CANCELLED');
+            },
+            buttonClicked: function(index) {
+                if (index == 0) {
+                    getPicture();
+                } else {
+                    getPictures();
+                }
+                return true;
+            },
+            destructiveButtonClicked: function() {
+                console.log('DESTRUCT');
+                return true;
+            },
+            cssClass: "wg-sheet"
         });
+    };
 
-        // Triggered in the login modal to close it
-        $scope.closeReForHelpModal = function() {
-            $scope.reForHelpModal.hide();
-        };
-        $scope.showReForHelpModal = function() {
-
-            $ionicScrollDelegate.scrollTop();
-            $scope.reForHelpModal.show();
-        };
-        $scope.$on('$destroy', function() {
-            $scope.reForHelpModal.remove();
+    $scope.showGendersheet = function() {
+        $ionicActionSheet.show({
+            titleText: '性别',
+            buttons: [{
+                text: '<i class="icon ion-male balanced"></i> 男'
+            }, {
+                text: '<i class="icon ion-female balanced"></i> 女'
+            }, ],
+            destructiveText: '',
+            cancelText: "取消",
+            cancel: function() {
+                console.log('CANCELLED');
+            },
+            buttonClicked: function(index) {
+                console.log('BUTTON CLICKED', index);
+                if (index == 0) {
+                    $scope.mideApp_user_reg.gender = "男";
+                } else {
+                    $scope.mideApp_user_reg.gender = "女";
+                }
+                return true;
+            },
+            destructiveButtonClicked: function() {
+                console.log('DESTRUCT');
+                return true;
+            },
+            cssClass: "wg-sheet"
         });
-        $ionicModal.fromTemplateUrl('templates/regVolunteer.html', {
-            scope: $scope,
-            animation: 'slide-in-right'
-        }).then(function(modal) {
-            $scope.regVolunteerModal = modal;
+    };
+    // "设置时间"Event
+    $scope.getDate = function() {
+
+
+        var mydate = new Date();
+        if (typeof($scope.mideApp_user_reg.birthday) != "undefined") {
+            mydate = new Date($scope.mideApp_user_reg.birthday);
+        }
+
+        var options = {
+            date: mydate,
+            mode: 'date'
+        };
+
+        datePicker.show(options, function(date) {
+            $timeout(function() {
+                $scope.mideApp_user_reg.birthday = date;
+            }, 10);
+
+
+
+        }, function(err) {
+            alert(err)
+                // MideApp.myNotice('修改失败')
         });
+    }
 
-        // Triggered in the login modal to close it
-        $scope.closeRegVolunteerModal = function() {
-            $scope.regVolunteerModal.hide();
-        };
-        $scope.showRegVolunteerModal = function() {
+    $scope.doReg = function(flag) {
+        alert( window.location.href);
+        if (!MideApp.isOnline()) {
+            return MideApp.myNotice('暂无网络连接...');
+        }
+        if ('' == $scope.mideApp_user_reg.unsename) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user_reg.password) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user_reg.confirmPassword) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user_reg.gender) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user_reg.birthday) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user_reg.phoneNumber) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user_reg.email) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        if ('' == $scope.mideApp_user_reg.QQnumber) {
+            return MideApp.myNotice('尚有内容未填写...');
+        }
+        // if (!ybb_user.profile.current_salary.toString().match(/^[0-9]+$/) || ybb_user.profile.current_salary < 2000 || ybb_user.profile.current_salary > 500000) {
+        //     return MideApp.myNotice('有效薪资范围：2000-500000');
+        // }
 
-            $ionicScrollDelegate.scrollTop();
-            $scope.regVolunteerModal.show();
+        $ionicLoading.show();
+        // ybb_user.profile.job_requirement = JSON.stringify($scope.job_requirement);
+        var params = {
+            'username': $scope.mideApp_user_reg.unsename,
+            'psw': $scope.mideApp_user_reg.password,
+            'avatar_url': 'test',
+            'nickname': 'test',
+            'sex':$scope.mideApp_user_reg.gender,
+            'birthday': $scope.mideApp_user_reg.birthday,
+            'phoneNumber': $scope.mideApp_user_reg.phoneNumber,
+            'email': $scope.mideApp_user_reg.email,
+            'QQnumber': $scope.mideApp_user_reg.QQnumber,
+            'flag': flag
+
         };
-        $scope.$on('$destroy', function() {
-            $scope.regVolunteerModal.remove();
+        MideApp.ajaxPost('datainterface/register.ashx', params, function(data) {
+            alert(data);
+            $scope.closeReForHelpModal();
+            $scope.closeRegVolunteerModal();
+            $ionicLoading.hide();
+
+            MideApp.myNotice('注册成功')
+            $timeout(function() {
+                $state.go("tab.account");
+            }, 200);
         });
+    };
+
+    $ionicModal.fromTemplateUrl('templates/regForHelp.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+    }).then(function(modal) {
+        $scope.reForHelpModal = modal;
+    });
 
-    })
-    .controller('BasicInfoCtrl', function($scope, $rootScope, $ionicActionSheet) {
-        mideApp_user = MideApp.LocCache.load('User');
-        $scope.mideApp_user = mideApp_user || {};
-
-        $scope.showActionsheet = function() {
-            $ionicActionSheet.show({
-                titleText: '性别',
-                buttons: [{
-                    text: '<i class="icon ion-male balanced"></i> 男'
-                }, {
-                    text: '<i class="icon ion-female balanced"></i> 女'
-                }, ],
-                destructiveText: '',
-                cancelText: "取消",
-                cancel: function() {
-                    console.log('CANCELLED');
-                },
-                buttonClicked: function(index) {
-                    console.log('BUTTON CLICKED', index);
-                    if (index == 0) {
-                        $scope.genter = "男";
-                    } else {
-                        $scope.genter = "女";
-                    }
-                    return true;
-                },
-                destructiveButtonClicked: function() {
-                    console.log('DESTRUCT');
-                    return true;
-                },
-                cssClass: "wg-sheet"
-            });
-        };
-    })
-    .controller('PhoneCtrl', function($scope, $rootScope, $state, $ionicLoading) {
-
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
-
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
-
-
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
-
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
-
-    })
-    .controller('EmailCtrl', function($scope, $rootScope, $state, $ionicLoading) {
-
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
-
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
-
+    // Triggered in the login modal to close it
+    $scope.closeReForHelpModal = function() {
+        $scope.reForHelpModal.hide();
+    };
+    $scope.showReForHelpModal = function() {
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+        $ionicScrollDelegate.scrollTop();
+        $scope.reForHelpModal.show();
+    };
+    $scope.$on('$destroy', function() {
+        $scope.reForHelpModal.remove();
+    });
+    $ionicModal.fromTemplateUrl('templates/regVolunteer.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+    }).then(function(modal) {
+        $scope.regVolunteerModal = modal;
+    });
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
-
-    })
-    .controller('QQCtrl', function($scope, $rootScope, $state, $ionicLoading) {
-
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
+    // Triggered in the login modal to close it
+    $scope.closeRegVolunteerModal = function() {
+        $scope.regVolunteerModal.hide();
+    };
+    $scope.showRegVolunteerModal = function() {
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+        $ionicScrollDelegate.scrollTop();
+        $scope.regVolunteerModal.show();
+    };
+    $scope.$on('$destroy', function() {
+        $scope.regVolunteerModal.remove();
+    });
 
+})
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+// .controller('PhoneCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('RegionCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('EmailCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('IdentityCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('QQCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('AddressCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('RegionCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('WeixinNumberCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('IdentityCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('EducationCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('AddressCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('ProfessionCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('WeixinNumberCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('SpecialityCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('EducationCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('IntentionCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('ProfessionCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('IntentionTimeCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
 
-        $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-        MideApp.setBackManner('back');
-        $rootScope.tabsHidden = "tabs-hide";
-        MideApp.intoMyController($scope, $rootScope, $state);
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
 
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
 
-        $scope.save = function() {
-            MideApp.httpGet('/user/' + $scope.mideApp_user.username, function(data) {
+//     })
+//     .controller('SpecialityCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
-                MideApp.LocCache.save("User", $scope.mideApp_user);
-                $ionicLoading.hide();
-                MideApp.myNotice('修改成功')
-                $state.go("account");
-            });
-        }
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
 
-    })
-    .controller('ForgetPasswordCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
+
+
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
+
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
+
+//     })
+//     .controller('IntentionCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
+
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
+
+
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
+
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
+
+//     })
+//     .controller('IntentionTimeCtrl', function($scope, $rootScope, $state, $ionicLoading) {
+
+//         $scope.mideApp_user = MideApp.LocCache.load('User') || {};
+
+//         MideApp.setBackManner('back');
+//         $rootScope.tabsHidden = "tabs-hide";
+//         MideApp.intoMyController($scope, $rootScope, $state);
+
+
+//         $scope.save = function() {
+//             MideApp.httpGet('mideData/user.json', function(data) {
+
+//                 MideApp.LocCache.save("User", $scope.mideApp_user);
+//                 $ionicLoading.hide();
+//                 MideApp.myNotice('修改成功')
+//                 $state.go("tab.account");
+//             });
+//         }
+
+//     })
+.controller('ForgetPasswordCtrl', function($scope, $rootScope, $state, $ionicLoading) {
 
         $scope.forget = {};
 
@@ -1539,12 +1750,12 @@ angular.module('starter.controllers', [])
 
 
         $scope.post = function() {
-            MideApp.httpGet('/user/oukeye', function(data) {
+            MideApp.httpGet('mideData/user.json', function(data) {
 
                 MideApp.LocCache.save("myEmail", $scope.forget.myEmail);
                 $ionicLoading.hide();
                 MideApp.myNotice('发送成功')
-                $state.go("forgetCode");
+                $state.go("tab.forgetCode");
             });
         }
 
@@ -1559,11 +1770,12 @@ angular.module('starter.controllers', [])
 
 
         $scope.post = function() {
-            MideApp.httpGet('/user/oukeye', function(data) {
+            $ionicLoading.show();
+            MideApp.httpGet('mideData/user.json', function(data) {
 
                 $ionicLoading.hide();
                 MideApp.myNotice('验证成功')
-                $state.go("resetPassword");
+                $state.go("tab.resetPassword");
             });
         }
 
@@ -1580,11 +1792,13 @@ angular.module('starter.controllers', [])
             if ($scope.pwd.newPassWord1 != $scope.pwd.newPassWord2) {
                 MideApp.myNotice('两密码不一致');
             } else {
-                MideApp.httpGet('/user/oukeye', function(data) {
+                MideApp.httpGet('mideData/user.json', function(data) {
 
                     $ionicLoading.hide();
                     MideApp.myNotice('成功')
-                    $state.go("login");
+                    $scope.pwd.newPassWord1 = "";
+                    $scope.pwd.newPassWord2 = "";
+                    $state.go("tab.account");
                     return true;
                 });
             }
@@ -1599,10 +1813,22 @@ angular.module('starter.controllers', [])
         $rootScope.tabsHidden = "tabs-hide";
         MideApp.intoMyController($scope, $rootScope, $state);
 
+
+        mideApp_user = MideApp.LocCache.load('User') || null;
+        if (mideApp_user == null) {
+            $state.includes = [];
+            $state.go("tab.account", {
+                reload: true
+            });
+            //$state.go('^'); // As $scope.search() changes the state, this is not even needed.
+
+
+        }
+
         $scope.mytime = new Date();
 
     })
-    .controller('FeedbackCtrl', function($scope, $rootScope, $state, $ionicScrollDelegate, $ionicModal, $ionicLoading,$filter) {
+    .controller('FeedbackCtrl', function($scope, $rootScope, $state, $ionicScrollDelegate, $ionicModal, $ionicLoading, $filter) {
 
         $scope.pwd = {};
         MideApp.setBackManner('back');
@@ -1663,19 +1889,19 @@ angular.module('starter.controllers', [])
                 return
             } else {
                 $ionicLoading.show();
-                MideApp.httpGet('/user/oukeye', function(data) {
-                    var _id = $scope.items.length+1;
-                    var _now = $filter('date')(new Date,'yyyy-MM-dd HH:mm:ss')
-                    var _data  = {
-                                    "id":_id,
-                                    "content": $scope.feedbackData,
-                                    "addtime":_now,
-                                    "Reply": "",
-                                    "ReplyTime": ""
-                                }
+                MideApp.httpGet('mideData/user.json', function(data) {
+                    var _id = $scope.items.length + 1;
+                    var _now = $filter('date')(new Date, 'yyyy-MM-dd HH:mm:ss')
+                    var _data = {
+                        "id": _id,
+                        "content": $scope.feedbackData,
+                        "addtime": _now,
+                        "Reply": "",
+                        "ReplyTime": ""
+                    }
                     $scope.items.push(_data)
                     $ionicLoading.hide();
-                    $scope.feedbackData="";
+                    $scope.feedbackData = "";
                     $ionicScrollDelegate.scrollTop();
                     MideApp.myNotice('发送成功')
                 });
@@ -1684,17 +1910,57 @@ angular.module('starter.controllers', [])
         }
 
     })
-    .controller('rankCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout) {
+    .controller('rankCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout, $ionicPopover, $filter, RankTabs) {
         MideApp.setBackManner('back');
         $rootScope.tabsHidden = "tabs-hide";
         MideApp.intoMyController($scope, $rootScope, $state);
 
+        $scope.rankTabs = RankTabs;
+        $scope.currentRankTabs = "all";
+        $scope.currentRank = $filter("filter")($scope.rankTabs, {
+            value: $scope.currentRankTabs
+        })[0];
 
-        $scope.tabActive = 1;
+        // .fromTemplateUrl() method
+        $ionicPopover.fromTemplateUrl('templates/rankPopover.html', {
+            scope: $scope
+        }).then(function(popover) {
+            $scope.rankPopover = popover;
+        });
+        $scope.rankList = MideApp.LocCache.load("rankList_all") || [];
+        $timeout(function() {
+            MideApp.httpGet("mideData/rankall.json", function(data) {
+                if (data.code == 0) {
+                    $scope.rankList = data.data;
+                    MideApp.LocCache.save("rankList_all", $scope.rankList);
+                } else {
+                    MideApp.myNotice(data.message);
+                }
 
-        $scope.selectTab = function(index) {
-            $scope.tabActive = index;
-        }
+            });
+
+        }, 200);
+
+        $scope.openRankPopover = function($event) {
+            console.log('show popover');
+            $scope.rankPopover.show($event);
+        };
+
+        $scope.changeTab = function(tab) {
+            $scope.rankList = MideApp.LocCache.load("rankList_" + tab) || [];
+
+            MideApp.httpGet('mideData/rank' + tab + ".json", function(data) {
+                $scope.rankList = data.data;
+                MideApp.LocCache.save("rankList_" + tab, $scope.rankList);
+                $scope.currentRankTabs = tab;
+                $scope.currentRank = $filter("filter")($scope.rankTabs, {
+                    value: $scope.currentRankTabs
+                })[0];
+            });
+
+            $scope.rankPopover.hide();
+        };
+
 
     })
     .controller('helpCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout) {
@@ -1725,110 +1991,13 @@ angular.module('starter.controllers', [])
                 return MideApp.myNotice('暂无网络连接...');
             }
 
-            MideApp.httpGet('/user/oukeye', function(data) {
+            MideApp.httpGet('mideData/myhelp.json', function(data) {
 
-                var _obj = {
-                    "data": [{
-                        "id": "1",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "ABC君",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>我们相信这个世界有爱，希望全社会都来帮帮这个孩子，帮帮这个妈妈！我们想到了网络，通过网络能让更多的好心人看到，大家的力量是伟大的，钰林的病肯定就能有救了，希望看到这个帖子的再生“父母”们，能献出自己的爱心，转载给更多的好心人，帮帮小钰林，病情不能再耽误了，钰林的命靠大家了，现在妈妈在省人民医院做第八次化疗，我们全家人在这里深深鞠躬，先谢谢大家了。好人有好报，好人一生平安。孩子父亲，娄建国手机号：13783430073</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084096409640.jpeg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084512681268.jpeg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084634763476.jpeg' alt=''></div>",
-                        "title": "救救这个孩子，救救这个家",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 1
-
-                    }, {
-                        "id": "2",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/11486388?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>他就是淮北相山区一个年仅2岁的孩子赵天佑，天佑是一名“极低体重早产儿”，只有1400克，所以刚出生时体质就特别差，再加上小天佑接二连三被查出患有新生儿先天性脑萎缩症，新生儿败血症，新生儿缺氧缺血性脑病等各种新生儿综合症，他的父母只好带着小天佑在医院治疗，可又一个坏消息传来让小天佑的父母孙忠元与赵贝贝差点崩溃，小天佑因抢救的极端需要，他所佩戴的呼吸机使他丧失了视力，为了挽救小天佑的生命，挽救他们的孩子，小天佑的父母咬着牙给小天佑治病，花光积蓄，甚至现在已负债累累，但眼下却仍因缺少治疗费用而无法进行下一步的治疗在家修养，情况非常不乐观，而就在这几天小天佑开始抽搐，他需要去治疗，他是那样一个鲜活可爱的小生命，不能因为没钱而放弃对小天佑的治疗，要知道，一个天使般生命的夭折，是对一个家庭深到骨髓里的打击。</p><p> 救助一个孩子，温暖整个家庭， 同志们，一样的生命一样的梦，一样的真情一样的感动，一分一元甚至百元万元，都凝聚着大家的爱心，都昭示着人间真爱请大家伸出你们的援助之手，奉献您的无限爱意，送去您强有力的支持，让我们行动起来，为小天佑送去希望，让他能健康快乐的成长，同志们，请伸出你们的双手，托起这明天的太阳，为小天佑的明天架起爱的桥梁。</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140506/20140506112615921592.jpg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140506/2014050611260939939.jpg' alt=''></div>",
-                        "title": "别让小天佑失去生命",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 2
-
-
-                    }, {
-                        "id": "3",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/9349200?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>六岁的男童等待骨髄移植，高昂的医疗费成了拦路虎一个不幸的家庭又出现在我们面前，父亲是个退伍军人尊纪守法，热于助人。却因小孩范乐祥于去年12月的一天上幼儿园不小心跌倒，一直流鼻血不止，到医院检查，在12月18日添加到日历小乐乐被确诊为急性淋巴细胞白血病。医生告诉我们结果时候，对于我们一个普通的农村家庭来说犹如晴天霹雳，如今儿子已经患有白血病，我们也无力挽回。不得不接受事实，现在经过五个月的化疗，是骨髓移植的最佳时期。却因骨髄移植需要一比高昂的手朮费，如今手术费已成为我们的＂拦路虎＂了。因之前化疗已发费家里的所有积蓄和借款共计二十余万元，现要骨髓移植还需50万元医疗费。多方求助、东凑西凑也是杯水车薪，只好在此恳求社会爱心人士救救我那不幸的孩子。您的慈悲之心换来孩子的新生，你们的一次次转发将给我们父母带来希望。作为孩子的父亲在此跪谢了。谢谢你们。祝各位好心人，一身平安，身体健康。</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140616/20140616094928932893.jpg' alt=''></div>",
-                        "title": "六岁的男童等待骨髄移植，高昂的医疗费成了拦路虎",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 2
-
-
-                    }, {
-                        "id": "4",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/7659710?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>花季少女为筹集手术费跪求好心人帮助.陈敏，女，12岁，家住陕西铜川市耀州区小丘镇移村四组。家里有78岁的爷爷、爸爸妈妈和仅4岁的弟弟。在她出生的第三天就被查出患有先天性脊柱侧弯的顽症，为了治病，家里为了给她治病，花去了20多万元，家中负债累累，恳请大家给予帮助。</p><img src='http://www.shilehui.com/UserImage/0/20131017060914412088.JPG' alt=''></div>",
-                        "title": "花季少女为筹集手术费跪求好心人帮助",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 3
-
-
-                    }, {
-                        "id": "5",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/2705854?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>彭思睿，男，1岁，家住江苏徐州市邳州市江苏徐州市邳州市徐州市邳州宿羊山镇苏口村。儿子彭思睿五个月查出，宝宝得了家族噬血病，这病必须干细胞移植才能治好宝宝病，手术费用需要几十万，对于农村的我们一辈子都挣不到。但我决不放弃我的宝宝！希望大家救救我的宝贝，我第一个宝宝也是这种病走了，没想到我第二个宝宝也得了噬血病。现在正在医院接受化疗，如果宝宝受到感染了，随时都会复发，时间就是生命，我相信人间有真情，跪求好心人的帮助，医生说不治的话更没希望，希望大家可怜我的宝贝，能伸出援手帮帮我的小宝贝！上天会保佑所有的好心人的！</p><img src='http://www.shilehui.com/UserImage/0/20131013032200560088.PNG' alt=''></div>",
-                        "title": "跪求拯救我6个月患噬血病宝宝",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 4
-
-
-                    }]
-                }
 
                 $scope.MyHelpConfig.page = $scope.MyHelpConfig.page + 1;
-                $scope.MyHelpConfig.MyHelp = $scope.MyHelpConfig.MyHelp.concat(_obj.data);
+                $scope.MyHelpConfig.MyHelp = $scope.MyHelpConfig.MyHelp.concat(data.data);
                 $scope.MyHelpConfig.errormsg = !$scope.MyHelpConfig.MyHelp.length;
-                $scope.MyHelpConfig.infinite = _obj.data.length;
+                $scope.MyHelpConfig.infinite = data.data.length;
                 $ionicLoading.hide();
                 callback && callback();
                 MideApp.MemCache.save('MyHelp-list', $scope.MyHelpConfig);
@@ -1875,110 +2044,14 @@ angular.module('starter.controllers', [])
                 return MideApp.myNotice('暂无网络连接...');
             }
 
-            MideApp.httpGet('/user/oukeye', function(data) {
-
-                var _obj = {
-                    "data": [{
-                        "id": "1",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "ABC君",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>我们相信这个世界有爱，希望全社会都来帮帮这个孩子，帮帮这个妈妈！我们想到了网络，通过网络能让更多的好心人看到，大家的力量是伟大的，钰林的病肯定就能有救了，希望看到这个帖子的再生“父母”们，能献出自己的爱心，转载给更多的好心人，帮帮小钰林，病情不能再耽误了，钰林的命靠大家了，现在妈妈在省人民医院做第八次化疗，我们全家人在这里深深鞠躬，先谢谢大家了。好人有好报，好人一生平安。孩子父亲，娄建国手机号：13783430073</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084096409640.jpeg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084512681268.jpeg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20141104/20141104084634763476.jpeg' alt=''></div>",
-                        "title": "救救这个孩子，救救这个家",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 1
-
-                    }, {
-                        "id": "2",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/11486388?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>他就是淮北相山区一个年仅2岁的孩子赵天佑，天佑是一名“极低体重早产儿”，只有1400克，所以刚出生时体质就特别差，再加上小天佑接二连三被查出患有新生儿先天性脑萎缩症，新生儿败血症，新生儿缺氧缺血性脑病等各种新生儿综合症，他的父母只好带着小天佑在医院治疗，可又一个坏消息传来让小天佑的父母孙忠元与赵贝贝差点崩溃，小天佑因抢救的极端需要，他所佩戴的呼吸机使他丧失了视力，为了挽救小天佑的生命，挽救他们的孩子，小天佑的父母咬着牙给小天佑治病，花光积蓄，甚至现在已负债累累，但眼下却仍因缺少治疗费用而无法进行下一步的治疗在家修养，情况非常不乐观，而就在这几天小天佑开始抽搐，他需要去治疗，他是那样一个鲜活可爱的小生命，不能因为没钱而放弃对小天佑的治疗，要知道，一个天使般生命的夭折，是对一个家庭深到骨髓里的打击。</p><p> 救助一个孩子，温暖整个家庭， 同志们，一样的生命一样的梦，一样的真情一样的感动，一分一元甚至百元万元，都凝聚着大家的爱心，都昭示着人间真爱请大家伸出你们的援助之手，奉献您的无限爱意，送去您强有力的支持，让我们行动起来，为小天佑送去希望，让他能健康快乐的成长，同志们，请伸出你们的双手，托起这明天的太阳，为小天佑的明天架起爱的桥梁。</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140506/20140506112615921592.jpg' alt=''><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140506/2014050611260939939.jpg' alt=''></div>",
-                        "title": "别让小天佑失去生命",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 2
+            MideApp.httpGet('mideData/myask.json', function(data) {
 
 
-                    }, {
-                        "id": "3",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/9349200?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>六岁的男童等待骨髄移植，高昂的医疗费成了拦路虎一个不幸的家庭又出现在我们面前，父亲是个退伍军人尊纪守法，热于助人。却因小孩范乐祥于去年12月的一天上幼儿园不小心跌倒，一直流鼻血不止，到医院检查，在12月18日添加到日历小乐乐被确诊为急性淋巴细胞白血病。医生告诉我们结果时候，对于我们一个普通的农村家庭来说犹如晴天霹雳，如今儿子已经患有白血病，我们也无力挽回。不得不接受事实，现在经过五个月的化疗，是骨髓移植的最佳时期。却因骨髄移植需要一比高昂的手朮费，如今手术费已成为我们的＂拦路虎＂了。因之前化疗已发费家里的所有积蓄和借款共计二十余万元，现要骨髓移植还需50万元医疗费。多方求助、东凑西凑也是杯水车薪，只好在此恳求社会爱心人士救救我那不幸的孩子。您的慈悲之心换来孩子的新生，你们的一次次转发将给我们父母带来希望。作为孩子的父亲在此跪谢了。谢谢你们。祝各位好心人，一身平安，身体健康。</p><img src='http://www.zgaxgyw.com/manageadmin/kindeditor-4.1.7/attached/image/20140616/20140616094928932893.jpg' alt=''></div>",
-                        "title": "六岁的男童等待骨髄移植，高昂的医疗费成了拦路虎",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 2
-
-
-                    }, {
-                        "id": "4",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/7659710?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>花季少女为筹集手术费跪求好心人帮助.陈敏，女，12岁，家住陕西铜川市耀州区小丘镇移村四组。家里有78岁的爷爷、爸爸妈妈和仅4岁的弟弟。在她出生的第三天就被查出患有先天性脊柱侧弯的顽症，为了治病，家里为了给她治病，花去了20多万元，家中负债累累，恳请大家给予帮助。</p><img src='http://www.shilehui.com/UserImage/0/20131017060914412088.JPG' alt=''></div>",
-                        "title": "花季少女为筹集手术费跪求好心人帮助",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 3
-
-
-                    }, {
-                        "id": "5",
-                        "author": {
-                            "author_id": "1",
-                            "author_name": "求助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/2705854?v=3&s=120"
-                        },
-                        "helper": {
-                            "helper_id": "1",
-                            "helper_name": "帮助者姓名",
-                            "avatar_url": "https://avatars.githubusercontent.com/u/5700428?v=3&s=120"
-                        },
-                        "content": "<div><p>彭思睿，男，1岁，家住江苏徐州市邳州市江苏徐州市邳州市徐州市邳州宿羊山镇苏口村。儿子彭思睿五个月查出，宝宝得了家族噬血病，这病必须干细胞移植才能治好宝宝病，手术费用需要几十万，对于农村的我们一辈子都挣不到。但我决不放弃我的宝宝！希望大家救救我的宝贝，我第一个宝宝也是这种病走了，没想到我第二个宝宝也得了噬血病。现在正在医院接受化疗，如果宝宝受到感染了，随时都会复发，时间就是生命，我相信人间有真情，跪求好心人的帮助，医生说不治的话更没希望，希望大家可怜我的宝贝，能伸出援手帮帮我的小宝贝！上天会保佑所有的好心人的！</p><img src='http://www.shilehui.com/UserImage/0/20131013032200560088.PNG' alt=''></div>",
-                        "title": "跪求拯救我6个月患噬血病宝宝",
-                        "addtime": "2015-08-21T02:33:00.896Z",
-                        "finishtime": "2015-08-21T02:33:00.896Z",
-                        "status": 4
-
-
-                    }]
-                }
 
                 $scope.AskConfig.page = $scope.AskConfig.page + 1;
-                $scope.AskConfig.myAsk = $scope.AskConfig.myAsk.concat(_obj.data);
+                $scope.AskConfig.myAsk = $scope.AskConfig.myAsk.concat(data.data);
                 $scope.AskConfig.errormsg = !$scope.AskConfig.myAsk.length;
-                $scope.AskConfig.infinite = _obj.data.length;
+                $scope.AskConfig.infinite = data.data.length;
                 $ionicLoading.hide();
                 callback && callback();
                 MideApp.MemCache.save('myAsk-list', $scope.AskConfig);
@@ -2010,7 +2083,7 @@ angular.module('starter.controllers', [])
             });
         }
     })
-    .controller('MyTeamCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout) {
+    .controller('MyTeamCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout, $ionicModal, $ionicScrollDelegate, $filter, $http) {
 
         MideApp.setBackManner('back');
         $rootScope.tabsHidden = "tabs-hide";
@@ -2028,12 +2101,21 @@ angular.module('starter.controllers', [])
                 return MideApp.myNotice('暂无网络连接...');
             }
 
-            MideApp.httpGet('/user/oukeye', function(data) {
-
+            MideApp.httpGet('mideData/user.json', function(data) {
+                var _id = $scope.TeamConfig.teams.length + 1;
                 var _obj = {
                     "data": [{
-                        "id": "1",
-                        "teamName": "医院义工医院义工",
+                        "id": _id,
+                        "title": _id + "医院义工", //标题
+                        "sponsor": "oky", //发起人
+                        "contacts": "oky", //联系人
+                        "phone": "13580530583",
+                        "type": "活动类型",
+                        "region": "所属区域",
+                        "activityTime": "所属区域",
+                        "location": "所属区域",
+                        "totalNumber": "所属区域",
+                        "content": "去因为做义工，帮助病人日常生活",
                         "addtime": "2015-08-02 22:33:00"
                     }]
                 }
@@ -2072,6 +2154,115 @@ angular.module('starter.controllers', [])
                 $scope.$broadcast('scroll.refreshComplete');
             });
         }
+
+        $ionicModal.fromTemplateUrl('templates/createTeam.html', {
+            scope: $scope,
+            animation: 'slide-in-right'
+        }).then(function(modal) {
+            $scope.CreateTeamModal = modal;
+        });
+
+        // Triggered in the login modal to close it
+        $scope.closeCreateTeamModal = function() {
+            $scope.CreateTeamModal.hide();
+        };
+        $scope.showCreateTeamModal = function(id) {
+            $scope.showId = {
+                "id": id
+            };
+            $ionicScrollDelegate.scrollTop();
+            $scope.CreateTeamModal.show();
+        };
+        $scope.$on('$destroy', function() {
+            $scope.CreateTeamModal.remove();
+        });
+
+        $scope.showCreateTeamSheet = function(info) {
+            if (typeof info == 'undefined') {
+                info = "";
+            };
+            $ionicActionSheet.show({
+                titleText: '确定' + info + '？',
+                buttons: [{
+                    text: '是'
+                }, {
+                    text: '否'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        MideApp.httpGet('mideData/user.json', function(data) {
+
+                            var _id = $scope.TeamConfig.teams.length + 1;
+                            var _now = $filter("date")(new Date, "yyyy-MM-dd HH:mm:ss");
+                            var _obj = {
+                                "data": [{
+                                    "id": _id,
+                                    "title": _id + "医院义工", //标题
+                                    "sponsorId": 1, //发起人id
+                                    "sponsor": "oky", //发起人
+                                    "contacts": "oky", //联系人
+                                    "phone": "13580530583",
+                                    "type": "活动类型",
+                                    "region": "所属区域",
+                                    "activityTime": "所属区域",
+                                    "location": "所属区域",
+                                    "totalNumber": "所属区域",
+                                    "content": "去因为做义工，帮助病人日常生活",
+                                    "addtime": _now
+                                }]
+                            }
+                            $scope.TeamConfig.teams = $scope.TeamConfig.teams.concat(_obj.data);
+                            $ionicLoading.hide();
+
+                            MideApp.myNotice(info + '成功')
+                            $scope.closeCreateTeamModal();
+                        });
+                    } else {
+                        return true;
+                    }
+
+
+
+
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+
+        $ionicModal.fromTemplateUrl('templates/teamDetail.html', {
+            scope: $scope,
+            animation: 'slide-in-right'
+        }).then(function(modal) {
+            $scope.teamDetailModal = modal;
+        });
+
+        // Triggered in the login modal to close it
+        $scope.closeTeamDetailModal = function() {
+            $scope.teamDetailModal.hide();
+        };
+        $scope.showTeamDetailModal = function(id) {
+            $scope.showId = {
+                "id": id
+            };
+            $ionicScrollDelegate.scrollTop();
+            $scope.teamDetailModal.show();
+        };
+        $scope.$on('$destroy', function() {
+            $scope.teamDetailModal.remove();
+        });
+
     })
 
 

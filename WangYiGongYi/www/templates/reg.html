@@ -1,38 +1,34 @@
-<ion-header-bar class="bar-positive">
-    <a class="button icon-left ion-ios-arrow-left button-clear button-linght" ng-click="back()"></a>
-    <h1 class="title">注册</h1>
-</ion-header-bar>
-
-<ion-view >   
-    <ion-content class=' has-footer'>
+<ion-view view-title="注册">
+    <ion-nav-buttons side="left">
+        <button class="button icon-left ion-ios-arrow-left button-clear button-linght" ng-click="back()"></button>
+    </ion-nav-buttons>
+    <ion-content class='has-tabs'>
         <form name=reg>
             <div class="list">
-                <div class="item item-input item-avatar-right headImg_40 text-midel"  style="padding-top:6px;padding-bottom:6px;" ng-click="showGetImagesheet()">
-                    <img ng-src="{{mideApp_user.avatar_url||'img/commentfailure.jpg'}}" style="width:100%"> 头像
+                <div class="item item-input item-avatar-right headImg_40 text-midel" style="padding-top:6px;padding-bottom:6px;" ng-click="showGetImagesheet()">
+                    <img ng-src="{{mideApp_user_reg.avatar_url||'img/commentfailure.jpg'}}" style="width:100%"> 头像
                 </div>
                 <label class="item item-input">
                     <span class="input-label">账号:</span>
-                    <input type="text" ng-model="mideApp_user.username" placeholder="请输入账号" required>
+                    <input type="text" ng-model="mideApp_user_reg.username" placeholder="请输入账号" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">密码:</span>
-                    <input type="password" ng-model="mideApp_user.password" placeholder="请输入密码" required>
+                    <input type="password" ng-model="mideApp_user_reg.password" placeholder="请输入密码" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">确认密码:</span>
-                    <input type="password" ng-model="mideApp_user.confirmPassword" placeholder="再输入密码" required>
+                    <input type="password" ng-model="mideApp_user_reg.confirmPassword" placeholder="再输入密码" required>
                 </label>
                 <label class="item item-input">
-
                     <span class="input-label">性别:</span>
-
-                    <input type="text" ng-model="mideApp_user.gender" placeholder="请选择性别"  ng-click="showGendersheet()" readonly="readonly" class="light" style = "background:#fff">
+                    <input type="text" ng-model="mideApp_user_reg.gender" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff">
                 </label>
                 <label class="item item-input" ng-click="getDate()">
                     <span class="input-label">出身年月:</span>
-                     <span class="" ng-show="mideApp_user.birthday">{{mideApp_user.birthday|date:"yyyy-MM-dd"}}</span>
-                      <span class="tips-info" ng-show="!mideApp_user.birthday">请选择日期</span>
-                    <!-- <input type="text" ng-model="mideApp_user.birthday" placeholder="请选择日期" required> -->
+                    <span class="" ng-show="mideApp_user_reg.birthday">{{mideApp_user_reg.birthday|date:"yyyy-MM-dd"}}</span>
+                    <span class="tips-info" ng-show="!mideApp_user_reg.birthday">请选择日期</span>
+                    <!-- <input type="text" ng-model="mideApp_user_reg.birthday" placeholder="请选择日期" required> -->
                 </label>
                 <label class="item item-input">
                     <span class="input-label">联系电话:</span>
@@ -49,10 +45,10 @@
             </div>
             <div class="padding">
                 <div class="row">
-                    <dov class="col"><a class="button button-block button-positive " ng-click=doReg() ng-disabled=reg.$invalid>提交</a>
+                    <dov class="col"><a class="button button-block button-positive " ng-click=doReg(1) ng-disabled=reg.$invalid>提交</a>
                     </dov>
                     <dov class="col">
-                        <a class="button button-block button-positive"  ng-click="showReForHelpModal()" ng-disabled=reg.$invalid>注册求助者</a>
+                        <a class="button button-block button-positive" ng-click="showReForHelpModal()" ng-disabled=reg.$invalid>注册求助者</a>
                     </dov>
                 </div>
             </div>

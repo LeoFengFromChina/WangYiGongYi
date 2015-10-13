@@ -1,22 +1,23 @@
-
-<ion-header-bar class="bar-positive">
+<!-- <ion-header-bar class="bar-positive">
     <a class="button icon-left ion-ios-arrow-left button-clear button-linght" ng-click="back()"></a>
     <h1 class="title">更改学历</h1>
-</ion-header-bar>
-
-<ion-view >
+</ion-header-bar> -->
+<ion-view>
+    <ion-nav-buttons side="left">
+        <a class="button icon-left ion-ios-arrow-left button-clear button-linght" ng-click="back()"></a>
+    </ion-nav-buttons>
     <ion-content class="light-bg has-header  has-footer">
-     <form name="myForm">
-        <div class="list">
-            <label class="item item-input">
-                <input type="text" placeholder="学历" ng-model="mideApp_user.education" required>
-            </label>
-             <label class="item tips_item">
-               <div>证实的学历可以更好的让好友了解您</div>
-            </label>
-        </div>
-        <div class="padding">
-                 <button class="button button-block button-positive" ng-click=save() ng-disabled="myForm.$invalid ">保存</button>
+        <form name="myForm">
+            <div class="list">
+                <label class="item item-input">
+                    <input type="text" placeholder="学历" ng-model="mideApp_user.education" required>
+                </label>
+                <label class="item tips_item">
+                    <div>证实的学历可以更好的让好友了解您</div>
+                </label>
+            </div>
+            <div class="padding">
+                <button class="button button-block button-positive" ng-click=save() ng-disabled="myForm.$invalid ">保存</button>
             </div>
         </form>
     </ion-content>

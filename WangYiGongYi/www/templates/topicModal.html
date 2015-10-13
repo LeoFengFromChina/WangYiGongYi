@@ -1,48 +1,50 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear" ng-click="closeTopicModal()">关闭</button>
+            <button class="button button-clear icon ion-android-close" ng-click="closeTopicModal()"></button>
         </div>
-        <h1 class="title">网益公益{{topicModal_shwoId}}</h1>
+        <h1 class="title title-center">网益公益</h1>
         <div class="buttons">
-            <button class="button button-clear icon " ng-click="help()">我要助他</button>
+            <button class="button button-clear icon " ng-click="help()">助他</button>
         </div>
     </ion-header-bar>
-    <ion-content has-bouncing="true" padding="false" class="has-header  no-footer" delegate-handle="mainScroll">
-        <div class="list card topics " ng-repeat="topic in config.topics | filter:topicShowId">
-            <div class="item item-avatar">
-                <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img>
-                <!-- reset-img   -->
-                <h2>{{topic.title}}</h2>
-                <p class="summary">
-                    <span ng-if="topic.status==1" class="tab status1">求助中</span>
-                    <span ng-if="topic.status==2" class="tab status2">已承接</span>
-                    <span ng-if="topic.status==3" class="tab status3">帮助中</span>
-                    <span ng-if="topic.status==4" class="tab status4">已完成</span>
-                    <span class="tab">发起人:</span> {{topic.author.author_name}}
-                    
-                </p>
-            </div>
-            <div class="item summary" style="padding:4px;">
-                <div class="row">
-                    <div class="col text-ellipsis" ><span >联系人:</span> {{topic.author.author_name}}</div>
-                    <div class="col  text-center">13580530583</div>
-                    <div class="col text-ellipsis text-right">佛山南海</div>
+    <ion-content has-bouncing="true" padding="false" class="has-header  no-footer" delegate-handle="topicMainScroll">
+        <div ng-if="current_topic">
+            <div class="list card topics " ng-repeat="topic in current_topic">
+                <div class="item item-avatar">
+                    <img ng-src="{{topic.Author._photourl|avatarFilter}}" reset-img>
+                    <!-- reset-img   -->
+                    <h2>{{topic.HelpRequest._title}}</h2>
+                    <p class="summary">
+                        <span ng-if="topic.HelpRequest._status==1" class="tab status1">求助中</span>
+                        <span ng-if="topic.HelpRequest._status==2" class="tab status2">已承接</span>
+                        <span ng-if="topic.HelpRequest._status==3" class="tab status3">帮助中</span>
+                        <span ng-if="topic.HelpRequest._status==4" class="tab status4">已完成</span>
+                        <span class="tab">发起人:</span> {{topic.Author.author_name}}
+                    </p>
+                    <p></p>
                 </div>
-                <div class="row">
-                    <div class="col"><span >开始时间:</span> {{topic.startTime}}</div>
-                    <div class="col text-right"><span >时长:</span> {{topic.duration}}</div>
-                    
+                <div class="item summary" style="padding:4px;">
+                    <div class="row">
+                        <div class="col text-ellipsis"><span>联系人:</span> {{topic.HelpRequest._linkman}}</div>
+                        <div class="col text-ellipsis text-right"> {{topic.HelpRequestaddress}}</div>
+                    </div>
+                    <dov class="row">
+                        <div class="col  text-ellipsis">联系电话</div>
+                        <div class="col  text-ellipsis text-right contactPhone" ><a href="tel:{{topic.contactPhone}}" ><i class="ion-ios-telephone "> </i>{{topic.contactPhone}}</a></div>
+                    </dov>
+                    <div class="row">
+                        <div class="col"><span>开始时间:</span> {{topic.startTime}}</div>
+                        <div class="col text-right"><span>时长:</span> {{topic.duration}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span>服务类型:</span> {{topic.serviceType}}</div>
+                        <div class="col text-right">发布时间:<span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix"></span></div>
+                    </div>
                 </div>
-                <div class="row">
-                    <div class="col"><span >服务类型:</span> {{topic.serviceType}}</div>
-                    <div class="col text-right">发布时间:<span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix"></span></div>                     
+                <div class="item item-body" ng-bind-html="topic.content">
                 </div>
             </div>
-            <div class="item item-body" ng-bind-html="topic.content">
-               
-            </div>
-            
         </div>
     </ion-content>
 </ion-modal-view>

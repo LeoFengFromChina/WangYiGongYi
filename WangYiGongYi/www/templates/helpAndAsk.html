@@ -1,0 +1,36 @@
+<ion-modal-view>
+    <ion-header-bar class=" bar-positive nav-title-slide-full">
+        <div class="buttons">
+            <button class="button button-clear icon ion-android-close" ng-click="closeHelpAndAskModal()"></button>
+        </div>
+        <h1 class="title title-center">求助与帮助</h1>
+        </div>
+    </ion-header-bar>
+    <div class="tabs-striped  tabs-color-positive tabs-top tabs-light tabs-icon-top">
+        <div class="tabs">
+            <a ng-class="{ask: 'tab-item active', help: 'tab-item'}[helpAndAsk_isActive]" data-active="ask" ng-click="helpAndAsk_changeTab($event)" style="font-size:16px;line-height:48px;">我的求助</a>
+            <a ng-class="{ask: 'tab-item', help: 'tab-item active'}[helpAndAsk_isActive]" data-active="help" ng-click="helpAndAsk_changeTab($event)" style="font-size:16px;line-height:48px;">我的帮助</a>
+        </div>
+    </div>
+    <ion-content class=" has-subheader " has-bouncing="true" delegate-handle="helpAndAskScroll">
+        <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
+        </ion-refresher>
+        <div class=" list topics" ng-if="activeConfig.topics">
+            <!--    <div class="item item-divider">求助列表</div> -->
+            <div class="item item-avatar" collection-repeat="topic in activeConfig.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.id)">
+                <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img />
+                <!-- reset-img   -->
+                <h2>{{topic.title}}</h2>
+                <p class="summary">
+                    <span ng-if="topic.status==1" class="tab status1">求助中</span>
+                    <span ng-if="topic.status==2" class="tab status2">已承接</span>
+                    <span ng-if="topic.status==3" class="tab status3">帮助中</span>
+                    <span ng-if="topic.status==4" class="tab status4">已完成</span>
+                    <span class="tab">发起人:</span> {{topic.author.author_name}}
+                    <span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix"></span>
+                </p>
+            </div>
+        </div>
+        <ion-infinite-scroll on-infinite="helpAndAsk_infinite()" distance="1%" ng-if="activeConfig.infinite" spinner="spiral" class="wg_spinner"></ion-infinite-scroll>
+    </ion-content>
+</ion-modal-view>

@@ -1,10 +1,14 @@
-<ion-header-bar class="bar-positive">
-    <a class="button icon-left ion-ios-arrow-left button-clear button-linght" ng-click="back()"></a>
-    <h1 class="title">登录</h1>
-    <a class="button  button-clear button-linght" ui-sref="reg">注册</a>
-</ion-header-bar>
-<ion-view >
-    <ion-content class=' has-footer'>
+<ion-modal-view>
+    <ion-header-bar class=" bar-positive nav-title-slide-full">
+        <div class="buttons">
+            <button class="button button-clear icon ion-android-close" ng-click="closeLoginModal()"></button>
+        </div>
+        <h1 class="title title-center">登录</h1>
+         <div class="buttons">
+            <button class="button button-clear light" ng-click="gotoState('tab.reg',false)">注册</button>
+        </div>
+    </ion-header-bar>
+    <ion-content has-bouncing="true" padding="false" class="has-header  no-footer" delegate-handle="loginScroll">
         <form name="login" ng-enter="doLogin()">
             <div class="list">
                 <!--  <label class="item item-input item-avatar">
@@ -25,8 +29,8 @@
             </div>
             <div class="padding">
                 <button class="button button-block button-positive" ng-click=doLogin() ng-disabled=login.$invalid>登录</button>
-                <a class="button-block text-right calm" ui-sref="forgetPassword">忘记密码?</a>
+                <a class="button-block text-right calm" ng-click="gotoState('tab.forgetPassword',false)" >忘记密码?</a>
             </div>
         </form>
     </ion-content>
-</ion-view>
+</ion-modal-view>

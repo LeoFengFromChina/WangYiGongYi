@@ -1,0 +1,119 @@
+<ion-modal-view>
+    <ion-header-bar class=" bar-positive nav-title-slide-full">
+        <div class="buttons">
+            <button class="button button-clear icon ion-android-close" ng-click="closeBasicInfoModal()"></button>
+        </div>
+        <h1 class="title title-center">修改个人信息</h1>
+        </div>
+    </ion-header-bar>
+    <div class="tabs-striped  tabs-color-positive tabs-top tabs-light tabs-icon-top">
+        <div class="tabs">
+            <a ng-class="{a: 'tab-item active', b: 'tab-item', c: 'tab-item'}[isActive]" data-active="a" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">基本信息</a>
+            <a ng-class="{a: 'tab-item', b: 'tab-item active', c: 'tab-item'}[isActive]" data-active="b" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">求助者信息</a>
+            <a ng-class="{a: 'tab-item', b: 'tab-item', c: 'tab-item active'}[isActive]" data-active="c" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">志愿者信息</a>
+        </div>
+    </div>
+    <ion-content class="has-subheader" delegate-handle="basicInfoScroll">
+        <div ng-if="isActive == 'a'">
+            <form ng-submit="changeBasic()" name="changeBasicForm">
+                <div class="list padding">
+                    <label class="item-input padding-left padding-right">
+                        <span class="input-label">账号:</span>
+                        <input type="text" ng-model="mideApp_user_basic.username" placeholder="请输入账号" required>
+                    </label>
+                   <!--  <label class="item-input padding-left padding-right">
+                        <span class="input-label">原密码:</span>
+                        <input type="password" ng-model="mideApp_user_basic.original_password" placeholder="请输入密码" required>
+                    </label>
+                    <label class="item-input padding-left padding-right">
+                        <span class="input-label">新密码:</span>
+                        <input type="password" ng-model="mideApp_user_basic.new_password" placeholder="请输入密码" required>
+                    </label>
+                    <label class="item-input padding-left padding-right">
+                        <span class="input-label">确认新密码:</span>
+                        <input type="password" ng-model="mideApp_user_basic.confirm_new_Password" placeholder="再输入密码" required>
+                    </label> -->
+                    <label class="item-input padding-left padding-right">
+                        <span class="input-label">性别:</span>
+                        <input type="text" ng-model="mideApp_user_basic.gender" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff" required>
+                    </label>
+                    <label class="item-input padding-left padding-right" ng-click="getDate()">
+                        <span class="input-label">出身年月:</span>
+                        <span class="" ng-show="mideApp_user_basic.birthday">{{mideApp_user_basic.birthday|date:"yyyy-MM-dd"}}</span>
+                        <span class="tips-info" ng-show="!mideApp_user_basic.birthday">请选择日期</span>
+                        <!-- <input type="text" ng-model="mideApp_user_basic.birthday" placeholder="请选择日期" required> -->
+                    </label>
+                    <label class="item-input padding-left padding-right">
+                        <span class="input-label">联系电话:</span>
+                        <input type="text" ng-model="mideApp_user_basic.phoneNumber" placeholder="请输入电话号码" required>
+                    </label>
+                    <label class="item-input padding-left padding-right">
+                        <span class="input-label">邮箱:</span>
+                        <input type="text" ng-model="mideApp_user_basic.email" placeholder="请输入邮箱" required>
+                    </label>
+                    <label class="item-input padding-left padding-right">
+                        <span class="input-label">QQ:</span>
+                        <input type="text" ng-model="mideApp_user_basic.QQnumber" placeholder="请输入QQ号码" required>
+                    </label>
+                    <label class="padding">
+                        <button class="button button-block button-positive" ng-disabled=changeBasicForm.$invalid type="submit">保存修改</button>
+                    </label>
+                </div>
+            </form>
+        </div>
+        <div ng-if="isActive == 'b'">
+            <form ng-submit="changeForHelp()" name="changeForHelpFrom">
+                <div class="list padding">
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">所属地区:</span>
+                    <input type="text" ng-model="mideApp_user_basic.region" placeholder="请输入所属地区" required>
+                </label>
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">身份证号:</span>
+                    <input type="text" ng-model="mideApp_user_basic.identity " placeholder="请输入身份证号" required>
+                </label>
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">常住地址:</span>
+                    <input type="text" ng-model="mideApp_user_basic.address" placeholder="再输入常住地址" required>
+                </label>
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">微信号码:</span>
+                    <input type="text" ng-model="mideApp_user_basic.weixinNumber" placeholder="请输入微信号码" required>
+                </label>
+                <label class="padding">
+                        <button class="button button-block button-positive" ng-disabled=changeForHelpFrom.$invalid type="submit">保存修改</button>
+                    </label>
+            </div>
+            </form>
+        </div>
+        <div ng-if="isActive == 'c'">
+            <form ng-submit="changeVolunteer()" name="changeVolunteerForm">
+                <div class="list padding">
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">学历:</span>
+                    <input type="text" ng-model="mideApp_user_basic.education" placeholder="请输入学历" required>
+                </label>
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">专业:</span>
+                    <input type="text" ng-model="mideApp_user_basic.profession" placeholder="请输入专业" required>
+                </label>
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">特长:</span>
+                    <input type="text" ng-model="mideApp_user_basic.speciality" placeholder="请输入特长" required>
+                </label>
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">选择服务意愿:</span>
+                    <input type="text" ng-model="mideApp_user_basic.intention" placeholder="选择服务意愿" required>
+                </label>
+                <label class="item-input padding-left padding-right">
+                    <span class="input-label">选择服务时间:</span>
+                    <input type="text" ng-model="mideApp_user_basic.intentionTime" placeholder="选择服务时间" required>
+                </label>
+                <label class="padding">
+                        <button class="button button-block button-positive" ng-disabled=changeVolunteerForm.$invalid type="submit">保存修改</button>
+                    </label>
+            </div>
+            </form>
+        </div>
+    </ion-content>
+</ion-modal-view>
