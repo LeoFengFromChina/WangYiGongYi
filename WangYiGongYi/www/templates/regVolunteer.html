@@ -10,27 +10,32 @@
             <div class="list">
                 <label class="item item-input">
                     <span class="input-label">学历:</span>
-                    <input type="text" ng-model="mideApp_user.education" placeholder="请输入学历" required>
+                     <select class="form-control" ng-model="mideApp_user_reg.education" ng-options="education.label for education in mideApp_user_reg.educationData">
+                        <option value="">请选择学历</option>
+                    </select>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">专业:</span>
-                    <input type="text" ng-model="regData.profession" placeholder="请输入专业" required>
+                    <input type="text" ng-model="mideApp_user_reg.profession" placeholder="请输入专业" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">特长:</span>
-                    <input type="text" ng-model="regData.speciality" placeholder="请输入特长" required>
+                    <input type="text" ng-model="mideApp_user_reg.speciality" placeholder="请输入特长" required>
                 </label>
                 <label class="item item-input">
-                    <span class="input-label">选择服务意愿:</span>
-                    <input type="text" ng-model="regData.intention" placeholder="选择服务意愿" required>
+                    <span class="input-label">服务意愿:</span>
+                    <!-- <input type="text" ng-model="mideApp_user_reg.intention" placeholder="选择服务意愿" required> -->
+                     <select class="form-control" ng-model="mideApp_user_reg.intention" ng-options="intention.label for intention in mideApp_user_reg.intentionData">
+                        <option value="">请选择服务意愿</option>
+                    </select>
                 </label>
                 <label class="item item-input">
-                    <span class="input-label">选择服务时间:</span>
-                    <input type="text" ng-model="regData.intentionTime" placeholder="选择服务时间" required>
+                    <span class="input-label">服务时间:</span>
+                    <input type="text" ng-model="mideApp_user_reg.intentionTime" placeholder="选择服务时间" required>
                 </label>
             </div>
             <div class="padding">
-                <button class="button button-block button-positive" ng-click=doReg() ng-disabled=regVolunteer.$invalid>提交</button>
+                <button class="button button-block button-positive" ng-click=doReg(3) ng-disabled=regVolunteer.$invalid>提交</button>
             </div>
         </form>
     </ion-content>

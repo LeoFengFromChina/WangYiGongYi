@@ -1,4 +1,6 @@
-var myConfig = {};
+var myConfig = {
+
+}
 var Patterns = {
     1: /^1\d{10}$/, //mobile
     6: /^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/, //email
@@ -8,7 +10,7 @@ var Patterns = {
 
 var MideApp = function() {
     var API_Host = 'http://oukeye.github.io/'; //http://api.yibeiban.com:8888';
-    var API_Home="http://192.168.1.101/"
+    var API_Home = "http://120.24.230.139/AppData/"
     var API_Lock = false;
 
     /* To be inited or changed in ctrl */
@@ -47,7 +49,7 @@ var MideApp = function() {
 
     var isOnline = function() {
         return true;
-         // return navigator && navigator.connection && navigator.connection.type != Connection.NONE;
+        // return navigator && navigator.connection && navigator.connection.type != Connection.NONE;
     };
     //var myLogger = function(i){return console.log(JSON.stringify(i));};
     var myLogger = function() {
@@ -187,9 +189,17 @@ var MideApp = function() {
 
         LocCache.save('&remote:' + target, LocCache.load('&remote:' + target) + 1);
 
-        $http.post(API_Home + target, JSON.stringify(params), {
-            'timeout': 10000
-        }).success(function(data) {
+        $http({
+                'method': 'GET',
+                'url': API_Home + target,
+                'params': JSON.stringify(params),
+                'headers': {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                'timeout': 10000
+            }
+
+        ).success(function(data) {
             API_Lock = false;
             if (data.status) {
                 done && done(data);
@@ -208,7 +218,19 @@ var MideApp = function() {
 
 
     var ajaxPost = function(target, params, done, fail) {
-        myRemote(target, params, done, fail);
+        // myRemote(target, params, done, fail);
+        $.ajax({
+            type: "post",
+            url: API_Home + target,
+            data: params,
+            dataType: "json",
+            success: function(data) {
+                done && done(data);
+            },
+            error: function(data) {
+                fail && fail(data);
+            }
+        });
     }
 
     var myGetData = function(target, done, fail) {

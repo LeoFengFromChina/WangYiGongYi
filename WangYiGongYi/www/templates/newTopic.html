@@ -15,21 +15,21 @@
                 <span class="input-label">主题:</span>
                 <input type="text" ng-model="newTopic.title" placeholder="请输入主题" required>
             </label>
-            <label class="item item-input">
+            <!-- <label class="item item-input">
                 <span class="input-label">发起人:</span>
                 <input type="text" ng-model="newTopic.promoter" placeholder="请输入发起人" required>
-            </label>
+            </label> -->
             <label class="item item-input">
                 <span class="input-label">联系人:</span>
-                <input type="text" ng-model="newTopic.contacts" placeholder="请输入联系人" required>
+                <input type="text" ng-model="newTopic.linkman" placeholder="请输入联系人" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">电话:</span>
-                <input type="text" ng-model="newTopic.phone" placeholder="请输入电话" required>
+                <input type="tel" ng-model="newTopic.linkphone" length='11' placeholder="请输入电话" placeholder="11位数字" maxlength='11'  ng-pattern="/^[0-9]{11}$/" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">时间:</span>
-                <input type="text" ng-model="newTopic.topicTime" placeholder="请输入时间" required>
+                <input type="date" ng-model="newTopic.beginTime" placeholder="请输入时间" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">区域:</span>
@@ -37,15 +37,15 @@
             </label>
             <label class="item item-input">
                 <span class="input-label">类型:</span>
-                <input type="text" ng-model="newTopic.type" placeholder="请输入类型" required>
+                <input type="text" ng-model="newTopic.serviceIntention" placeholder="请输入类型" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">时长:</span>
-                <input type="text" ng-model="newTopic.long" placeholder="请输入时长" required>
+                <input type="number" ng-model="newTopic.duration" placeholder="请输入时长" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">详细:</span>
-                <textarea placeholder="请发布您的求助信息......" ng-model="newTopic.content"></textarea>
+                <textarea placeholder="请发布您的求助信息......" ng-model="newTopic.detail"></textarea>
             </label>
              <div class="item " ng-click="showGetImagesheet(newTopic)">上传图片</div>
             <div class="item" ng-repeat="img in newTopic.images_list">

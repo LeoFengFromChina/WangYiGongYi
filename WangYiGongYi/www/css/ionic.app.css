@@ -8049,6 +8049,41 @@ a.button {
     color: #d82a3e; }
 
 /*topicModeal page css end*/
+.css-valid-form input {
+  margin-right: 16px; }
+
+.css-valid-form input.ng-invalid.ng-dirty {
+  background-color: #FA787E; }
+
+.css-valid-form input.ng-valid.ng-dirty {
+  background-color: #ffffff; }
+
+.item-input select {
+  border: 0;
+  display: block;
+  width: 100%;
+  padding-top: 2px;
+  padding-left: 0;
+  height: 34px;
+  color: #111;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 16px;
+  webkit-border-radius: 0;
+  border-radius: 0;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1 220px;
+  -moz-box-flex: 1;
+  -moz-flex: 1 220px;
+  -ms-flex: 1 220px;
+  flex: 1 220px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  margin: 0;
+  padding-right: 24px;
+  background-color: transparent; }
+
 /*loading*/
 @keyframes "loading" {
   from {

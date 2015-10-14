@@ -8,26 +8,51 @@
     <ion-content has-bouncing="true" padding="false" class="has-header  no-footer">
         <form name=regForHelp>
             <div class="list">
+                <label class="item item-input ">
+                    <span class="input-label">国家:</span>
+                    <!-- <input type="text" ng-model="mideApp_user_reg.country" placeholder="请输入国家" required> -->
+                    <select class="form-control" ng-model="mideApp_user_reg.country" ng-options="country.label for country in mideApp_user_reg.countries">
+                        <option value="">请选择国家</option>
+                    </select>
+                </label>
                 <label class="item item-input">
-                    <span class="input-label">所属地区:</span>
-                    <input type="text" ng-model="mideApp_user.region" placeholder="请输入所属地区" required>
+                    <span class="input-label">省份:</span>
+                    <!-- <input type="text" ng-model="mideApp_user_reg.province" placeholder="请输入省份" required> -->
+                    <select class="form-control" ng-model="mideApp_user_reg.province" ng-options="province.label for province in mideApp_user_reg.country.provinces">
+                        <option value="">请选择省份</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">城市:</span>
+                    <!-- <input type="text" ng-model="mideApp_user_reg.city" placeholder="请输入城市" required> -->
+                    <select class="form-control" ng-model="mideApp_user_reg.city" ng-options="city.label for city in mideApp_user_reg.province.cities">
+                        <option value="">请选择城市</option>
+                    </select>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">区:</span>
+                    <input type="text" ng-model="mideApp_user_reg.district" placeholder="请输入所属区" required>
+                </label>
+                <label class="item item-input">
+                    <span class="input-label">社区:</span>
+                    <input type="text" ng-model="mideApp_user_reg.community" placeholder="请输入社区" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">身份证号:</span>
-                    <input type="text" ng-model="mideApp_user.identity " placeholder="请输入身份证号" required>
+                    <input type="text" ng-model="mideApp_user_reg.identity " placeholder="请输入身份证号" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">常住地址:</span>
-                    <input type="text" ng-model="mideApp_user.address" placeholder="再输入常住地址" required>
+                    <input type="text" ng-model="mideApp_user_reg.address" placeholder="再输入常住地址" required>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">微信号码:</span>
-                    <input type="text" ng-model="mideApp_user.weixinNumber" placeholder="请输入微信号码" required>
+                    <input type="text" ng-model="mideApp_user_reg.weixinNumber" placeholder="请输入微信号码" required>
                 </label>
             </div>
             <div class="padding">
                 <div class="row">
-                    <dov class="col"><a class="button button-block button-positive " ng-click=doReg() ng-disabled=regForHelp.$invalid>提交</a>
+                    <dov class="col"><a class="button button-block button-positive " ng-click=doReg(2) ng-disabled=regForHelp.$invalid>提交</a>
                     </dov>
                     <dov class="col">
                         <a class="button button-block button-positive" ng-click="showRegVolunteerModal()" ng-disabled=regForHelp.$invalid>注册志愿者</a>
