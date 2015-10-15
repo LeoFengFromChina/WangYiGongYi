@@ -258,6 +258,19 @@ angular.module('starter.services', ['ngCordova'])
             return src;
         };
     })
+    .filter('topicFilter', function() {
+        return function(data, id) {
+            var result = {};
+            if (data) {
+                for (var i = 0; i < data.length; i++) {
+                    if (data[i].ID == id) {
+                        result = data[i];
+                    }
+                }
+            }
+            return result;
+        };
+    })
     .directive(
         // Collection-repeat image recycling while loading
         // https://github.com/driftyco/ionic/issues/1742

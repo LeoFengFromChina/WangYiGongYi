@@ -54,8 +54,24 @@ angular.module('starter.controllers', [])
             } catch (e) {
                 // console.log(e);
             }
-            MideApp.httpGet('wygyData/Banner.json', function(data) {
-                // $scope.banners = [];
+            // MideApp.httpGet('wygyData/Banner.json', function(data) {
+            //     // $scope.banners = [];
+            //     $scope.banners = data.data;
+            //     $scope.isShowBanner = false;
+            //     var _handle = $ionicSlideBoxDelegate.$getByHandle("topicsBanner");
+            //     if (_handle._instances.length != 0) {
+            //         _handle.update();
+            //     }
+            //     MideApp.writeFile($cordovaFile, 'banners.json', JSON.stringify(data.data), true);
+            //     callback && callback();
+            // }, function() {
+
+
+            // });
+            var GetBanner_params = {
+                'GroupID': 1
+            };
+            MideApp.ajaxPost('GetBannerPictures.ashx', GetBanner_params, function(data) {
                 $scope.banners = data.data;
                 $scope.isShowBanner = false;
                 var _handle = $ionicSlideBoxDelegate.$getByHandle("topicsBanner");
@@ -64,10 +80,11 @@ angular.module('starter.controllers', [])
                 }
                 MideApp.writeFile($cordovaFile, 'banners.json', JSON.stringify(data.data), true);
                 callback && callback();
-            }, function() {
 
-
+            }, function(data) {
+                MideApp.myNotice("网络错误" + data.status)
             });
+
         }
         load_banner();
         $scope.newTopic = {};
@@ -255,16 +272,16 @@ angular.module('starter.controllers', [])
                             return false;
                         }
                         var AddNewHelpRequest_params2 = {
-                            'title': '我要助人标题',
+                            'title': $scope.newHelp.title,
                             'type': '2',
                             'promoterID': mideApp_user._id,
-                            'linkman': "oukeye_xiesi",
-                            'linkphone': '12345678987',
-                            'beginTime': '2015-09-09',
-                            'region': '广州',
-                            'serviceIntention': '家教',
-                            'duration': '4',
-                            'detail': '我可以帮助小孩纸数学英语，我是一名幼师',
+                            'linkman': $scope.newHelp.contacts,
+                            'linkphone': $scope.newHelp.phone,
+                            'beginTime': $scope.newHelp.topicTime,
+                            'region': $scope.newHelp.region,
+                            'serviceIntention': $scope.newHelp.type,
+                            'duration': $scope.newHelp.long,
+                            'detail': $scope.newHelp.content,
 
                         };
                         MideApp.ajaxPost('AddHelp.ashx', AddNewHelpRequest_params2, function(data) {
@@ -474,37 +491,35 @@ angular.module('starter.controllers', [])
             $scope.topicModal.hide();
         };
 
-        // Open the login modal
         $scope.showTopicModal = function(topicId) {
             var mideApp_user = MideApp.LocCache.load('User') || null;
             $scope.current_id = "" + topicId;
-            $scope.current_topic = $filter("filter")($scope.config.topics, {
-                'ID': topicId
-            });
-            
-            if ($scope.current_topic[0].HelpRequest._status == 0) {
-                if ($scope.current_topic[0].HelpRequest._type == 1) {
+            $scope.current_topic = $filter("topicFilter")($scope.config.topics, topicId);
+
+
+            if ($scope.current_topic.HelpRequest._status == 0) {
+                if ($scope.current_topic.HelpRequest._type == 1) {
                     $scope.buttonName = '助他';
-                } else if ($scope.current_topic[0].HelpRequest._type == 2){
+                } else if ($scope.current_topic.HelpRequest._type == 2) {
                     $scope.buttonName = '求他';
                 }
-                if (mideApp_user && $scope.current_topic[0].Author._id == mideApp_user._id) {
-                    $scope.show_help_button= false;
-                }else{
-                    $scope.show_help_button= true;
+                if (mideApp_user && $scope.current_topic.Author._id == mideApp_user._id) {
+                    $scope.show_help_button = false;
+                } else {
+                    $scope.show_help_button = true;
                 }
-            } else if ($scope.current_topic[0].HelpRequest._status == 1) {
-                
-                if (mideApp_user && $scope.current_topic[0].Author._id == mideApp_user._id) {
+            } else if ($scope.current_topic.HelpRequest._status == 1) {
+
+                if (mideApp_user && $scope.current_topic.Author._id == mideApp_user._id) {
                     $scope.buttonName = '完成';
-                    $scope.show_help_button= true;
-                }else{
-                    $scope.show_help_button= false;
+                    $scope.show_help_button = true;
+                } else {
+                    $scope.show_help_button = false;
                 }
-            } else{
-                $scope.show_help_button= false;
+            } else {
+                $scope.show_help_button = false;
             }
-            // if(mideApp_user&&mideApp_user._id==$scope.current_topic[0].Author._id){
+            // if(mideApp_user&&mideApp_user._id==$scope.current_topic.Author._id){
             //     $scope.show_help_button= false;
             // }
             $ionicScrollDelegate.$getByHandle('topicMainScroll').scrollTop();
@@ -537,18 +552,18 @@ angular.module('starter.controllers', [])
                             return false;
                         } else {
                             $ionicLoading.show();
-                            var _status=1;
+                            var _status = 1;
                             if ($scope.buttonName == '完成') {
                                 _status = 2;
                             }
                             var UpdateHelp_params = {
-                                'helpRequestID': $scope.current_topic[0].ID, //请求单号
+                                'helpRequestID': $scope.current_topic.ID, //请求单号
                                 'underTakerID': mideApp_user._id, //接单者ID
                                 'status': _status, //动作状态
                             };
                             MideApp.ajaxPost('UpdateHelpRequest.ashx', UpdateHelp_params, function(data) {
                                 if (data.code == 0) {
-                                    $scope.current_topic[0].HelpRequest._status=_status;
+                                    $scope.current_topic.HelpRequest._status = _status;
                                     $ionicLoading.hide();
                                     $scope.closeTopicModal();
                                     MideApp.myNotice('成功')
@@ -724,7 +739,7 @@ angular.module('starter.controllers', [])
     MideApp.setBackManner('back');
     $rootScope.tabsHidden = "tabs-show";
     MideApp.intoMyController($scope, $rootScope, $state);
-
+     var mideApp_user = MideApp.LocCache.load('User') || {};
     var load_giftBanner = function(callback) {
 
         try {
@@ -777,15 +792,31 @@ angular.module('starter.controllers', [])
 
         }
 
-        MideApp.httpGet('wygyData/AllGiftList.json', function(data) {
-            $scope.gifts = data.data;
+        // MideApp.httpGet('wygyData/AllGiftList.json', function(data) {
+        //     $scope.gifts = data.data;
 
-            // MideApp.MemCache.save('topics-list', $scope.config);
-            // MideApp.LocCache.save('topics-list', $scope.config);
-            MideApp.writeFile($cordovaFile, "gifts.json", JSON.stringify($scope.config), true);
+        //     // MideApp.MemCache.save('topics-list', $scope.config);
+        //     // MideApp.LocCache.save('topics-list', $scope.config);
+        //     MideApp.writeFile($cordovaFile, "gifts.json", JSON.stringify($scope.config), true);
+        //     callback && callback();
+        // }, function() {
+        //     // $scope.$broadcast('scroll.infiniteScrollComplete');
+        // });
+
+        MideApp.ajaxPost('GetGiftList.ashx', {}, function(data) {
+            if (data.code == 0) {
+                $scope.gifts = data.data;
+                MideApp.writeFile($cordovaFile, "gifts.json", JSON.stringify($scope.config), true);
+            }
             callback && callback();
-        }, function() {
-            // $scope.$broadcast('scroll.infiniteScrollComplete');
+
+        }, function(data) {
+            MideApp.myNotice("网络错误" + data.status)
+            $cordovaFile.readAsText(cordova.file.externalDataDirectory, "gifts.json")
+                .then(function(success) {
+                    $scope.gifts = angular.fromJson(success);
+                }, function(error) {});
+            callback && callback();
         });
     };
     load_gift();
@@ -805,7 +836,7 @@ angular.module('starter.controllers', [])
     // Open the login modal
     $scope.showGiftModal = function(giftId) {
         $scope.giftShowId = {
-            "id": giftId
+            "_id": giftId
         };
         $ionicScrollDelegate.$getByHandle('giftDetailScroll').scrollTop();
         $scope.giftModal.show();
@@ -813,7 +844,7 @@ angular.module('starter.controllers', [])
     $scope.$on('$destroy', function() {
         $scope.giftModal.remove();
     });
-    $scope.showGiftsheet = function(info) {
+    $scope.showGiftsheet = function(info,giftID) {
         if (typeof info == 'undefined') {
             info = "";
         };
@@ -839,14 +870,32 @@ angular.module('starter.controllers', [])
                         return false;
                     } else {
                         $ionicLoading.show();
-                        MideApp.httpGet('mideData/user.json', function(data) {
+                        // string giftID = context.Request["giftID"];
+                        // string menberID = context.Request["menberID"];
+                        // string giftCount = context.Request["giftCount"];
+                        // string status = context.Request["status"];//0已兑换，1已领取
+                        var params = {
+                            'giftID':giftID,
+                            'menberID': mideApp_user._id,
+                            'giftCount': 1,
+                            'status': '0'
+                        };
+                        MideApp.ajaxPost('ExchangeForGift.ashx', params, function(data) {
+                            if (data.code == 0) {
+                                $ionicLoading.hide();
+                                MideApp.myNotice(info + '成功')
+                                $scope.closeGiftModal();
 
-                            mideApp_user = {};
-                            $ionicLoading.hide();
+                            } else {
+                                $ionicLoading.hide();
+                                MideApp.myNotice(data.message);
+                            }
 
-                            MideApp.myNotice(info + '成功')
-                            $scope.closeGiftModal();
+
+                        }, function(data) {
+                            MideApp.myNotice("网络错误" + data.status)
                         });
+
                     }
 
                 } else {
@@ -873,7 +922,7 @@ angular.module('starter.controllers', [])
 
 .controller('AccountCtrl', function($scope, $rootScope, $rootScope, $state,
     $log, $ionicActionSheet, $ionicModal, $ionicHistory, $timeout,
-    $ionicLoading, $ionicPopover, $filter, $ionicScrollDelegate, Tools) {
+    $ionicLoading, $ionicPopover, $filter, $ionicScrollDelegate, $cordovaFile, Tools) {
     MideApp.setBackManner('back');
     $rootScope.tabsHidden = "tabs-show";
     MideApp.intoMyController($scope, $rootScope, $state);
@@ -1016,29 +1065,6 @@ angular.module('starter.controllers', [])
 
 
         $ionicLoading.show();
-
-        // MideApp.httpGet('mideData/user.json', function(data) {
-
-        //     if (data.code == 0) {
-        //         var _user = data.data;
-        //         if (_user.username == $scope.mideApp_user.username && _user.password == $scope.mideApp_user.password) {
-        //             $scope.mideApp_user = _user;
-        //             MideApp.LocCache.save('User', _user);
-        //             MideApp.MemCache.save('User', _user);
-
-        //             $ionicLoading.hide();
-        //             $rootScope.$broadcast('app.login');
-        //             $scope.closeLoginModal();
-        //             $state.go("tab.account");
-        //         } else {
-        //             MideApp.myNotice("账号或密码错误");
-        //         }
-
-        //     } else {
-        //         MideApp.myNotice(data.message);
-        //     }
-
-        // });
         var appLogin_params = {
             'username': $scope.mideApp_user.username,
             'psw': Tools.MD5($scope.mideApp_user.password),
@@ -1305,121 +1331,116 @@ angular.module('starter.controllers', [])
         }
     };
 
-    var load_help_page1 = function(callback) {
-        if (!MideApp.isOnline()) {
-            return MideApp.myNotice('暂无网络连接...');
-        }
-
-        MideApp.httpGet('mideData/myhelp.json', function(data) {
-
-            $scope.MyHelpConfig.page = $scope.MyHelpConfig.page + 1;
-            $scope.MyHelpConfig.topics = $scope.MyHelpConfig.topics.concat(data.data);
-            $scope.MyHelpConfig.errormsg = !$scope.MyHelpConfig.topics.length;
-            $scope.MyHelpConfig.infinite = data.data.length;
-
-
-            $ionicLoading.hide();
-            callback && callback();
-            MideApp.MemCache.save('MyHelp-list', $scope.MyHelpConfig);
-            MideApp.LocCache.save('MyHelp-list', $scope.MyHelpConfig);
-
-            if ($scope.MyHelpConfig.page > 5) {
-                $scope.MyHelpConfig.infinite = false;
-            }
-            $scope.activeConfig = $scope.MyHelpConfig;
-
-
-        }, function() {
-            // $scope.$broadcast('scroll.infiniteScrollComplete');
-        });
-
-    };
-// string PromoterIDstr = context.Request["PromoterID"];//求助者ID
-// string UnderTakerIDstr = context.Request["UnderTakerID"];//帮助者ID
-// string TypeID = context.Request["TypeID"];//1求助，2帮助
-//string PageIndex = context.Request["PageIndex"];  
-     var load_help_page = function(callback) {
-            try {
-                if (!$cordovaNetwork.isOnline()) {
-                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, "MyHelp-list.json")
-                        .then(function(success) {
-                            $scope.MyHelpConfig = angular.fromJson(success);
-                            $scope.MyHelpConfig.infinite = 0;
-                        }, function(error) {});
-                    callback && callback();
-                    return MideApp.myNotice('暂无网络连接...');
-                }
-            } catch (e) {
-                // console.log(e);
-            }
-
-            var GetHelpRequestList_params = {
-                'UnderTakerID': $scope.mideApp_user._id,
-                'Type':2,
-                'PageIndex':$scope.MyHelpConfig.page
-            };
-            MideApp.ajaxPost('GetHelpRequestList.ashx', GetHelpRequestList_params, function(data) {
-                if (data.code == 0) {
-                    if (!(data.data == null || data.data == '')) {
-                        if ($scope.MyHelpConfig.page == 1) {
-                            $scope.MyHelpConfig.topics = data.data;
-                        } else {
-                            $scope.MyHelpConfig.topics = $scope.MyHelpConfig.topics.concat(data.data);
-                        }
-                        $scope.MyHelpConfig.page = $scope.MyHelpConfig.page + 1;
-                        $scope.MyHelpConfig.errormsg = !$scope.MyHelpConfig.topics.length;
-                        $scope.MyHelpConfig.infinite = data.data.length > 0;
-                        MideApp.writeFile($cordovaFile, "MyHelp-list.json", JSON.stringify($scope.config), true);
-
-                    } else {
-                        $scope.MyHelpConfig.infinite = false;
-                    }
-
-                } else {
-                    $scope.MyHelpConfig.infinite = false;
-                }
-                $scope.activeConfig = $scope.MyHelpConfig;
-                callback && callback();
-
-
-            }, function(data) {
-                MideApp.myNotice("网络错误" + data.status)
-                $cordovaFile.readAsText(cordova.file.externalDataDirectory, "topics.json")
+    var load_help_page = function(callback) {
+        try {
+            if (!$cordovaNetwork.isOnline()) {
+                $cordovaFile.readAsText(cordova.file.externalDataDirectory, "MyHelp-list.json")
                     .then(function(success) {
                         $scope.MyHelpConfig = angular.fromJson(success);
                         $scope.MyHelpConfig.infinite = 0;
                     }, function(error) {});
-                $scope.activeConfig = $scope.MyHelpConfig;
                 callback && callback();
-            });
-        };
-    var load_ask_page = function(callback) {
-        if (!MideApp.isOnline()) {
-            return MideApp.myNotice('暂无网络连接...');
+                return MideApp.myNotice('暂无网络连接...');
+            }
+        } catch (e) {
+            // console.log(e);
         }
 
-        MideApp.httpGet('mideData/myask.json', function(data) {
+        var GetHelpRequestList_params = {
+            'UnderTakerID': $scope.mideApp_user._id,
+            'Type': 2,
+            'PageIndex': $scope.MyHelpConfig.page
+        };
+        MideApp.ajaxPost('GetHelpRequestList.ashx', GetHelpRequestList_params, function(data) {
+            if (data.code == 0) {
+                if (!(data.data == null || data.data == '')) {
+                    if ($scope.MyHelpConfig.page == 1) {
+                        $scope.MyHelpConfig.topics = data.data;
+                    } else {
+                        $scope.MyHelpConfig.topics = $scope.MyHelpConfig.topics.concat(data.data);
+                    }
+                    $scope.MyHelpConfig.page = $scope.MyHelpConfig.page + 1;
+                    $scope.MyHelpConfig.errormsg = !$scope.MyHelpConfig.topics.length;
+                    $scope.MyHelpConfig.infinite = data.data.length > 0;
+                    MideApp.writeFile($cordovaFile, "MyHelp-list.json", JSON.stringify($scope.config), true);
 
-            $scope.AskConfig.page = $scope.AskConfig.page + 1;
-            $scope.AskConfig.topics = $scope.AskConfig.topics.concat(data.data);
-            $scope.AskConfig.errormsg = !$scope.AskConfig.topics.length;
-            $scope.AskConfig.infinite = data.data.length;
+                } else {
+                    $scope.MyHelpConfig.infinite = false;
+                }
 
-
-            $ionicLoading.hide();
+            } else {
+                $scope.MyHelpConfig.infinite = false;
+            }
+            $scope.activeConfig = $scope.MyHelpConfig;
             callback && callback();
-            MideApp.MemCache.save('myAsk-list', $scope.AskConfig);
-            MideApp.LocCache.save('myAsk-list', $scope.AskConfig);
 
-            if ($scope.AskConfig.page > 5) {
+
+        }, function(data) {
+            MideApp.myNotice("网络错误" + data.status)
+            $cordovaFile.readAsText(cordova.file.externalDataDirectory, "MyHelp-list.json")
+                .then(function(success) {
+                    $scope.MyHelpConfig = angular.fromJson(success);
+                    $scope.MyHelpConfig.infinite = 0;
+                }, function(error) {});
+            $scope.activeConfig = $scope.MyHelpConfig;
+            callback && callback();
+        });
+    };
+
+    var load_ask_page = function(callback) {
+        try {
+            if (!$cordovaNetwork.isOnline()) {
+                $cordovaFile.readAsText(cordova.file.externalDataDirectory, "myAsk-list.json")
+                    .then(function(success) {
+                        $scope.MyHelpConfig = angular.fromJson(success);
+                        $scope.MyHelpConfig.infinite = 0;
+                    }, function(error) {});
+                callback && callback();
+                return MideApp.myNotice('暂无网络连接...');
+            }
+        } catch (e) {
+            // console.log(e);
+        }
+
+        var GetHelpRequestList_params = {
+            'PromoterID': $scope.mideApp_user._id,
+            'Type': 1,
+            'PageIndex': $scope.AskConfig.page
+        };
+        MideApp.ajaxPost('GetHelpRequestList.ashx', GetHelpRequestList_params, function(data) {
+            if (data.code == 0) {
+                if (!(data.data == null || data.data == '')) {
+                    if ($scope.AskConfig.page == 1) {
+                        $scope.AskConfig.topics = data.data;
+                    } else {
+                        $scope.AskConfig.topics = $scope.AskConfig.topics.concat(data.data);
+                    }
+                    $scope.AskConfig.page = $scope.AskConfig.page + 1;
+                    $scope.AskConfig.errormsg = !$scope.AskConfig.topics.length;
+                    $scope.AskConfig.infinite = data.data.length > 0;
+                    MideApp.writeFile($cordovaFile, "myAsk-list.json", JSON.stringify($scope.config), true);
+
+                } else {
+                    $scope.AskConfig.infinite = false;
+                }
+
+            } else {
                 $scope.AskConfig.infinite = false;
             }
             $scope.activeConfig = $scope.AskConfig;
+            callback && callback();
 
-        }, function() {
-            // $scope.$broadcast('scroll.infiniteScrollComplete');
+
+        }, function(data) {
+            MideApp.myNotice("网络错误" + data.status)
+            $cordovaFile.readAsText(cordova.file.externalDataDirectory, "myAsk-list.json")
+                .then(function(success) {
+                    $scope.AskConfig = angular.fromJson(success);
+                    $scope.AskConfig.infinite = 0;
+                }, function(error) {});
+            $scope.activeConfig = $scope.AskConfig;
+            callback && callback();
         });
-
     };
     $scope.moreDataCanBeLoaded = function() {
         return true;
@@ -1434,7 +1455,6 @@ angular.module('starter.controllers', [])
                 $scope.$broadcast('scroll.infiniteScrollComplete');
             });
         }
-
 
     }
     $scope.doRefresh = function() {
@@ -1453,6 +1473,118 @@ angular.module('starter.controllers', [])
         }
 
     }
+    $ionicModal.fromTemplateUrl('templates/topicModal.html', {
+        scope: $scope,
+        animation: 'slide-in-right'
+    }).then(function(modal) {
+        $scope.topicModal = modal;
+    });
+
+    // Triggered in the login modal to close it
+    $scope.closeTopicModal = function() {
+        $scope.topicModal.hide();
+    };
+
+    $scope.showTopicModal = function(topicId) {
+        var mideApp_user = MideApp.LocCache.load('User') || null;
+        $scope.current_id = "" + topicId;
+        $scope.current_topic = $filter("topicFilter")($scope.activeConfig.topics, topicId);
+
+
+        if ($scope.current_topic.HelpRequest._status == 0) {
+            if ($scope.current_topic.HelpRequest._type == 1) {
+                $scope.buttonName = '助他';
+            } else if ($scope.current_topic.HelpRequest._type == 2) {
+                $scope.buttonName = '求他';
+            }
+            if (mideApp_user && $scope.current_topic.Author._id == mideApp_user._id) {
+                $scope.show_help_button = false;
+            } else {
+                $scope.show_help_button = true;
+            }
+        } else if ($scope.current_topic.HelpRequest._status == 1) {
+
+            if (mideApp_user && $scope.current_topic.Author._id == mideApp_user._id) {
+                $scope.buttonName = '完成';
+                $scope.show_help_button = true;
+            } else {
+                $scope.show_help_button = false;
+            }
+        } else {
+            $scope.show_help_button = false;
+        }
+        // if(mideApp_user&&mideApp_user._id==$scope.current_topic.Author._id){
+        //     $scope.show_help_button= false;
+        // }
+        $ionicScrollDelegate.$getByHandle('topicMainScroll').scrollTop();
+        $scope.topicModal.show();
+    };
+    $scope.$on('$destroy', function() {
+        $scope.topicModal.remove();
+    });
+    $scope.help = function() {
+
+        $ionicActionSheet.show({
+            titleText: '确认' + $scope.buttonName + '？',
+            buttons: [{
+                text: $scope.buttonName
+            }, {
+                text: '再看看'
+            }, ],
+            destructiveText: '',
+            cancelText: "取消",
+            cancel: function() {
+                console.log('CANCELLED');
+            },
+            buttonClicked: function(index) {
+
+                if (index == 0) {
+                    var mideApp_user = MideApp.LocCache.load('User') || null;
+                    if (!mideApp_user) {
+                        $scope.closeTopicModal();
+                        $state.go("tab.account");
+                        return false;
+                    } else {
+                        $ionicLoading.show();
+                        var _status = 1;
+                        if ($scope.buttonName == '完成') {
+                            _status = 2;
+                        }
+                        var UpdateHelp_params = {
+                            'helpRequestID': $scope.current_topic.ID, //请求单号
+                            'underTakerID': mideApp_user._id, //接单者ID
+                            'status': _status, //动作状态
+                        };
+                        MideApp.ajaxPost('UpdateHelpRequest.ashx', UpdateHelp_params, function(data) {
+                            if (data.code == 0) {
+                                $scope.current_topic.HelpRequest._status = _status;
+                                $ionicLoading.hide();
+                                $scope.closeTopicModal();
+                                MideApp.myNotice('成功')
+                            } else {
+                                MideApp.myNotice(data.message);
+                            }
+
+                        }, function(data) {
+                            MideApp.myNotice("网络错误" + data.status)
+                        });
+                    }
+
+                } else {
+                    return true;
+                }
+
+                return true;
+
+
+            },
+            destructiveButtonClicked: function() {
+                console.log('DESTRUCT');
+                return true;
+            },
+            cssClass: "wg-sheet"
+        });
+    };
 
 })
 

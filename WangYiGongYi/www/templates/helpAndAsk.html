@@ -17,16 +17,16 @@
         </ion-refresher>
         <div class=" list topics" ng-if="activeConfig.topics">
             <!--    <div class="item item-divider">求助列表</div> -->
-            <div class="item item-avatar" collection-repeat="topic in activeConfig.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.id)">
-                <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img />
+            <div class="item item-avatar" collection-repeat="topic in activeConfig.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.HelpRequest._id)">
+                <img ng-src="{{topic.Author._photourl|avatarFilter}}" reset-img />
                 <!-- reset-img   -->
-                <h2>{{topic.title}}</h2>
+                <h2>{{topic.HelpRequest._title}}</h2>
                 <p class="summary">
-                    <span ng-if="topic.status==0" class="tab status1">求助中</span>
-                    <span ng-if="topic.status==1" class="tab status2">已承接</span>
-                    <span ng-if="topic.status==2" class="tab status4">已完成</span>
-                    <span class="tab">发起人:</span> {{topic.author.author_name}}
-                    <span class="item-note ago" am-time-ago="topic.addtime" vam-preprocess="unix"></span>
+                    <span ng-if="topic.HelpRequest._status==0" class="tab status1">求助中</span>
+                    <span ng-if="topic.HelpRequest._status==1" class="tab status2">已配对</span>
+                    <span ng-if="topic.HelpRequest._status==2" class="tab status4">已完成</span>
+                    <span class="tab">发起人:</span> {{topic.Author._name}}
+                    <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span>
                 </p>
             </div>
         </div>

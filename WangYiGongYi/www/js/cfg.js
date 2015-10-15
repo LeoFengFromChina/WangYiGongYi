@@ -188,20 +188,21 @@ var MideApp = function() {
         API_Lock = lock;
 
         LocCache.save('&remote:' + target, LocCache.load('&remote:' + target) + 1);
-
         $http({
-                'method': 'GET',
+                'method': 'POST',
                 'url': API_Home + target,
-                'params': JSON.stringify(params),
+                'params': params,
                 'headers': {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 'timeout': 10000
             }
 
-        ).success(function(data) {
+        ).success(function(data,status) {
             API_Lock = false;
-            if (data.status) {
+             done && done(data);
+              $ionicLoading.hide();
+            if (status==200) {
                 done && done(data);
             } else {
                 $ionicLoading.hide();
@@ -214,23 +215,25 @@ var MideApp = function() {
                 fail ? fail(data) : myNotice(data ? data.errmsg : '网络错误');
             }
         });
+
+
     }
 
 
     var ajaxPost = function(target, params, done, fail) {
-        // myRemote(target, params, done, fail);
-        $.ajax({
-            type: "post",
-            url: API_Home + target,
-            data: params,
-            dataType: "json",
-            success: function(data) {
-                done && done(data);
-            },
-            error: function(data) {
-                fail && fail(data);
-            }
-        });
+        myRemote(target, params, done, fail);
+        // $.ajax({
+        //     type: "post",
+        //     url: API_Home + target,
+        //     data: params,
+        //     dataType: "json",
+        //     success: function(data) {
+        //         done && done(data);
+        //     },
+        //     error: function(data) {
+        //         fail && fail(data);
+        //     }
+        // });
     }
 
     var myGetData = function(target, done, fail) {

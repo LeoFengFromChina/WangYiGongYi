@@ -1,0 +1,41 @@
+﻿{
+  "code": 0,
+  "data": [
+    {
+      "__type": "OnGoingGiftsView:#MideFrameWork_AppDataInterface",
+      "GiftEntity": {
+        "_count": 2,
+        "_createdate": "/Date(1444468210000+0800)/",
+        "_detail": "领取小米手机需要100个积分",
+        "_id": 2,
+        "_needscores": 800,
+        "_photourl": "image",
+        "_region": "佛山",
+        "_status": 0,
+        "_title": "格力空调",
+        "_updatedate": "/Date(1444468210000+0800)/"
+      },
+      "Status": 0,
+      "ValidateCode": "010020391283"
+    },
+    {
+      "__type": "OnGoingGiftsView:#MideFrameWork_AppDataInterface",
+      "GiftEntity": {
+        "_count": 1,
+        "_createdate": "/Date(1444468210000+0800)/",
+        "_detail": "领取小米手机需要100个积分",
+        "_id": 3,
+        "_needscores": 50,
+        "_photourl": "image",
+        "_region": "韶关",
+        "_status": 0,
+        "_title": "华为路由器",
+        "_updatedate": "/Date(1444468210000+0800)/"
+      },
+      "Status": 0,
+      "ValidateCode": "010020391281"
+    }
+  ],
+  "message": "成功获取您的礼物列表。",
+  "success": true
+}

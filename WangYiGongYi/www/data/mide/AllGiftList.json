@@ -1,0 +1,46 @@
+﻿{
+  "code": 0,
+  "data": [
+    {
+      "__type": "WG_GiftsEntity:#MideFrameWork.Data.Entity",
+      "_count": 10,
+      "_createdate": "/Date(1444468210000+0800)/",
+      "_detail": "领取小米手机需要100个积分",
+      "_id": 1,
+      "_needscores": 100,
+      "_photourl": "./img/gift1.jpg",
+      "_region": "广州",
+      "_status": 0,
+      "_title": "小米手机",
+      "_updatedate": "/Date(1444468210000+0800)/"
+    },
+    {
+      "__type": "WG_GiftsEntity:#MideFrameWork.Data.Entity",
+      "_count": 2,
+      "_createdate": "/Date(1444468210000+0800)/",
+      "_detail": "领取小米手机需要100个积分",
+      "_id": 2,
+      "_needscores": 800,
+      "_photourl": "./img/gift2.jpg",
+      "_region": "佛山",
+      "_status": 0,
+      "_title": "格力空调",
+      "_updatedate": "/Date(1444468210000+0800)/"
+    },
+    {
+      "__type": "WG_GiftsEntity:#MideFrameWork.Data.Entity",
+      "_count": 1,
+      "_createdate": "/Date(1444468210000+0800)/",
+      "_detail": "领取小米手机需要100个积分",
+      "_id": 3,
+      "_needscores": 50,
+      "_photourl": "./img/gift3.jpg",
+      "_region": "韶关",
+      "_status": 0,
+      "_title": "华为路由器",
+      "_updatedate": "/Date(1444468210000+0800)/"
+    }
+  ],
+  "message": "成功获取所有礼物列表。",
+  "success": true
+}

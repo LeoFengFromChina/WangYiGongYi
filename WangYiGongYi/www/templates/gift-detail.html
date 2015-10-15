@@ -9,27 +9,27 @@
         <div ng-repeat="gift in gifts | filter:giftShowId">
             <div class="row row-center ">
                 <div class="col col-50 ">
-                    <img ng-src="{{gift.giftImage}} " style="width:100% ">
+                    <img ng-src="{{gift._photourl}} " style="width:100% ">
                 </div>
                 <div class="col ">
                     <div class="row ">
-                        <div class="col ">价格:{{gift.integral}}积分</div>
+                        <div class="col ">价格:{{gift._needscores}}积分</div>
                     </div>
                     <div class="row ">
-                        <div class="col ">名称:{{gift.name}}</div>
+                        <div class="col ">名称:{{gift._title}}</div>
                     </div>
                     <div class="row ">
-                        <div class="col ">库存:{{gift.stock}}件</div>
+                        <div class="col ">库存:{{gift._count}}件</div>
                     </div>
                 </div>
             </div>
             <div class="item item-body ">
                 <h3>说明:</h3>
                 <p>
-                    {{gift.description}}
+                    {{gift._detail}}
                 </p>
             </div>
-            <button class="button button-block button-positive " ng-click="showGiftsheet('兑换') ">
+            <button class="button button-block button-positive " ng-click="showGiftsheet('兑换',gift._id) ">
                 确认兑换
             </button>
         </div>

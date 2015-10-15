@@ -1,0 +1,49 @@
+﻿{
+  "code": 0,
+  "data": [
+    {
+      "__type": "GlobalPictureEntity:#MideFrameWork.Data.Entity",
+      "_createdate": "/Date(1444467600000+0800)/",
+      "_displayindex": 0,
+      "_groupid": 1,
+      "_iconurl": "http://oukeye.github.io/mideImages/banner/wg_banner1.jpg",
+      "_id": 1,
+      "_isenable": 0,
+      "_linkurl": "http://www.baidu.com/",
+      "_ownerid": 1,
+      "_showtextcn": "图片1",
+      "_showtexten": "Picture1",
+      "_updatedate": "/Date(1444467600000+0800)/"
+    },
+    {
+      "__type": "GlobalPictureEntity:#MideFrameWork.Data.Entity",
+      "_createdate": "/Date(1444467600000+0800)/",
+      "_displayindex": 0,
+      "_groupid": 1,
+      "_iconurl": "http://oukeye.github.io/mideImages/banner/wg_banner2.jpg",
+      "_id": 2,
+      "_isenable": 0,
+      "_linkurl": "http://www.baidu.com/",
+      "_ownerid": 1,
+      "_showtextcn": "图片2",
+      "_showtexten": "Picture2",
+      "_updatedate": "/Date(1444467600000+0800)/"
+    },
+    {
+      "__type": "GlobalPictureEntity:#MideFrameWork.Data.Entity",
+      "_createdate": "/Date(1444467600000+0800)/",
+      "_displayindex": 0,
+      "_groupid": 1,
+      "_iconurl": "http://oukeye.github.io/mideImages/banner/wg_banner3.jpg",
+      "_id": 4,
+      "_isenable": 0,
+      "_linkurl": "http://www.baidu.com/",
+      "_ownerid": 1,
+      "_showtextcn": "图片4",
+      "_showtexten": "Picture4",
+      "_updatedate": "/Date(1444467600000+0800)/"
+    }
+  ],
+  "message": "成功。",
+  "success": true
+}

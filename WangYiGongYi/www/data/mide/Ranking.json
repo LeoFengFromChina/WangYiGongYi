@@ -1,0 +1,26 @@
+﻿{
+	"code":0,"
+	data":
+		[
+			{
+				"__type":"MenberRankingView:#",
+				"CreateDate":"2015\/10\/12 21:47:56",
+				"ID":2,
+				"Name":"oukeye",
+				"NickName":"oukeye",
+				"Rank":1,
+				"ServiceHours":"100"
+			},
+			{
+				"__type":"MenberRankingView:#",
+				"CreateDate":"2015\/10\/12 21:47:56",
+				"ID":1,"
+				Name":"fengrd",
+				"NickName":"fengrd",
+				"Rank":2,
+				"ServiceHours":"20"
+			}
+		],
+	"message":"成功。",
+	"success":true
+}
