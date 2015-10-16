@@ -229,14 +229,26 @@ angular.module('starter.services', ['ngCordova'])
 
             return temp.toLowerCase();
         }
+         var _findById = function(a, val) {
 
+            for (var i = 0; i < a.length; i++) {
+                if (a[i]._id == val) {
+                    return a[i]
+                };
+            }
+            return null;
+        };
         return {
             MD5: function(string) {
                 return MD5(string);
-            }
+            },
+            findById: function(a, val) {
+                return _findById(a, val);
+            },
         };
     })
     .factory('RankTabs', function() {
+        
         return [{
             value: 'all',
             label: '全国'
@@ -320,6 +332,37 @@ angular.module('starter.services', ['ngCordova'])
                 });
             }
         };
+    })
+    .directive('numberinput', function() {
+        return {
+            restrict: 'AE',
+            replace: true,
+            scope: {
+                buyCount: '=buycount'
+            },
+            template: '<div class="input-group" style="width:65%">' + '<span class="input-group-addon ion-minus-round positive" ng-click="minusBuyCount($event)"></span>' + '<input type="tel" class="form-control" placeholder="手数" ng-model="buyCount">' + '<span class="input-group-addon ion-plus-round button-positive plus"  ng-click="plusBuyCount($event)"></span>' + '</div>',
+            link: function(scope, element, attrs, accordionController) {
+                var _attrs = attrs;
+                var myelement = element;
+                scope.minusBuyCount = function($event) {
+                    scope.buyCount = parseInt(scope.buyCount) - 1;
+                    if (scope.buyCount < 1) {
+                        scope.buyCount = 1;
+                    }
+                };
+                scope.plusBuyCount = function($event) {
+                   
+                    if (scope.buyCount < _attrs.maxcount) {
+                        myelement.removeClass("minusHidden");
+                        myelement.removeClass("plusHidden");
+                        scope.buyCount = parseInt(scope.buyCount) + 1;
+                    } else {
+                       myelement.addClass("plusHidden");
+                    }
+
+                };
+            }
+        }
     })
     .directive('errSrc', function() {
         return {

@@ -10,21 +10,18 @@
             <div class="list">
                 <label class="item item-input ">
                     <span class="input-label">国家:</span>
-                    <!-- <input type="text" ng-model="mideApp_user_reg.country" placeholder="请输入国家" required> -->
                     <select class="form-control" ng-model="mideApp_user_reg.country" ng-options="country.label for country in mideApp_user_reg.countries">
                         <option value="">请选择国家</option>
                     </select>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">省份:</span>
-                    <!-- <input type="text" ng-model="mideApp_user_reg.province" placeholder="请输入省份" required> -->
                     <select class="form-control" ng-model="mideApp_user_reg.province" ng-options="province.label for province in mideApp_user_reg.country.provinces">
                         <option value="">请选择省份</option>
                     </select>
                 </label>
                 <label class="item item-input">
                     <span class="input-label">城市:</span>
-                    <!-- <input type="text" ng-model="mideApp_user_reg.city" placeholder="请输入城市" required> -->
                     <select class="form-control" ng-model="mideApp_user_reg.city" ng-options="city.label for city in mideApp_user_reg.province.cities">
                         <option value="">请选择城市</option>
                     </select>
@@ -52,7 +49,7 @@
             </div>
             <div class="padding">
                 <div class="row">
-                    <dov class="col"><a class="button button-block button-positive " ng-click=doReg(2) ng-disabled=regForHelp.$invalid>提交</a>
+                    <dov class="col"><a class="button button-block button-positive " ng-click=doReg(1) ng-disabled=regForHelp.$invalid>提交</a>
                     </dov>
                     <dov class="col">
                         <a class="button button-block button-positive" ng-click="showRegVolunteerModal()" ng-disabled=regForHelp.$invalid>注册志愿者</a>

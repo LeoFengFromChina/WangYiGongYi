@@ -10,7 +10,7 @@ var Patterns = {
 
 var MideApp = function() {
     var API_Host = 'http://oukeye.github.io/'; //http://api.yibeiban.com:8888';
-    var API_Home = "http://120.24.230.139/AppData/"
+    var API_Home = "http://120.24.230.139/AppData/";
     var API_Lock = false;
 
     /* To be inited or changed in ctrl */
@@ -173,7 +173,7 @@ var MideApp = function() {
             prev && prev();
             $ionicLoading.hide();
             post && post();
-        }, timeout || 1000);
+        }, timeout || 2000);
         return false;
     }
 
@@ -198,11 +198,10 @@ var MideApp = function() {
                 'timeout': 10000
             }
 
-        ).success(function(data,status) {
+        ).success(function(data, status) {
             API_Lock = false;
-             done && done(data);
-              $ionicLoading.hide();
-            if (status==200) {
+            $ionicLoading.hide();
+            if (status == 200) {
                 done && done(data);
             } else {
                 $ionicLoading.hide();
@@ -221,6 +220,7 @@ var MideApp = function() {
 
 
     var ajaxPost = function(target, params, done, fail) {
+        // console.log(target + " 请求ajax");
         myRemote(target, params, done, fail);
         // $.ajax({
         //     type: "post",

@@ -9,8 +9,8 @@
             </div>
         </ion-slide-box>
         <div style="width:100%;" ng-if="gifts">
-            <div class="" ng-repeat="gift in gifts" style="width:33%; display:block; float:left;padding:10px;text-decoration: none;" ng-click="showGiftModal(gift._id)">
-                <img ng-src="{{gift._photourl}}" style="width:100%;">
+            <div class="" ng-repeat="gift in gifts" style="width:33%; display:block; float:left;padding:4px;text-decoration: none;" ng-click="showGiftModal(gift._id)">
+                <img ng-src="{{gift._photourl}}" style="width:100%;border:1px solid #ccc;">
                 <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift._title}}</div>
             </div>
         </div>

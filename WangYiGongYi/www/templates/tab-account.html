@@ -1,15 +1,15 @@
 <ion-view view-title="网益公益">
     <ion-nav-buttons side="right">
-        <button class="button  button-clear button-linght" ng-click="gotoState('tab.reg',false)" ng-if="mideApp_user._status!=0">注册</button>
+        <button class="button  button-clear button-linght" ng-click="gotoState('tab.reg',false)" ng-if="!mideApp_user.islogin">注册</button>
     </ion-nav-buttons>
     <ion-content class="stable-bg has-tabs" has-bouncing="true" delegate-handle="accountScroll">
         <div class="list ">
-            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow" ng-if="mideApp_user._status!=0" ng-click="showLoginModal()">
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow" ng-if="!mideApp_user.islogin" ng-click="showLoginModal()">
                 <img ng-src="img/commentfailure_logout.jpg" style="width:100%">
                 <p ng-if="!processing" style="height:68px;line-height:68px;">立即登录</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
-            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow " ng-if="mideApp_user._status==0">
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow " ng-if="mideApp_user._status<2">
                 <img ng-src="{{mideApp_user._photourl}}" style="width:100%">
                 <div class="row">
                     <div class="col">
@@ -45,7 +45,7 @@
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
         </div>
-        <div class="list" ng-if="mideApp_user._status==0" ng-click="showBasicInfoModal('a')">
+        <div class="list" ng-if="mideApp_user._status<2" ng-click="showBasicInfoModal('a')">
             <div class="item  item-divider item-icon-left item-icon-right ">
                 <i class="icon ion-ios-list positive"></i>个人信息
                 <i class="icon ion-ios-gear-outline "></i>
@@ -71,7 +71,7 @@
                 <span class="item-note">{{mideApp_user._qq}}</span>
             </div>
         </div>
-        <div class="list" ng-if="mideApp_user._status==0" ng-click="showBasicInfoModal('b')">
+        <div class="list" ng-if="mideApp_user._status<2" ng-click="showBasicInfoModal('b')">
             <div class="item ">
                 国家:
                 <span class="item-note">{{mideApp_user._country}}</span>
@@ -82,11 +82,11 @@
             </div>
             <div class="item ">
                 城市:
-                <span class="item-note">{{mideApp_user._district}}</span>
+                <span class="item-note">{{mideApp_user._city}}</span>
             </div>
             <div class="item ">
                 区:
-                <span class="item-note">{{mideApp_user.region}}</span>
+                <span class="item-note">{{mideApp_user._district}}</span>
             </div>
             <div class="item ">
                 社区:
@@ -105,7 +105,7 @@
                 <span class="item-note">{{mideApp_user._wechat}}</span>
             </div>
         </div>
-        <div class="list" ng-if="mideApp_user._status==0" ng-click="showBasicInfoModal('c')">
+        <div class="list" ng-if="mideApp_user._status<2" ng-click="showBasicInfoModal('c')">
             <div class="item ">
                 学历:
                 <span class="item-note">{{mideApp_user._education}}</span>
@@ -127,7 +127,7 @@
                 <span class="item-note">{{mideApp_user._servicetimeinterval}}</span>
             </div>
         </div>
-        <div class="list  wg-logoutBtn padding" ng-if="mideApp_user._status==0">
+        <div class="list  wg-logoutBtn padding" ng-if="mideApp_user._status<2">
             <button class="button button-block button-outline button-positive" ng-click="logout()">
                 退出登录
             </button>
