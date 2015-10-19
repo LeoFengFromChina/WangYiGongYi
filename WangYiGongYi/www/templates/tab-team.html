@@ -1,0 +1,74 @@
+<ion-view view-title="网益公益">
+    <ion-nav-buttons side="left">
+        <button class="button icon-left ion-android-arrow-back button-clear button-linght" ng-click="back()"></button>
+    </ion-nav-buttons>
+    <ion-nav-buttons side="right">
+        <button class="button  button-clear button-linght" ng-click="showCreateTeamModal()">创建团队</button>
+    </ion-nav-buttons>
+    <div class="tabs-striped  tabs-color-positive tabs-top tabs-light tabs-icon-top">
+        <div class="tabs">
+            <a ng-class="{myteam: 'tab-item active', search: 'tab-item'}[Tab_isActive]" data-active="myteam" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">我的团队</a>
+            <a ng-class="{myteam: 'tab-item', search: 'tab-item active'}[Tab_isActive]" data-active="search" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">查找团队</a>
+        </div>
+    </div>
+    <ion-content class="has-tabs has-subheader has-header" has-bouncing="true">
+        <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
+        </ion-refresher>
+        <div class="search" ng-show="Tab_isActive=='search'">
+            <!-- <div class="list" style="margin-top:10px;">
+                <div class=" item-input-inset assertive-bg-new">
+                    <label class="item-input-wrapper text-center" style="background-color:#e12f32;position:relative;height:28px;border-radius:5px" ng-click="focusSearch()" on-release="focusSearch()">
+                        <p class="text-center" style="color:#fff;font-size:12px;width:100%;margin:0">
+                            <i class="icon ion-search placeholder-icon light"></i>查找团队</p>
+                    </label>
+               
+                </div>
+            </div> -->
+            <div class="list">
+                <div class="item item-input-inset">
+                    <label class="item-input-wrapper">
+                        <i class="icon ion-search placeholder-icon"></i>
+                        <input type="text" ng-model='searchConfig.teamName' placeholder="请输入团队名">
+                    </label>
+                    <button class="button button-outline button-positive  button-small" ng-click="searchTeam()">
+                        查找
+                    </button>
+                </div>
+                <div style="height:100%;color:#e6e6e6;padding:20px;" ng-if="config.dataList.length==0">
+                    <i class="ion-ios-search center" style="font-size:80px;"></i>
+                    <div class="center" style="font-size:20px;color:#afafaf;">输入团队名称查找团队</div>
+                </div>
+            </div>
+        </div>
+        <div class="list " collection-repeat="data in config.dataList" collection-item-height="250px" ng-click="showTeamDetailModal(data._id)">
+            <div class="card">
+                <div class="item ">
+                    <h2>{{data._name}}</h2>
+                </div>
+                <div class="item item-body" style="height:134px;">
+                    <p style='margin-top:0;'>
+                        {{data._teamaim}}
+                    </p>
+                </div>
+                <div class="item tabs tabs-secondary tabs-icon-left">
+                    <a class="tab-item left" href="#">
+                        <i class="icon ion-ios-person positive"></i>{{data._linkman}}
+                    </a>
+                    <a class="tab-item" href="#">
+                        <i class="icon ion-ios-telephone positive"></i>{{data._linkphone}}
+                    </a>
+                    <a class="tab-item right" href="#">
+                        <i class="icon ion-ios-location positive"></i>{{data._linkaddress}}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div ng-show="Tab_isActive=='myteam'">
+            <div ng-if="config.dataList.length==0" style="height:100%;color:#e6e6e6;padding:20px;">
+                <i class="ion-chatbubble-working center" style="font-size:80px;"></i>
+                <div class="center" style="font-size:20px;color:#afafaf;">没有内容,请下拉刷新</div>
+            </div>
+        </div>
+        <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="config.infinite" spinner="spiral" class="wg_spinner"></ion-infinite-scroll>
+    </ion-content>
+</ion-view>

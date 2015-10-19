@@ -34,7 +34,7 @@
                 <h2>
                 <span style="padding-right:20px;">{{topic.HelpRequest._title}}</span> <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span></h2>
                 <p class="summary">
-                    <span class="tab">发起人:</span> {{topic.Author._name}}
+                    <span class="tab">发起人:</span> {{topic.Author._nickname}}
                      <span ng-if="topic.HelpRequest._status==0" class="tab status1 item-note">求助中</span>
                     <span ng-if="topic.HelpRequest._status==1" class="tab status2 item-note">已配对</span>
                     <span ng-if="topic.HelpRequest._status==2" class="tab status4 item-note">已完成</span>

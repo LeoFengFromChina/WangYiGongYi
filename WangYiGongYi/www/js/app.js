@@ -77,10 +77,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
                 }
             }
         })
+        .state('tab.activity', {
+            url: '/activity',
+            views: {
+                'tab-activity': {
+                    templateUrl: 'templates/tab-activity.html',
+                    controller: 'ActivityCtrl'
+                }
+            }
+        })
         .state('tab.chats', {
             url: '/chats',
             views: {
-                'tab-chats': {
+                'tab-account': {
                     templateUrl: 'templates/tab-chats.html',
                     controller: 'ChatsCtrl'
                 }
@@ -289,7 +298,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
             url: '/myTeam',
             views: {
                 'tab-account': {
-                    templateUrl: 'templates/myTeam.html',
+                    templateUrl: 'templates/tab-team.html',
                     controller: 'MyTeamCtrl'
                 }
             }

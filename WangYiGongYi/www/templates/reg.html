@@ -20,6 +20,10 @@
                     <span class="input-label">确认密码:</span>
                     <input type="password" ng-model="mideApp_user_reg.confirmPassword" placeholder="再输入密码" required>
                 </label>
+                 <label class="item item-input">
+                    <span class="input-label">姓名:</span>
+                    <input type="text" ng-model="mideApp_user_reg.nikename" placeholder="请输入姓名" required ng-minlength="2" ng-maxlength="4" required>
+                </label>
                 <label class="item item-input">
                     <span class="input-label">性别:</span>
                     <input type="text" ng-model="mideApp_user_reg.gender" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff">

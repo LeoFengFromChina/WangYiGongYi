@@ -1,8 +1,7 @@
 <ion-modal-view>
-
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-close" ng-click="closeNewTopicModal()"></button>
+            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeNewTopicModal()"></button>
         </div>
         <h1 class="title title-center">我要求助发布</h1>
         <div class="buttons">
@@ -25,7 +24,7 @@
             </label>
             <label class="item item-input">
                 <span class="input-label">电话:</span>
-                <input type="tel" ng-model="newTopic.linkphone" length='11' placeholder="请输入电话" placeholder="11位数字" maxlength='11'  ng-pattern="/^[0-9]{11}$/" required>
+                <input type="tel" ng-model="newTopic.linkphone" length='11' placeholder="请输入电话" placeholder="11位数字" maxlength='11' ng-pattern="/^[0-9]{11}$/" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">时间:</span>
@@ -35,9 +34,31 @@
                 <span class="input-label">区域:</span>
                 <input type="text" ng-model="newTopic.region" placeholder="请输入区域" required>
             </label>
+            <!--  <label class="item item-input ">
+                <span class="input-label">国家:</span>
+                <select ng-model="mideApp_user_basic.this_country" ng-options="country.label for country in mideApp_user_basic.countries">
+                    <option value="">请选择国家</option>
+                </select>
+            </label>
             <label class="item item-input">
-                <span class="input-label">类型:</span>
-                <input type="text" ng-model="newTopic.serviceIntention" placeholder="请输入类型" required>
+                <span class="input-label">省份:</span>
+                <select class="form-control" ng-model="mideApp_user_basic.this_provinces" ng-options="_province.label for _province in mideApp_user_basic.this_country.provinces" required>
+                    <option value="">请选择省份</option>
+                </select>
+            </label> -->
+            <label class="item item-input ">
+                <!-- <span class="input-label">类型:</span> -->
+                <!-- <input type="text" ng-model="newTopic.serviceIntention" placeholder="请输入类型" required> -->
+                <span class="input-label">类型1:</span>
+                <select class="form-control" ng-model="helpType.type1" ng-options="type.label for type in  helpTypeData.type1" required>
+                    <option value="">请选择类型</option>
+                </select>
+            </label>
+            <label class="item item-input ">
+                <span class="input-label">类型2:</span>
+                <select class="form-control" ng-model="helpType.value" ng-options="type2.label for type2 in helpType.type1.value" required>
+                    <option value="">请选择省份</option>
+                </select>
             </label>
             <label class="item item-input">
                 <span class="input-label">时长:</span>
@@ -47,7 +68,7 @@
                 <span class="input-label">详细:</span>
                 <textarea placeholder="请发布您的求助信息......" ng-model="newTopic.detail"></textarea>
             </label>
-             <div class="item " ng-click="showGetImagesheet(newTopic)">上传图片</div>
+            <div class="item " ng-click="showGetImagesheet(newTopic)">上传图片</div>
             <div class="item" ng-repeat="img in newTopic.images_list">
                 <img src="{{img}}" width="100%">
             </div>

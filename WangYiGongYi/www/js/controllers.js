@@ -4,24 +4,7 @@ angular.module('starter.controllers', [])
         console.log("typeof MideApp is" + typeof MideApp);
         MideApp.intoMyController($scope, $rootScope, $state);
 
-        // Wait for Cordova to load
-        //  document.addEventListener("deviceready", onDeviceReady, false);
 
-        // Cordova is ready
-        /* function onDeviceReady() {
-             // var db = window.sqlitePlugin.openDatabase("Database", "1.0", "Demo", -1);
-
-             var db = window.sqlitePlugin.openDatabase("database.sqlite3");
-
-             db.transaction(function(tx) {
-                 tx.executeSql('CREATE TABLE IF NOT EXISTS cache (id INTEGER primary key, key TEXT,val TEXT, ttl DATETIME)');
-             });
-             var MySQLite = getSQLiteClass(db);
-             MideApp.setMySQLite(MySQLite);
-
-             $state.go("tab.topics");
-             return;
-         }*/
         $state.go("tab.topics");
 
     })
@@ -31,10 +14,32 @@ angular.module('starter.controllers', [])
     .controller('TopicsCtrl', function($http, $ionicActionSheet, $scope, $state,
         $rootScope, $cordovaFileTransfer, $ionicScrollDelegate, $cordovaFile,
         $ionicLoading, $ionicModal, $filter, $timeout, $cordovaNetwork, $cordovaImagePicker,
-        $ionicSlideBoxDelegate, Tools) {
+        $ionicSlideBoxDelegate, Tools, Data) {
         MideApp.setBackManner('exit');
         $rootScope.tabsHidden = "tabs-show";
         MideApp.intoMyController($scope, $rootScope, $state);
+
+
+        // if (mideApp_user_basic._country != '') {
+        //     mideApp_user_basic.this_country = $filter('filter')(mideApp_user_basic.countries, {
+        //         label: mideApp_user_basic._country
+        //     })[0];
+        //     if (mideApp_user_basic._province != '') {
+        //         mideApp_user_basic.this_provinces = $filter('filter')(mideApp_user_basic.this_country.provinces, {
+        //             label: mideApp_user_basic._province
+        //         })[0];
+        //         if (mideApp_user_basic._city != '') {
+        //             mideApp_user_basic.this_city = $filter('filter')(mideApp_user_basic.this_provinces.cities, {
+        //                 label: mideApp_user_basic._city
+        //             })[0];
+        //         }
+        //     }
+        // }
+        // 更换国家的时候清空省
+        $scope.$watch('helpType', function(type1) {
+            type2 = null;
+        });
+
 
         var load_banner = function(callback) {
             try {
@@ -54,20 +59,7 @@ angular.module('starter.controllers', [])
             } catch (e) {
                 // console.log(e);
             }
-            // MideApp.httpGet('wygyData/Banner.json', function(data) {
-            //     // $scope.banners = [];
-            //     $scope.banners = data.data;
-            //     $scope.isShowBanner = false;
-            //     var _handle = $ionicSlideBoxDelegate.$getByHandle("topicsBanner");
-            //     if (_handle._instances.length != 0) {
-            //         _handle.update();
-            //     }
-            //     MideApp.writeFile($cordovaFile, 'banners.json', JSON.stringify(data.data), true);
-            //     callback && callback();
-            // }, function() {
 
-
-            // });
             var GetBanner_params = {
                 'GroupID': 1
             };
@@ -81,8 +73,8 @@ angular.module('starter.controllers', [])
                 MideApp.writeFile($cordovaFile, 'banners.json', JSON.stringify(data.data), true);
                 callback && callback();
 
-            }, function(data) {
-                MideApp.myNotice("网络错误" + data.status)
+            }, function(data, status) {
+                MideApp.myNotice("网络错误" + status)
             });
 
         }
@@ -104,6 +96,10 @@ angular.module('starter.controllers', [])
 
         // Open the login modal
         $scope.showNewTopicModal = function() {
+            var helpTypeData = $scope.helpTypeData = {};
+            helpTypeData.type1 = Data.getHelpTypeData();
+            helpTypeData.type2 = helpTypeData.type1[0];
+
             var mideApp_user = MideApp.LocCache.load('User') || null;
             if (!mideApp_user) {
                 $state.go("tab.account");
@@ -238,6 +234,8 @@ angular.module('starter.controllers', [])
 
         // Open the login modal
         $scope.showNewHelpModal = function() {
+
+
             var mideApp_user = MideApp.LocCache.load('User') || null;
             if (!mideApp_user) {
                 $state.go("tab.account");
@@ -422,8 +420,7 @@ angular.module('starter.controllers', [])
         $rootScope.$on('topics.update', function() {
 
             $scope.config = MideApp.LocCache.load("topics") || {};
-            console.log("topics.update");
-            console.log($scope.config);
+
         });
 
         var load_page = function(callback) {
@@ -443,9 +440,7 @@ angular.module('starter.controllers', [])
             var GetHelpRequestList_params = {
                 'PageIndex': $scope.config.page
             };
-            console.log($scope.config.page);
             MideApp.ajaxPost('GetHelpRequestList.ashx', GetHelpRequestList_params, function(data) {
-                console.log(GetHelpRequestList_params);
                 if (data.code == 0) {
                     if (!(data.data == null || data.data == '')) {
                         if ($scope.config.page == 1) {
@@ -476,8 +471,8 @@ angular.module('starter.controllers', [])
                 callback && callback();
 
 
-            }, function(data) {
-                MideApp.myNotice("网络错误" + data.status)
+            }, function(data, status) {
+                MideApp.myNotice("网络错误" + status)
                 $cordovaFile.readAsText(cordova.file.externalDataDirectory, "topics.json")
                     .then(function(success) {
                         $scope.config = angular.fromJson(success);
@@ -677,16 +672,486 @@ angular.module('starter.controllers', [])
         // }
 
     })
-    .controller('ChatsCtrl', function($scope, $rootScope, $state, $ionicModal, $ionicScrollDelegate, $ionicActionSheet, $timeout) {
+    .controller('ActivityCtrl', function($scope, $rootScope, $state, $ionicModal,
+        $ionicScrollDelegate, $ionicActionSheet, $timeout, $cordovaFile, $ionicLoading,Tools) {
         MideApp.setBackManner('back');
         $rootScope.tabsHidden = "tabs-show";
         MideApp.intoMyController($scope, $rootScope, $state);
 
+        $scope.mideApp_user = MideApp.LocCache.load('User') || null;
+        // 监听登录
+        $rootScope.$on('app.login', function() {
+            $scope.mideApp_user = MideApp.LocCache.load('User') || null;
+            if ($scope.mideApp_user) {
+                $scope.activityConfig.infinite = true;
+                // $scope.doRefresh();
+            }
+        });
+        $scope.activityConfig = {
+            errormsg: false,
+            infinite: true,
+            page: 1,
+            activitys: []
+        };
+        $scope.allConfig = {
+            errormsg: false,
+            infinite: true,
+            page: 1,
+            activitys: []
+        };
+        $scope.joinConfig = {
+            errormsg: false,
+            infinite: true,
+            page: 1,
+            activitys: []
+        };
+        $scope.createConfig = {
+            errormsg: false,
+            infinite: true,
+            page: 1,
+            activitys: []
+        };
+        $scope.Tab_isActive = 'all';
+        $scope.buttonName = '参加';
+        var load_activitys = function(Tab_isActive, callback) {
+            try {
+                if (!$cordovaNetwork.isOnline()) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, "activitys" + Tab_isActive + ".json")
+                        .then(function(success) {
+                            $scope.activityConfig = angular.fromJson(success);
+                            $scope.activityConfig.infinite = 0;
+                        }, function(error) {});
+                    callback && callback();
+                    return MideApp.myNotice('暂无网络连接...');
+                }
+            } catch (e) {
+                // console.log(e);
+            }
+            var mideApp_user = MideApp.LocCache.load('User') || null;
+            if (!mideApp_user) {
+                MideApp.myNotice("请先登录");
+                $scope.activityConfig.infinite = false;
+                callback && callback();
+                return false;
+            }
+            var GetHelpRequestList_params = {};
+            if (Tab_isActive == 'join') {
+                GetHelpRequestList_params = {
+                    'PageIndex': $scope.activityConfig.page,
+                    'menberID': mideApp_user._id
+                };
+            } else if (Tab_isActive == 'create') {
+                GetHelpRequestList_params = {
+                    'PageIndex': $scope.activityConfig.page,
+                    'promoterID': mideApp_user._id
+                };
+            } else {
+                GetHelpRequestList_params = {
+                    'PageIndex': $scope.activityConfig.page
+                };
+            }
 
+            MideApp.ajaxPost('GetActivityList.ashx', GetHelpRequestList_params, function(data) {
+                if (data.code == 0) {
+                    if (!(data.data == null || data.data == '')) {
+                        if ($scope.activityConfig.page == 1) {
+                            $scope.activityConfig.activitys = [];
+                            $scope.activityConfig.activitys = data.data;
+                        } else {
+                            $scope.activityConfig.activitys = $scope.activityConfig.activitys.concat(data.data);
+                        }
+                        $scope.activityConfig.page = $scope.activityConfig.page + 1;
+                        $scope.activityConfig.errormsg = !$scope.activityConfig.activitys.length;
+                        $scope.activityConfig.infinite = data.data.length > 0;
+                        GetHelpRequestList_params = {
+                            'PageIndex': $scope.activityConfig.page
+                        };
+                        MideApp.LocCache.save('activitys', $scope.activityConfig);
+                        MideApp.MemCache.save('activitys', $scope.activityConfig);
+                        $rootScope.$broadcast('activitys.update');
+                        MideApp.writeFile($cordovaFile, "activitys" + Tab_isActive + ".json", JSON.stringify($scope.activityConfig), true);
+
+                    } else {
+                        $scope.activityConfig.infinite = false;
+                    }
+
+                } else {
+                    $scope.activityConfig.infinite = false;
+                }
+
+                callback && callback();
+
+
+            }, function(data, status) {
+                MideApp.myNotice("网络错误" + status)
+                $cordovaFile.readAsText(cordova.file.externalDataDirectory, "activitys" + Tab_isActive + ".json")
+                    .then(function(success) {
+                        $scope.config = angular.fromJson(success);
+                        $scope.config.infinite = 0;
+                    }, function(error) {});
+                callback && callback();
+            });
+        };
+
+        $scope.infinite = function() {
+            load_activitys($scope.Tab_isActive, function() {
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        }
+
+        $scope.doRefresh = function() {
+            $scope.activityConfig.page = 1;
+            load_activitys($scope.Tab_isActive, function() {
+                $scope.$broadcast('scroll.refreshComplete');
+            });
+
+        }
+
+        $scope.changeTab = function(evt) {
+            var elem = evt.currentTarget;
+            $scope.Tab_isActive = elem.getAttributeNode('data-active').value;
+
+            if ($scope.Tab_isActive == "join") {
+                $scope.activityConfig = $scope.joinConfig;
+                if ($scope.joinConfig.activitys.length == 0) {
+                    $scope.doRefresh();
+                }
+            } else if ($scope.Tab_isActive == "create") {
+                $scope.activityConfig = $scope.createConfig;
+                if ($scope.createConfig.activitys.length == 0) {
+                    $scope.doRefresh();
+                }
+            } else {
+                $scope.activityConfig = $scope.allConfig;
+                if ($scope.allConfig.activitys.length == 0) {
+                    $scope.doRefresh();
+                }
+            }
+        };
+        $ionicModal.fromTemplateUrl('templates/activityModal.html', {
+            scope: $scope,
+            animation: 'slide-in-right'
+        }).then(function(modal) {
+            $scope.activityModal = modal;
+        });
+
+        // Triggered in the login modal to close it
+        $scope.closeActivityModal = function() {
+            $scope.activityModal.hide();
+        };
+
+        $scope.showActivityModal = function(Id) {
+
+            if (!$scope.mideApp_user) {
+                return MideApp.myNotice('请先登录');
+            }
+            $scope.current_activitys = Tools.findById($scope.activityConfig.activitys, Id);
+
+            switch ($scope.current_activitys._status) {
+                case 0:
+                    $scope.current_activitys._statusName = "报名中"
+                    break;
+                case 1:
+                    $scope.current_activitys._statusName = "正在开始"
+                    break;
+                case 2:
+                    $scope.current_activitys._statusName = "已结束"
+                    break;
+                default:
+                    $scope.current_activitys._statusName = "其他"
+            }
+
+
+            var UpdateActivity_params = {
+                'menberID': $scope.mideApp_user._id,
+                'activityID': Id,
+                'opc': 5
+            };
+            MideApp.ajaxPost('UpdateActivity.ashx', UpdateActivity_params, function(data) {
+                if (data.code == 0) {
+                    $scope.current_activitys.menberlist = data.data;
+                    if ($scope.mideApp_user._flag < 1) {
+                        return MideApp.myNotice("请先成为求助者或志愿者");
+                    }
+                    if ($scope.current_activitys._promoterid == $scope.mideApp_user._id) {
+
+                        switch ($scope.current_activitys._status) {
+                            case 0:
+                                $scope.buttonName = '撤销';
+                                break;
+                            case 1:
+                                $scope.buttonName = '完成';
+                                break;
+                            case 2:
+                                $scope.buttonName = '';
+                                break;
+                            default:
+                                $scope.buttonName = '';
+                                break;
+                        }
+                    } else {
+                        if ($scope.current_activitys._status == 0) {
+                            if ($scope.current_activitys.menberlist.length != 0) {
+                                var _me = Tools.findById($scope.current_activitys.menberlist, $scope.mideApp_user._id);
+                                if (_me) {
+                                    $scope.buttonName = '退出活动';
+                                } else {
+                                    $scope.buttonName = '参加';
+
+                                }
+                            } else {
+                                $scope.buttonName = '参加';
+                            }
+
+
+                        } else {
+                            $scope.buttonName = '';
+                        }
+                    }
+
+                } else {
+                    $scope.activityConfig.infinite = false;
+                    return false;
+                }
+
+                $ionicScrollDelegate.$getByHandle('activityMainScroll').scrollTop();
+                $scope.activityModal.show();
+
+            }, function(data, status) {
+                return MideApp.myNotice("网络错误" + status)
+
+            });
+
+        };
+        $scope.$on('$destroy', function() {
+            $scope.activityModal.remove();
+        });
+        $scope.showUpdateActivity = function() {
+            $ionicActionSheet.show({
+                titleText: '确认' + $scope.buttonName + '？',
+                buttons: [{
+                    text: $scope.buttonName
+                }],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        updateActivity();
+                    } else {
+                        return true;
+                    }
+
+                    return true;
+
+
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+        var updateActivity = function() {
+            //1参加活动，2退出活动，3完成活动（发起人权利),4撤销活动,5.获取活动参与者列表
+            var _opc = 5;
+            switch ($scope.buttonName) {
+                case '参加':
+                    _opc = 1;
+                    break;
+                case '退出活动':
+                    _opc = 2;
+                    break;
+                case '撤销':
+                    _opc = 4;
+                    break;
+                case '完成':
+                    _opc = 3;
+                    break;
+                default:
+                    break;
+            }
+            var UpdateActivity_params = {
+                'menberID': $scope.mideApp_user._id,
+                'activityID': $scope.current_activitys._id,
+                'opc': _opc
+            };
+            MideApp.ajaxPost('UpdateActivity.ashx', UpdateActivity_params, function(data) {
+
+                if (data.code == 0) {
+                    switch ($scope.buttonName) {
+                        case '参加':
+                            $scope.current_activitys.menberlist.push($scope.mideApp_user);
+                            $scope.buttonName = '退出活动'
+                            MideApp.myNotice('您成功参加该活动');
+                            break;
+                        case '退出活动':
+                            $scope.buttonName = '参加'
+                            MideApp.myNotice('您已退出该活动');
+                            for (var i = 0; i < $scope.current_activitys.menberlist.length; i++) {
+                                if ($scope.current_activitys.menberlist[i]._id == $scope.mideApp_user._id) {
+                                    var _list = $scope.current_activitys.menberlist.splice(i, 1);
+                                    console.log(_list);
+                                }
+                            }
+                            break;
+                        case '撤销':
+                            $scope.buttonName = ''
+                            $scope.closeActivityModal();
+                            break;
+                        case '完成':
+                            $scope.buttonName = ''
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+            }, function(data, status) {
+                return MideApp.myNotice("网络错误" + status)
+
+            });
+        }
+        $scope.pushActivity={};
+        $scope.showPushActivirySheet = function(info) {
+
+            if (angular.isUndefined($scope.pushActivity.title)) {
+                return MideApp.myNotice('标题未填写');
+            }
+            if (angular.isUndefined($scope.pushActivity.linkman)) {
+                return MideApp.myNotice('联系人未填写');
+            }
+            if (angular.isUndefined($scope.pushActivity.linkphone)) {
+                return MideApp.myNotice('联系电话异常,应为11位数字');
+            }
+            if (angular.isUndefined($scope.pushActivity.linkaddress)) {
+                return MideApp.myNotice('地址未填写');
+            }
+            if (angular.isUndefined($scope.pushActivity.activitytype)) {
+                return MideApp.myNotice('活动类型未填写');
+            }
+            if (angular.isUndefined($scope.pushActivity.region)) {
+                return MideApp.myNotice('区域未填写');
+            }
+            if (angular.isUndefined($scope.pushActivity.begintime)) {
+                return MideApp.myNotice('开始时间未填写');
+            }
+            if (angular.isUndefined($scope.pushActivity.needmenbercount)) {
+                return MideApp.myNotice('人数未填写');
+            }
+            if (angular.isUndefined($scope.pushActivity.detail)) {
+                return MideApp.myNotice('详情未填写');
+            }
+            if (typeof info == 'undefined') {
+                info = "";
+            };
+            $ionicActionSheet.show({
+                titleText: '确定' + info + '？',
+                buttons: [{
+                    text: '是'
+                }, {
+                    text: '否'
+                }, ],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+                    if (index == 0) {
+                        $ionicLoading.show();
+                        var TeamAction_params = {
+                            'activityID': 0,
+                            'menberID': $scope.mideApp_user._id,
+                            'promoterid': $scope.mideApp_user._id,
+                            'title': $scope.pushActivity.title,
+                            'opc': 6,
+                            'linkman': $scope.pushActivity.linkman,
+                            'linkphone': $scope.pushActivity.linkphone,
+                            'linkaddress': $scope.pushActivity.linkaddress,
+                            'activitytype': $scope.pushActivity.activitytype,
+                            'region': $scope.pushActivity.region,
+                            'begintime': $scope.pushActivity.begintime,
+                            'needmenbercount': $scope.pushActivity.needmenbercount,
+                            'detail': $scope.pushActivity.detail
+                        };
+                        MideApp.ajaxPost('UpdateActivity.ashx', TeamAction_params, function(data) {
+
+                            if (data.code == 0) {
+                                // $scope.activityConfig.activitys.push($scope.pushActivity);
+                                MideApp.LocCache.save('activityList', $scope.myteamCconfig);
+                                $rootScope.$broadcast('activityList.update');
+
+                                MideApp.myNotice('发布成功', 1500, function() {
+                                    $scope.pushActivity = {};
+                                    $scope.closePushActivityModal();
+                                });
+
+                            } else {
+                                MideApp.myNotice(data.message);
+                            }
+
+                        }, function(data, status) {
+                            return MideApp.myNotice("网络错误" + status)
+
+                        });
+                    } else {
+                        return true;
+                    }
+
+
+
+
+                    return true;
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+        $ionicModal.fromTemplateUrl('templates/pushActivity.html', {
+            scope: $scope,
+            animation: 'slide-in-right'
+        }).then(function(modal) {
+            $scope.pushActivityModal = modal;
+        });
+
+        // Triggered in the login modal to close it
+        $scope.closePushActivityModal = function() {
+            $scope.pushActivityModal.hide();
+        };
+        $scope.showPushActivityModal = function() {
+
+            $scope.pushActivityModal.show();
+        };
+        $scope.$on('$destroy', function() {
+            $scope.pushActivityModal.remove();
+        });
+
+    })
+    .controller('ChatsCtrl', function($scope, $rootScope, $state, $ionicModal, $ionicScrollDelegate,
+        $ionicActionSheet, $timeout, $cordovaFile) {
+        MideApp.setBackManner('back');
+        $rootScope.tabsHidden = "tabs-show";
+        MideApp.intoMyController($scope, $rootScope, $state);
+
+        $scope.chatsConfig = {
+            errormsg: false,
+            infinite: true,
+            page: 1,
+            chats: []
+        };
         $scope.doRefresh = function() {
             var mideApp_user = MideApp.LocCache.load('User') || null;
             if (mideApp_user) {
-                load_chats(mideApp_user.userId, function() {
+                load_chats(mideApp_user._id, function() {
                     $scope.$broadcast('scroll.refreshComplete');
 
                 });
@@ -696,23 +1161,61 @@ angular.module('starter.controllers', [])
 
 
         };
+        $scope.infinite = function() {
+            var mideApp_user = MideApp.LocCache.load('User') || null;
+            if (mideApp_user) {
+                load_chats(mideApp_user._id, function() {
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                });
+            } else {
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            }
+        }
         var load_chats = function(userId, callback) {
-            MideApp.httpGet("mideData/message.json?userId=" + userId, function(data) {
-                if (data.code == 0) {
-                    $scope.chats = data.data;
-                } else {
-                    MideApp.myNotice(data.message);
-                }
-                callback && callback();
 
-            });
-        }
-        var mideApp_user = MideApp.LocCache.load('User') || null;
-        if (mideApp_user) {
-            load_chats(mideApp_user.userId, function() {
+                var GetNoticeList_params = {
+                    'menberid': userId,
+                    'PageIndex': $scope.chatsConfig.page
+                };
+                MideApp.ajaxPost('GetNoticeList.ashx', GetNoticeList_params, function(data) {
+                    if (data.code == 0) {
+                        if (!(data.data == null || data.data == '')) {
+                            if ($scope.chatsConfig.page == 1) {
+                                $scope.chatsConfig.chats = data.data;
+                            } else {
+                                $scope.chatsConfig.chats = $scope.chatsConfig.chats.concat(data.data);
+                            }
+                            $scope.chatsConfig.page = $scope.chatsConfig.page + 1;
+                            $scope.chatsConfig.errormsg = !$scope.chatsConfig.chats.length;
+                            $scope.chatsConfig.infinite = data.data.length > 0;
+                            GetHelpRequestList_params = {
+                                'PageIndex': $scope.chatsConfig.page
+                            };
+                            MideApp.LocCache.save('chats', $scope.chatsConfig);
+                            MideApp.MemCache.save('chats', $scope.chatsConfig);
+                            // $rootScope.$broadcast('chats.update');
+                            MideApp.writeFile($cordovaFile, "chats.json", JSON.stringify($scope.chatsConfig), true);
 
-            });
-        }
+                        } else {
+                            $scope.chatsConfig.infinite = false;
+                        }
+
+                    } else {
+                        $scope.chatsConfig.infinite = false;
+                    }
+                    callback && callback();
+
+                }, function(data, status) {
+                    MideApp.myNotice("网络错误" + status)
+                    callback && callback();
+                });
+            }
+            // var mideApp_user = MideApp.LocCache.load('User') || null;
+            // if (mideApp_user) {
+            //     load_chats(mideApp_user._id, function() {
+
+        //     });
+        // }
 
         $scope.deleteItem = function(k, id) {
 
@@ -964,7 +1467,7 @@ angular.module('starter.controllers', [])
 
 .controller('AccountCtrl', function($scope, $rootScope, $rootScope, $state,
     $log, $ionicActionSheet, $ionicModal, $ionicHistory, $timeout,
-    $ionicLoading, $ionicPopover, $filter, $ionicScrollDelegate, $cordovaFile, Tools, Data) {
+    $ionicLoading, $ionicPopover, $filter, $ionicScrollDelegate, $cordovaFile, Tools, Data, UserCache) {
     MideApp.setBackManner('back');
     $rootScope.tabsHidden = "tabs-show";
     MideApp.intoMyController($scope, $rootScope, $state);
@@ -1119,12 +1622,36 @@ angular.module('starter.controllers', [])
         };
         MideApp.ajaxPost('AppLogin.ashx', appLogin_params, function(data) {
             if (data.code == 0) {
-                var _user = data.data;
+                var _user = data.data['<Menber>k__BackingField'];
+                //status:0正常，1待审核，2禁止
                 if (_user._status < 2) {
                     $scope.mideApp_user = _user;
+                    $scope.mideApp_user.privilege = data.data['<Privilege>k__BackingField'];
+
+                    switch ($scope.mideApp_user._flag) {
+                        case 0:
+                            $scope.mideApp_user._flagName = '游客';
+                            break;
+                        case 1:
+                            $scope.mideApp_user._flagName = '求助者';
+                            break;
+                        case 2:
+                            $scope.mideApp_user._flagName = '志愿者';
+                            break;
+                        default:
+                    }
+                    switch ($scope.mideApp_user._status) {
+                        case 0:
+                            $scope.mideApp_user._statusName = '正常';
+                            break;
+                        case 1:
+                            $scope.mideApp_user._statusName = '待审核';
+                            break;
+                        default:
+                            $scope.mideApp_user._statusName = '其他';
+                    }
                     $scope.mideApp_user.islogin = true;
-                    MideApp.LocCache.save('User', _user);
-                    MideApp.MemCache.save('User', _user);
+                    UserCache.setUser(_user); //缓存用户信息
 
                     $ionicLoading.hide();
                     $rootScope.$broadcast('app.login');
@@ -1140,8 +1667,8 @@ angular.module('starter.controllers', [])
                 MideApp.myNotice(data.message);
             }
 
-        }, function(data) {
-            MideApp.myNotice("网络错误" + data.status)
+        }, function(data, status) {
+            MideApp.myNotice("网络错误" + status)
         });
     };
 
@@ -1162,6 +1689,22 @@ angular.module('starter.controllers', [])
         var mideApp_user_basic = $scope.mideApp_user_basic = MideApp.LocCache.load('User') || {};
 
         mideApp_user_basic.countries = Data.getCityData();
+
+        if (mideApp_user_basic._country != '') {
+            mideApp_user_basic.this_country = $filter('filter')(mideApp_user_basic.countries, {
+                label: mideApp_user_basic._country
+            })[0];
+            if (mideApp_user_basic._province != '') {
+                mideApp_user_basic.this_provinces = $filter('filter')(mideApp_user_basic.this_country.provinces, {
+                    label: mideApp_user_basic._province
+                })[0];
+                if (mideApp_user_basic._city != '') {
+                    mideApp_user_basic.this_city = $filter('filter')(mideApp_user_basic.this_provinces.cities, {
+                        label: mideApp_user_basic._city
+                    })[0];
+                }
+            }
+        }
         // 更换国家的时候清空省
         $scope.$watch('mideApp_user_basic.country', function(country) {
             mideApp_user_basic.province = null;
@@ -1170,6 +1713,22 @@ angular.module('starter.controllers', [])
         $scope.$watch('mideApp_user_basic.province', function(province) {
             mideApp_user_basic.city = null;
         });
+
+        mideApp_user_basic.educations = Data.getEducationData();
+        if (mideApp_user_basic._education != '') {
+            mideApp_user_basic.this_education = $filter('filter')(mideApp_user_basic.educations, {
+                label: mideApp_user_basic._education
+            })[0];
+        }
+
+        mideApp_user_basic.serviceintentions = Data.getIntentionData();
+        if (mideApp_user_basic._serviceintention != '') {
+            mideApp_user_basic.this_serviceintention = $filter('filter')(mideApp_user_basic.serviceintentions, {
+                label: mideApp_user_basic._serviceintention
+            })[0];
+        }
+
+
 
         $ionicScrollDelegate.$getByHandle('basicInfoScroll').scrollTop();
         $scope.basicInfoModal.show();
@@ -1192,6 +1751,10 @@ angular.module('starter.controllers', [])
         // if (angular.isUndefined($scope.mideApp_user_basic._photourl)) {
         //     return MideApp.myNotice('账号未填写...');
         // }
+
+        if (angular.isUndefined($scope.mideApp_user_basic._nickname)) {
+            return MideApp.myNotice('姓名未填写...');
+        }
         if (angular.isUndefined($scope.mideApp_user_basic._sex)) {
             return MideApp.myNotice('性别未填写...');
         }
@@ -1211,6 +1774,7 @@ angular.module('starter.controllers', [])
 
         var UpdateMenberInfo_params = {
             'menberid': $scope.mideApp_user_basic._id,
+            'nickname': $scope.mideApp_user_basic._nickname,
             'avatar_url': $scope.mideApp_user_basic._photourl,
             'sex': $scope.mideApp_user_basic._sex,
             'birthday': $scope.mideApp_user_basic._birthday,
@@ -1223,7 +1787,7 @@ angular.module('starter.controllers', [])
             if (data.code == 0) {
                 var mideApp_user = MideApp.LocCache.load('User') || null;
                 if (mideApp_user) {
-
+                    mideApp_user._nickname = $scope.mideApp_user_basic._nickname;
                     mideApp_user._photourl = $scope.mideApp_user_basic._photourl;
                     mideApp_user._sex = $scope.mideApp_user_basic._sex;
                     mideApp_user._birthday = $scope.mideApp_user_basic._birthday;
@@ -1250,68 +1814,88 @@ angular.module('starter.controllers', [])
         if (!MideApp.isOnline()) {
             return MideApp.myNotice('暂无网络连接...');
         }
-        if (!$scope.mideApp_user_basic.region) {
-            return MideApp.myNotice('地区未填写...');
+        if (!$scope.mideApp_user_basic.this_country) {
+            return MideApp.myNotice('国家未选择...');
+        }
+        if (!$scope.mideApp_user_basic.this_provinces) {
+            return MideApp.myNotice('省份未选择...');
+        }
+        if (!$scope.mideApp_user_basic.this_city) {
+            return MideApp.myNotice('城市未选择...');
+        }
+        if (!$scope.mideApp_user_basic._district) {
+            return MideApp.myNotice('区域未填写...');
         }
 
-        if (!$scope.mideApp_user_basic.identity) {
+        if (!$scope.mideApp_user_basic._district) {
+            return MideApp.myNotice('社区未选择...');
+        }
+        if (!$scope.mideApp_user_basic._community) {
+            return MideApp.myNotice('社区未选择...');
+        }
+
+        if (!$scope.mideApp_user_basic._personalid) {
             return MideApp.myNotice('身份证未填写...');
         }
-        if (!$scope.mideApp_user_basic.birthday) {
-            return MideApp.myNotice('出身年月未填写...');
-        }
-        if (!$scope.mideApp_user_basic.address) {
+        if (!$scope.mideApp_user_basic._address) {
             return MideApp.myNotice('常住地址未填写...');
         }
-        if (!$scope.mideApp_user_basic.weixinNumber) {
+        if (!$scope.mideApp_user_basic._wechat) {
             return MideApp.myNotice('微信未填写...');
         }
 
         $ionicLoading.show();
-        // MideApp.httpGet('mideData/user.json', function(data) {
 
-        //     MideApp.LocCache.save("User", $scope.mideApp_user);
-        //     $ionicLoading.hide();
-        //     MideApp.myNotice('修改成功')
-        //     $scope.closeBasicInfoModal();
-        // }, function() {
-        //     $ionicLoading.hide();
-        // });
-        var GetHelpRequestList_params = {
-            'PageIndex': $scope.config.page
+        var UpdateMenberInfo_params = {
+            'menberid': $scope.mideApp_user_basic._id,
+            'country': $scope.mideApp_user_basic.this_country.label,
+            'province': $scope.mideApp_user_basic.this_provinces.label,
+            'city': $scope.mideApp_user_basic.this_city.label,
+            'district': $scope.mideApp_user_basic._district,
+            'community': $scope.mideApp_user_basic._community,
+            'identity': $scope.mideApp_user_basic._personalid,
+            'address': $scope.mideApp_user_basic._address,
+            'weixinNumber': $scope.mideApp_user_basic._wechat,
+            'flag': 1,
+
         };
-        MideApp.ajaxPost('GetHelpRequestList.ashx', GetHelpRequestList_params, function(data) {
+        MideApp.ajaxPost('UpdateMenberInfo.ashx', UpdateMenberInfo_params, function(data) {
             if (data.code == 0) {
-                if (!(data.data == null || data.data == '')) {
-                    if ($scope.config.page == 1) {
-                        $scope.config.topics = data.data;
-                    } else {
-                        $scope.config.topics = $scope.config.topics.concat(data.data);
-                    }
-                    $scope.config.page = $scope.config.page + 1;
-                    $scope.config.errormsg = !$scope.config.topics.length;
-                    $scope.config.infinite = data.data.length > 0;
-                    MideApp.writeFile($cordovaFile, "topics.json", JSON.stringify($scope.config), true);
+                var mideApp_user = MideApp.LocCache.load('User') || null;
+                if (mideApp_user) {
 
-                } else {
-                    $scope.config.infinite = false;
+                    mideApp_user._country = $scope.mideApp_user_basic.this_country.label;
+                    mideApp_user._province = $scope.mideApp_user_basic.this_provinces.label;
+                    mideApp_user._city = $scope.mideApp_user_basic.this_city.label;
+                    mideApp_user._district = $scope.mideApp_user_basic._district;
+                    mideApp_user._community = $scope.mideApp_user_basic._community;
+                    mideApp_user._personalid = $scope.mideApp_user_basic._personalid;
+                    mideApp_user._address = $scope.mideApp_user_basic._address;
+                    mideApp_user._wechat = $scope.mideApp_user_basic._wechat;
+
+                    if (mideApp_user._flag < 1) {
+                        mideApp_user._flag = 1;
+                        mideApp_user._flagName = '求助者';
+                        mideApp_user._status = 1;
+                        mideApp_user._statusName = '待审核';
+                    } else if (mideApp_user.flag < 2) {
+                        mideApp_user._flag = 2;
+                        mideApp_user._flagName = '志愿者';
+                        mideApp_user._status = 1;
+                        mideApp_user._statusName = '待审核';
+                    }
+                    MideApp.LocCache.save('User', mideApp_user);
+                    $rootScope.$broadcast('User.update');
                 }
 
-            } else {
-                $scope.config.infinite = false;
             }
 
-            callback && callback();
+            MideApp.myNotice(data.message)
+            $scope.closeBasicInfoModal();
 
+        }, function(data, status) {
+            MideApp.myNotice("网络错误" + status)
 
-        }, function(data) {
-            MideApp.myNotice("网络错误" + data.status)
-            $cordovaFile.readAsText(cordova.file.externalDataDirectory, "topics.json")
-                .then(function(success) {
-                    $scope.config = angular.fromJson(success);
-                    $scope.config.infinite = 0;
-                }, function(error) {});
-            callback && callback();
         });
 
     }
@@ -1319,32 +1903,63 @@ angular.module('starter.controllers', [])
         if (!MideApp.isOnline()) {
             return MideApp.myNotice('暂无网络连接...');
         }
-        if (!$scope.mideApp_user_basic.education) {
+        if (!$scope.mideApp_user_basic.this_education.label) {
             return MideApp.myNotice('学历未填写...');
         }
-
-        if (!$scope.mideApp_user_basic.profession) {
+        if (!$scope.mideApp_user_basic._major) {
             return MideApp.myNotice('专业未填写...');
         }
-        if (!$scope.mideApp_user_basic.speciality) {
+        if (!$scope.mideApp_user_basic._specialskill) {
             return MideApp.myNotice('特长未填写...');
         }
-        if (!$scope.mideApp_user_basic.intention) {
-            return MideApp.myNotice('服务意愿未填写...');
+        if (!$scope.mideApp_user_basic.this_serviceintention.label) {
+            return MideApp.myNotice('服务意愿未选择...');
         }
-        if (!$scope.mideApp_user_basic.intentionTime) {
-            return MideApp.myNotice('服务时间未填写...');
+        if (!$scope.mideApp_user_basic._servicetimeinterval) {
+            return MideApp.myNotice('服务时段未填写...');
         }
 
         $ionicLoading.show();
-        MideApp.httpGet('mideData/user.json', function(data) {
-            $scope.mideApp_user = $scope.mideApp_user_basic;
-            MideApp.LocCache.save("User", $scope.mideApp_user);
-            $ionicLoading.hide();
-            MideApp.myNotice('修改成功')
-            $scope.closeBasicInfoModal();
-        }, function() {
-            $ionicLoading.hide();
+        var UpdateMenberInfo_params = {
+            'menberid': $scope.mideApp_user_basic._id,
+            'education': $scope.mideApp_user_basic.this_education.label,
+            'profession': $scope.mideApp_user_basic._major,
+            'speciality': $scope.mideApp_user_basic._specialskill,
+            'intention': $scope.mideApp_user_basic.this_serviceintention.label,
+            'intentionTime': $scope.mideApp_user_basic._servicetimeinterval,
+            'flag': 2,
+
+        };
+        MideApp.ajaxPost('UpdateMenberInfo.ashx', UpdateMenberInfo_params, function(data) {
+            if (data.code == 0) {
+                var mideApp_user = MideApp.LocCache.load('User') || null;
+                if (mideApp_user) {
+
+                    mideApp_user._education = $scope.mideApp_user_basic.this_education.label;
+                    mideApp_user._major = $scope.mideApp_user_basic._major;
+                    mideApp_user._specialskill = $scope.mideApp_user_basic._specialskill;
+                    mideApp_user._serviceintention = $scope.mideApp_user_basic.this_serviceintention.label,
+                        mideApp_user._servicetimeinterval = $scope.mideApp_user_basic._servicetimeinterval;
+
+                    if (mideApp_user.flag < 2) {
+                        mideApp_user._flag = 2;
+                        mideApp_user._flagName = '志愿者';
+                        mideApp_user._status = 1;
+                        mideApp_user._statusName = '待审核';
+                    }
+                    MideApp.LocCache.save('User', mideApp_user);
+                    $rootScope.$broadcast('User.update');
+                }
+                $scope.closeBasicInfoModal();
+
+            }
+
+            MideApp.myNotice(data.message)
+
+
+        }, function(data, status) {
+            MideApp.myNotice("网络错误" + status)
+
         });
 
     }
@@ -1562,8 +2177,8 @@ angular.module('starter.controllers', [])
             callback && callback();
 
 
-        }, function(data) {
-            MideApp.myNotice("网络错误" + data.status)
+        }, function(data, status) {
+            MideApp.myNotice("网络错误" + status)
             $cordovaFile.readAsText(cordova.file.externalDataDirectory, "myAsk-list.json")
                 .then(function(success) {
                     $scope.AskConfig = angular.fromJson(success);
@@ -1602,7 +2217,7 @@ angular.module('starter.controllers', [])
             $scope.AskConfig.topics = [];
             $scope.AskConfig.page = 1;
             load_ask_page(function() {
-                $scope.$broadcast('scroll.infiniteScrollComplete');
+                $scope.$broadcast('scroll.refreshComplete');
             });
         }
 
@@ -1904,6 +2519,9 @@ angular.module('starter.controllers', [])
             if ($scope.mideApp_user_reg.password != $scope.mideApp_user_reg.confirmPassword) {
                 return MideApp.myNotice('密码不一致');
             }
+            if (angular.isUndefined($scope.mideApp_user_reg.nickname)) {
+                return MideApp.myNotice('姓名未填写...');
+            }
             if (angular.isUndefined($scope.mideApp_user_reg.gender)) {
                 return MideApp.myNotice('性别未填写...');
             }
@@ -1970,7 +2588,7 @@ angular.module('starter.controllers', [])
             'username': $scope.mideApp_user_reg.username,
             'psw': Tools.MD5($scope.mideApp_user_reg.password),
             'avatar_url': 'test',
-            'nickname': '',
+            'nickname': $scope.mideApp_user_reg.nickname,
             'sex': $scope.mideApp_user_reg.gender,
             'birthday': '1982-09-09',
             'phoneNumber': $scope.mideApp_user_reg.phoneNumber,
@@ -2404,9 +3022,9 @@ angular.module('starter.controllers', [])
         }
 
         $scope.myGiftConfig = {
-            infinite: true,
-            page: 1,
-            gifts: []
+            'infinite': true,
+            'page': 1,
+            'gifts': []
         };
 
         var load_mygift = function(callback) {
@@ -2467,8 +3085,8 @@ angular.module('starter.controllers', [])
             });
         }
         $scope.doRefresh = function() {
-            $scope.MyHelpConfig.MyHelp = [];
-            $scope.MyHelpConfig.page = 1;
+            $scope.myGiftConfig.gifts = [];
+            $scope.myGiftConfig.page = 1;
             load_mygift(function() {
                 $scope.$broadcast('scroll.refreshComplete');
             });
@@ -2476,39 +3094,70 @@ angular.module('starter.controllers', [])
 
 
     })
-    .controller('FeedbackCtrl', function($scope, $rootScope, $state, $ionicScrollDelegate, $ionicModal, $ionicLoading, $filter) {
-
+    .controller('FeedbackCtrl', function($scope, $rootScope, $state, $ionicScrollDelegate,
+        $ionicModal, $ionicLoading, $filter, $cordovaFile, $cordovaNetwork) {
+        //没有接口获取回馈列表
         $scope.pwd = {};
         MideApp.setBackManner('back');
         $rootScope.tabsHidden = "tabs-hide";
         MideApp.intoMyController($scope, $rootScope, $state);
 
-        var _items = [{
-            "id": 1,
-            "content": "怎么页面打不开的啊？",
-            "addtime": "2015-09-11 11:00:00",
-            "Reply": "请查看是不是没有网络连接",
-            "ReplyTime": "2015-09-13 12:00:00"
-        }, {
-            "id": 2,
-            "content": "怎么页面打不开的啊？怎么页面打不开的啊？怎么页面打不开的啊？怎么页面打不开的啊？怎么页面打不开的啊？怎么页面打不开的啊？",
-            "addtime": "2015-09-11 11:00:00",
-            "Reply": "请查看是不是没有网络连接",
-            "ReplyTime": "2015-09-13 12:00:00"
-        }, {
-            "id": 3,
-            "content": "怎么页面打不开的啊？",
-            "addtime": "2015-09-11 11:00:00",
-            "Reply": "请查看是不是没有网络连接",
-            "ReplyTime": "2015-09-13 12:00:00"
-        }, {
-            "id": 4,
-            "content": "怎么页面打不开的啊？",
-            "addtime": "2015-09-11 11:00:00",
-            "Reply": "",
-            "ReplyTime": ""
-        }];
-        $scope.items = _items;
+        $scope.config = {
+            infinite: true,
+            page: 1,
+            dataList: []
+        };
+        var load_page = function(callback) {
+            try {
+                if (!$cordovaNetwork.isOnline()) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, "feedback.json")
+                        .then(function(success) {
+                            $scope.config = angular.fromJson(success);
+                            $scope.config.infinite = 0;
+                        }, function(error) {});
+                    callback && callback();
+                    return MideApp.myNotice('暂无网络连接...');
+                }
+            } catch (e) {
+                // console.log(e);
+            }
+            var GetHelpRequestList_params = {
+                'PageIndex': $scope.config.page
+            };
+            MideApp.ajaxPost('GetHelpRequestList.ashx', GetHelpRequestList_params, function(data) {
+                if (data.code == 0) {
+                    if (!(data.data == null || data.data == '')) {
+                        if ($scope.config.page == 1) {
+                            $scope.config.topics = data.data;
+                        } else {
+                            $scope.config.topics = $scope.config.topics.concat(data.data);
+                        }
+                        $scope.config.page = $scope.config.page + 1;
+                        $scope.config.errormsg = !$scope.config.topics.length;
+                        $scope.config.infinite = data.data.length > 0;
+                        MideApp.writeFile($cordovaFile, "topics.json", JSON.stringify($scope.config), true);
+
+                    } else {
+                        $scope.config.infinite = false;
+                    }
+
+                } else {
+                    $scope.config.infinite = false;
+                }
+
+                callback && callback();
+
+
+            }, function(data) {
+                MideApp.myNotice("网络错误" + data.status)
+                $cordovaFile.readAsText(cordova.file.externalDataDirectory, "topics.json")
+                    .then(function(success) {
+                        $scope.config = angular.fromJson(success);
+                        $scope.config.infinite = 0;
+                    }, function(error) {});
+                callback && callback();
+            });
+        };
 
         $ionicModal.fromTemplateUrl('templates/feedback.html', {
             scope: $scope,
@@ -2634,8 +3283,8 @@ angular.module('starter.controllers', [])
 
                         MideApp.writeFile($cordovaFile, "rankList_" + tab + ".json", JSON.stringify($scope.rankList), true);
 
-                    }else{
-                        $scope.rankList =[];
+                    } else {
+                        $scope.rankList = [];
                     }
 
                 } else {
@@ -2804,78 +3453,215 @@ angular.module('starter.controllers', [])
             });
         }
     })
-    .controller('MyTeamCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading, $timeout, $ionicModal, $ionicScrollDelegate, $filter, $http) {
+    .controller('MyTeamCtrl', function($scope, $rootScope, $ionicActionSheet, $state, $ionicLoading,
+        $timeout, $ionicModal, $ionicScrollDelegate, $filter, $http, $cordovaFile, Tools) {
 
         MideApp.setBackManner('back');
         $rootScope.tabsHidden = "tabs-hide";
         MideApp.intoMyController($scope, $rootScope, $state);
-        $scope.TeamConfig = MideApp.MemCache.load('team-list') || {
-            errormsg: false,
-            infinite: true,
-            number: 10,
-            page: 1,
-            teams: []
-        };
 
-        var load_page = function(callback) {
-            if (!MideApp.isOnline()) {
-                return MideApp.myNotice('暂无网络连接...');
+        $scope.config = {
+            infinite: true,
+            page: 1,
+            dataList: []
+        }
+
+        $scope.myteamCconfig = {
+                infinite: true,
+                page: 1,
+                dataList: []
+            }
+            // 监听登录
+        $rootScope.$on('myteam.update', function() {
+            $scope.myteamCconfig = MideApp.LocCache.load('myteamList');
+            if ($scope.Tab_isActive == "myteam") {
+                $scope.config = $scope.myteamCconfig;
+            }
+        });
+        $scope.searchConfig = {
+            infinite: true,
+            page: 1,
+            dataList: []
+        }
+        var mideApp_user = $scope.mideApp_user = MideApp.LocCache.load('User') || null;
+        if (!mideApp_user) {
+            $state.go("tab.account");
+            return false;
+        }
+        $scope.Tab_isActive = 'myteam';
+
+        $scope.changeTab = function(evt) {
+            var elem = evt.currentTarget;
+            $scope.Tab_isActive = elem.getAttributeNode('data-active').value;
+            if ($scope.Tab_isActive == "myteam") {
+                $scope.config = MideApp.LocCache.load('myteamList');
+            } else {
+                $scope.config = MideApp.LocCache.load('searchTeamList');
             }
 
-            MideApp.httpGet('mideData/user.json', function(data) {
-                var _id = $scope.TeamConfig.teams.length + 1;
-                var _obj = {
-                    "data": [{
-                        "id": _id,
-                        "title": _id + "医院义工", //标题
-                        "sponsor": "oky", //发起人
-                        "contacts": "oky", //联系人
-                        "phone": "13580530583",
-                        "type": "活动类型",
-                        "region": "所属区域",
-                        "activityTime": "所属区域",
-                        "location": "所属区域",
-                        "totalNumber": "所属区域",
-                        "content": "去因为做义工，帮助病人日常生活",
-                        "addtime": "2015-08-02 22:33:00"
-                    }]
+        };
+        var load_page_myteamCconfig = function(callback) {
+            try {
+                if (!$cordovaNetwork.isOnline()) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, $scope.Tab_isActive + ".json")
+                        .then(function(success) {
+                            $scope.myteamCconfig = angular.fromJson(success);
+                            $scope.myteamCconfig.infinite = 0;
+                        }, function(error) {});
+                    callback && callback();
+                    return MideApp.myNotice('暂无网络连接...');
+                }
+            } catch (e) {
+                // console.log(e);
+            }
+
+            var GetMyTeamList_params = {
+                'PageIndex': $scope.myteamCconfig.page,
+                'menberid': mideApp_user._id
+            };
+
+
+            MideApp.ajaxPost('GetMyTeamList.ashx', GetMyTeamList_params, function(data) {
+                if (data.code == 0) {
+                    if (!(data.data == null || data.data == '')) {
+                        if ($scope.myteamCconfig.page == 1) {
+                            $scope.myteamCconfig.dataList = data.data;
+                        } else {
+                            $scope.myteamCconfig.dataList = $scope.myteamCconfig.dataList.concat(data.data);
+                        }
+                        $scope.myteamCconfig.page = $scope.myteamCconfig.page + 1;
+                        $scope.myteamCconfig.errormsg = !$scope.myteamCconfig.dataList.length;
+                        $scope.myteamCconfig.infinite = data.data.length > 0;
+                        MideApp.LocCache.save('myteamList', $scope.myteamCconfig);
+                        MideApp.writeFile($cordovaFile, $scope.Tab_isActive + ".json", JSON.stringify($scope.myteamCconfig), true);
+
+                    } else {
+                        $scope.myteamCconfig.infinite = false;
+                    }
+
+                } else {
+                    $scope.myteamCconfig.infinite = false;
                 }
 
-                $scope.TeamConfig.page = $scope.TeamConfig.page + 1;
-                $scope.TeamConfig.teams = $scope.TeamConfig.teams.concat(_obj.data);
-                $scope.TeamConfig.errormsg = !$scope.TeamConfig.teams.length;
-                $scope.TeamConfig.infinite = _obj.data.length;
-                $ionicLoading.hide();
+                $scope.config = $scope.myteamCconfig;
+
+
                 callback && callback();
-                MideApp.MemCache.save('team-list', $scope.TeamConfig);
-                MideApp.LocCache.save('team-list', $scope.TeamConfig);
 
-                if ($scope.TeamConfig.page > 5) {
-                    $scope.TeamConfig.infinite = 0;
+            }, function(data, status) {
+                MideApp.myNotice("网络错误" + status)
+                if (cordova) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, $scope.Tab_isActive + ".json")
+                        .then(function(success) {
+                            $scope.myteamCconfig = angular.fromJson(success);
+                            $scope.myteamCconfig.infinite = 0;
+                        }, function(error) {});
                 }
 
-            }, function() {
-                // $scope.$broadcast('scroll.infiniteScrollComplete');
+                callback && callback();
             });
+        };
+        var load_page_searchConfig = function(callback) {
+            try {
+                if (!$cordovaNetwork.isOnline()) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, $scope.Tab_isActive + ".json")
+                        .then(function(success) {
+                            $scope.searchConfig = angular.fromJson(success);
+                            $scope.searchConfig.infinite = 0;
+                        }, function(error) {});
+                    callback && callback();
+                    return MideApp.myNotice('暂无网络连接...');
+                }
+            } catch (e) {
+                // console.log(e);
+            }
 
+            var GetMyTeamList_params = {
+                'PageIndex': $scope.searchConfig.page,
+                'teamname': $scope.searchConfig.teamName
+            };
+
+
+            MideApp.ajaxPost('GetMyTeamList.ashx', GetMyTeamList_params, function(data) {
+                if (data.code == 0) {
+                    if (!(data.data == null || data.data == '')) {
+                        if ($scope.searchConfig.page == 1) {
+                            $scope.searchConfig.dataList = data.data;
+                        } else {
+                            $scope.searchConfig.dataList = $scope.searchConfig.dataList.concat(data.data);
+                        }
+                        $scope.searchConfig.page = $scope.searchConfig.page + 1;
+                        $scope.searchConfig.errormsg = !$scope.searchConfig.dataList.length;
+                        $scope.searchConfig.infinite = data.data.length > 0;
+
+                        MideApp.LocCache.save('searchTeamList', $scope.searchConfig);
+                        MideApp.writeFile($cordovaFile, $scope.Tab_isActive + ".json", JSON.stringify($scope.searchConfig), true);
+
+                    } else {
+                        $scope.searchConfig.infinite = false;
+                    }
+
+                } else {
+                    $scope.searchConfig.infinite = false;
+                }
+
+                $scope.config = $scope.searchConfig;
+
+
+                callback && callback();
+
+            }, function(data, status) {
+                MideApp.myNotice("网络错误" + status)
+                if (cordova) {
+                    $cordovaFile.readAsText(cordova.file.externalDataDirectory, $scope.Tab_isActive + ".json")
+                        .then(function(success) {
+                            $scope.searchConfig = angular.fromJson(success);
+                            $scope.searchConfig.infinite = 0;
+                        }, function(error) {});
+                }
+
+                callback && callback();
+            });
         };
         $scope.moreDataCanBeLoaded = function() {
             return true;
         }
 
         $scope.infinite = function() {
-            load_page(function() {
-                $scope.$broadcast('scroll.infiniteScrollComplete');
-            });
+            if ($scope.Tab_isActive == "myteam") {
+                load_page_myteamCconfig(function() {
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                });
+            } else {
+                load_page_searchConfig(function() {
+                    $scope.$broadcast('scroll.infiniteScrollComplete');
+                });
+            }
+
         }
         $scope.doRefresh = function() {
-            $scope.TeamConfig.teams = [];
-            $scope.TeamConfig.page = 1;
-            load_page(function() {
-                $scope.$broadcast('scroll.refreshComplete');
-            });
+            $scope.config.page = 1;
+            if ($scope.Tab_isActive == "myteam") {
+                load_page_myteamCconfig(function() {
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+            } else {
+                load_page_searchConfig(function() {
+                    $scope.$broadcast('scroll.refreshComplete');
+                });
+            }
+
         }
 
+        $scope.searchTeam = function() {
+            $scope.searchConfig.page = 1;
+            load_page_searchConfig(function() {
+                $scope.$broadcast('scroll.refreshComplete');
+                $scope.$broadcast('scroll.infiniteScrollComplete');
+            });
+        };
+
+        $scope.createTeam = {};
         $ionicModal.fromTemplateUrl('templates/createTeam.html', {
             scope: $scope,
             animation: 'slide-in-right'
@@ -2887,11 +3673,9 @@ angular.module('starter.controllers', [])
         $scope.closeCreateTeamModal = function() {
             $scope.CreateTeamModal.hide();
         };
-        $scope.showCreateTeamModal = function(id) {
-            $scope.showId = {
-                "id": id
-            };
-            $ionicScrollDelegate.scrollTop();
+        $scope.showCreateTeamModal = function() {
+
+            // $ionicScrollDelegate.scrollTop();
             $scope.CreateTeamModal.show();
         };
         $scope.$on('$destroy', function() {
@@ -2899,6 +3683,27 @@ angular.module('starter.controllers', [])
         });
 
         $scope.showCreateTeamSheet = function(info) {
+            if (angular.isUndefined($scope.createTeam.name)) {
+                return MideApp.myNotice('团队名未填写');
+            }
+            if (angular.isUndefined($scope.createTeam.linkman)) {
+                return MideApp.myNotice('联系人未填写');
+            }
+            if (angular.isUndefined($scope.createTeam.linkphone)) {
+                return MideApp.myNotice('联系电话异常,应为11位数字');
+            }
+            if (angular.isUndefined($scope.createTeam.linkaddress)) {
+                return MideApp.myNotice('地址未填写');
+            }
+            if (angular.isUndefined($scope.createTeam.teamaim)) {
+                return MideApp.myNotice('详情未填写');
+            }
+            if (angular.isUndefined($scope.createTeam.serviceintention)) {
+                return MideApp.myNotice('服务意愿未填写');
+            }
+            if (angular.isUndefined($scope.createTeam.region)) {
+                return MideApp.myNotice('区域未填写');
+            }
             if (typeof info == 'undefined') {
                 info = "";
             };
@@ -2918,32 +3723,38 @@ angular.module('starter.controllers', [])
 
                     if (index == 0) {
                         $ionicLoading.show();
-                        MideApp.httpGet('mideData/user.json', function(data) {
+                        var TeamAction_params = {
+                            'teamid': 0,
+                            'menberid': $scope.mideApp_user._id,
+                            'captainid': $scope.mideApp_user._id,
+                            'name': $scope.createTeam.name,
+                            'opc': 5,
+                            'linkman': $scope.createTeam.linkman,
+                            'linkphone': $scope.createTeam.linkphone,
+                            'linkaddress': $scope.createTeam.linkaddress,
+                            'teamaim': $scope.createTeam.teamaim,
+                            'serviceintention': $scope.createTeam.serviceintention,
+                            'region': $scope.createTeam.region
+                        };
+                        MideApp.ajaxPost('TeamAction.ashx', TeamAction_params, function(data) {
 
-                            var _id = $scope.TeamConfig.teams.length + 1;
-                            var _now = $filter("date")(new Date, "yyyy-MM-dd HH:mm:ss");
-                            var _obj = {
-                                "data": [{
-                                    "id": _id,
-                                    "title": _id + "医院义工", //标题
-                                    "sponsorId": 1, //发起人id
-                                    "sponsor": "oky", //发起人
-                                    "contacts": "oky", //联系人
-                                    "phone": "13580530583",
-                                    "type": "活动类型",
-                                    "region": "所属区域",
-                                    "activityTime": "所属区域",
-                                    "location": "所属区域",
-                                    "totalNumber": "所属区域",
-                                    "content": "去因为做义工，帮助病人日常生活",
-                                    "addtime": _now
-                                }]
+                            if (data.code == 0) {
+                                $scope.myteamCconfig.dataList.push($scope.createTeam);
+                                MideApp.LocCache.save('myteamList', $scope.myteamCconfig);
+                                $rootScope.$broadcast('myteam.update');
+
+                                MideApp.myNotice('创建团队成功', 1500, function() {
+                                    $scope.createTeam = {};
+                                    $scope.closeCreateTeamModal();
+                                });
+
+                            } else {
+                                MideApp.myNotice(data.message);
                             }
-                            $scope.TeamConfig.teams = $scope.TeamConfig.teams.concat(_obj.data);
-                            $ionicLoading.hide();
 
-                            MideApp.myNotice(info + '成功')
-                            $scope.closeCreateTeamModal();
+                        }, function(data, status) {
+                            return MideApp.myNotice("网络错误" + status)
+
                         });
                     } else {
                         return true;
@@ -2974,15 +3785,163 @@ angular.module('starter.controllers', [])
             $scope.teamDetailModal.hide();
         };
         $scope.showTeamDetailModal = function(id) {
-            $scope.showId = {
-                "id": id
+
+            $scope.current_team = Tools.findById($scope.config.dataList, id);
+
+            var UpdateActivity_params = {
+                'menberID': $scope.mideApp_user._id,
+                'teamid': id,
+                'opc': 4
             };
-            $ionicScrollDelegate.scrollTop();
-            $scope.teamDetailModal.show();
+            MideApp.ajaxPost('TeamAction.ashx', UpdateActivity_params, function(data) {
+                if (data.code == 0) {
+                    $scope.current_team.menberlist = data.data;
+
+                    if ($scope.current_team._captainid == $scope.mideApp_user._id) {
+
+                        $scope.buttonName = '解散';
+
+                    } else {
+
+                        if ($scope.current_team.menberlist.length != 0) {
+                            var _me = Tools.findById($scope.current_team.menberlist, $scope.mideApp_user._id);
+                            if (_me) {
+                                $scope.buttonName = '退出团队';
+                            } else {
+                                $scope.buttonName = '加入';
+
+                            }
+                        } else {
+                            $scope.buttonName = '加入';
+                        }
+                    }
+
+                } else {
+                    $scope.activityConfig.infinite = false;
+                    return false;
+                }
+
+                $ionicScrollDelegate.$getByHandle('teamDetailMainScroll').scrollTop();
+                $scope.teamDetailModal.show();
+
+            }, function(data, status) {
+                return MideApp.myNotice("网络错误" + status)
+
+            });
         };
         $scope.$on('$destroy', function() {
             $scope.teamDetailModal.remove();
         });
+
+        $scope.showTeamAction = function() {
+            $ionicActionSheet.show({
+                titleText: '确认' + $scope.buttonName + '？',
+                buttons: [{
+                    text: $scope.buttonName
+                }],
+                destructiveText: '',
+                cancelText: "取消",
+                cancel: function() {
+                    console.log('CANCELLED');
+                },
+                buttonClicked: function(index) {
+
+                    if (index == 0) {
+                        TeamAction();
+                    } else {
+                        return true;
+                    }
+
+                    return true;
+
+
+                },
+                destructiveButtonClicked: function() {
+                    console.log('DESTRUCT');
+                    return true;
+                },
+                cssClass: "wg-sheet"
+            });
+        };
+        var TeamAction = function() {
+            //1参加活动，2退出活动，3完成活动（发起人权利),4撤销活动,5.获取活动参与者列表
+            var _opc = 1;
+            switch ($scope.buttonName) {
+                case '加入':
+                    _opc = 1;
+                    break;
+                case '退出团队':
+                    _opc = 2;
+                    break;
+                case '解散':
+                    _opc = 3;
+                    break;
+                case '创建团队':
+                    _opc = 5;
+                    break;
+                default:
+                    break;
+            }
+            var TeamAction_params = {
+                'menberid': $scope.mideApp_user._id,
+                'teamid': $scope.current_team._id,
+                'opc': _opc
+            };
+            MideApp.ajaxPost('TeamAction.ashx', TeamAction_params, function(data) {
+
+                if (data.code == 0) {
+                    switch ($scope.buttonName) {
+                        case '加入':
+                            $scope.current_team.menberlist.push($scope.mideApp_user);
+                            $scope.myteamCconfig.dataList.push($scope.current_team);
+                            MideApp.LocCache.save('myteamList', $scope.myteamCconfig);
+                            $rootScope.$broadcast('myteam.update');
+                            $scope.buttonName = '退出团队'
+                            MideApp.myNotice('您成功加入该团队');
+                            break;
+                        case '退出团队':
+                            $scope.buttonName = '加入'
+                            MideApp.myNotice('您已退出该团队');
+                            for (var i = 0; i < $scope.current_team.menberlist.length; i++) {
+                                if ($scope.current_team.menberlist[i]._id == $scope.mideApp_user._id) {
+                                    $scope.current_team.menberlist.splice(i, 1);
+
+                                }
+                            }
+                            for (var i = 0; i < $scope.myteamCconfig.dataList.length; i++) {
+                                if ($scope.myteamCconfig.dataList[i]._id == $scope.current_team._id) {
+                                    $scope.myteamCconfig.dataList.splice(i, 1);
+
+                                }
+                            }
+                            MideApp.LocCache.save('myteamList', $scope.myteamCconfig);
+                            $rootScope.$broadcast('myteam.update');
+                            break;
+                        case '解散':
+                            for (var i = 0; i < $scope.myteamCconfig.dataList.length; i++) {
+                                if ($scope.myteamCconfig.dataList[i]._id == $scope.current_team._id) {
+                                    $scope.myteamCconfig.dataList.splice(i, 1);
+
+                                }
+                            }
+                            MideApp.LocCache.save('myteamList', $scope.myteamCconfig);
+                            $rootScope.$broadcast('myteam.update');
+                            $scope.buttonName = ''
+                            MideApp.myNotice("该团队已解散", 1500, function() {
+                                $scope.closeTeamDetailModal();
+                            })
+                            break;
+                        default:
+                            break;
+                    }
+
+                }
+
+            }, function(data, status) {
+                return MideApp.myNotice("网络错误" + status)
+
+            });
+        }
 
     })
 

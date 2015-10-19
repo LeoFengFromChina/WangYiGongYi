@@ -229,7 +229,7 @@ angular.module('starter.services', ['ngCordova'])
 
             return temp.toLowerCase();
         }
-         var _findById = function(a, val) {
+        var _findById = function(a, val) {
 
             for (var i = 0; i < a.length; i++) {
                 if (a[i]._id == val) {
@@ -238,6 +238,13 @@ angular.module('starter.services', ['ngCordova'])
             }
             return null;
         };
+        var formatTime = function(val) {
+            var re = /-?\d+/;
+            var m = re.exec(val);
+            var d = new Date(parseInt(m[0]));
+            // 按【2012-02-13 09:09:09】的格式返回日期
+            return d.format("yyyy-MM-dd hh:mm:ss");
+        }
         return {
             MD5: function(string) {
                 return MD5(string);
@@ -245,10 +252,13 @@ angular.module('starter.services', ['ngCordova'])
             findById: function(a, val) {
                 return _findById(a, val);
             },
+            formatTime: function(val) {
+                return formatTime(val);
+            }
         };
     })
     .factory('RankTabs', function() {
-        
+
         return [{
             value: 'all',
             label: '全国'
@@ -271,6 +281,7 @@ angular.module('starter.services', ['ngCordova'])
         };
     })
     .filter('topicFilter', function() {
+
         return function(data, id) {
             var result = {};
             if (data) {
@@ -282,6 +293,55 @@ angular.module('starter.services', ['ngCordova'])
             }
             return result;
         };
+    })
+    .filter('CdateTime', function() {
+        Date.prototype.format = function(format) //author: meizz
+            {
+                var o = {
+                    "M+": this.getMonth() + 1, //month
+                    "d+": this.getDate(), //day
+                    "h+": this.getHours(), //hour
+                    "m+": this.getMinutes(), //minute
+                    "s+": this.getSeconds(), //second
+                    "q+": Math.floor((this.getMonth() + 3) / 3), //quarter
+                    "S": this.getMilliseconds() //millisecond
+                }
+                if (/(y+)/.test(format)) format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+                for (var k in o)
+                    if (new RegExp("(" + k + ")").test(format))
+                        format = format.replace(RegExp.$1,
+                            RegExp.$1.length == 1 ? o[k] :
+                            ("00" + o[k]).substr(("" + o[k]).length));
+                return format;
+            }
+        console.log('CdateTime');
+        return function(val, type) {
+            var re = /-?\d+/;
+            var m = re.exec(val);
+            var d = new Date(parseInt(m[0]));
+            // 按【2012-02-13 09:09:09】的格式返回日期
+            console.log('CdateTime format');
+            return d.format("yyyy-MM-dd hh:mm:ss");
+        }
+    })
+    .filter('activityStatus', function() {
+        return function(val) {
+            var _stautsName = "";
+            switch (val) {
+                case 0:
+                    _stautsName = "报名中"
+                    break;
+                case 1:
+                    _stautsName = "正在开始"
+                    break;
+                case 2:
+                    _stautsName = "已结束"
+                    break;
+                default:
+                    _stautsName = "其他"
+            }
+            return _stautsName;
+        }
     })
     .directive(
         // Collection-repeat image recycling while loading
@@ -351,13 +411,13 @@ angular.module('starter.services', ['ngCordova'])
                     }
                 };
                 scope.plusBuyCount = function($event) {
-                   
+
                     if (scope.buyCount < _attrs.maxcount) {
                         myelement.removeClass("minusHidden");
                         myelement.removeClass("plusHidden");
                         scope.buyCount = parseInt(scope.buyCount) + 1;
                     } else {
-                       myelement.addClass("plusHidden");
+                        myelement.addClass("plusHidden");
                     }
 
                 };
@@ -375,69 +435,72 @@ angular.module('starter.services', ['ngCordova'])
             }
         }
     })
-    .factory('User', function(ENV, $resource, $log, $q, Storage, Push) {
-        var storageKey = 'user';
-        var resource = $resource(ENV.api + '/accesstoken');
-        var userResource = $resource(ENV.api + '/user/:loginname', {
-            loginname: ''
-        });
-        var user = Storage.get(storageKey) || {};
-        return {
-            login: function(accesstoken) {
-                var $this = this;
-                return resource.save({
-                    accesstoken: accesstoken
-                }, null, function(response) {
-                    $log.debug('post accesstoken:', response);
-                    user.accesstoken = accesstoken;
-                    $this.getByLoginName(response.loginname).$promise.then(function(r) {
-                        user = r.data;
-                        user.id = response.id;
-                        user.accesstoken = accesstoken;
+    .factory('Storage', function() {
 
-                        // set alias for jpush
-                        Push.setAlias(user.id);
-
-                        Storage.set(storageKey, user);
-                    });
-                    user.loginname = response.loginname;
-                });
-            },
-            logout: function() {
-                user = {};
-                Storage.remove(storageKey);
-
-                // unset alias for jpush
-                Push.setAlias('');
-            },
-            getCurrentUser: function() {
-                $log.debug('current user:', user);
-                return user;
-            },
-            getByLoginName: function(loginName) {
-                if (user && loginName === user.loginname) {
-                    var userDefer = $q.defer();
-                    $log.debug('get user info from storage:', user);
-                    userDefer.resolve({
-                        data: user
-                    });
-                    return {
-                        $promise: userDefer.promise
-                    };
-                }
-                return this.get(loginName);
-            },
-            get: function(loginName) {
-                return userResource.get({
-                    loginname: loginName
-                }, function(response) {
-                    $log.debug('get user info:', response);
-                    if (user && user.loginname === loginName) {
-                        angular.extend(user, response.data);
-
-                        Storage.set(storageKey, user);
+        
+        var saveStorage = function(key, val) {
+            try {
+                key = ('&' == key.substring(0, 1)) ? key : '~' + key;
+                var data=[];
+                data[key] = {
+                    'ttl': Date.now(),
+                    'val': val
+                };
+                window.localStorage.setItem(key, window.JSON.stringify(data[key]));
+                return data[key];
+            } catch (e) {
+                return false;
+            }
+        }
+        var loadStorage = function(key, ttl) {
+            try {
+                key = ('&' == key.substring(0, 1)) ? key : '~' + key;
+                var data=[];
+                data[key] = window.JSON.parse(window.localStorage.getItem(key));;
+                return (data[key] && (data[key].ttl > Date.now() - (ttl || 60 * 60 * 24 * 365) * 1000)) ? data[key].val : false;
+            } catch (e) {
+                return false;
+            }
+        }
+        var clearStorage = function(clear_key, prefix) {
+            prefix = prefix || '~';
+            Object.keys(localStorage).forEach(function(key) {
+                if (typeof(clear_key) == 'undefined') {
+                    if (key.substring(0, 1) == prefix) {
+                        window.localStorage.removeItem(key);
                     }
-                });
+                } else {
+                    if (key == prefix + clear_key) {
+                        window.localStorage.removeItem(key);
+                    }
+                }
+
+            });
+        }
+        return {
+            save: function(key, val) {
+                return saveStorage(key, val);
+            },
+            load: function(key, ttl) {
+
+                return loadStorage(key, ttl);
+            },
+            clear: function(clear_key, prefix) {
+                return clearStorage(clear_key, prefix);
+            }
+        };
+    })
+    .factory('UserCache', function(Storage) {
+        var storageKey = 'User';
+        return {
+            getUser: function(key) {
+                return Storage.load(storageKey) || {};
+            },
+            setUser:function(userValue){
+                Storage.save(storageKey,userValue);
+            },
+            clearUser:function(){
+                Storage.clear(storageKey)
             }
         };
     })
@@ -530,6 +593,73 @@ angular.module('starter.services', ['ngCordova'])
         }, {
             label: '其它'
         }];
+        var HelpTypeData = [{
+            label: '弱势帮扶',
+            value: [{
+                label: '思想引导'
+
+            }, {
+                label: '政策帮扶'
+
+            }, {
+                label: '资金帮扶'
+
+            }, {
+                label: '人才培养'
+
+            }, {
+                label: '实物帮扶'
+
+            }, {
+                label: '服务帮扶'
+
+            }, {
+                label: '其他'
+
+            }]
+        }, {
+            label: '公益慈善',
+            value: [{
+                label: '环保节能'
+
+            }, {
+                label: '教育助学'
+
+            }, {
+                label: '扶贫救灾'
+
+            }, {
+                label: '心理健康'
+
+            }, {
+                label: '社区服务'
+
+            }, {
+                label: '其他'
+
+            }]
+        }, {
+            label: '社会服务',
+            value: [{
+                label: '思想引导'
+
+            }, {
+                label: '政策帮扶'
+
+            }, {
+                label: '资金帮扶'
+
+            }, {
+                label: '人才培养'
+
+            }, {
+                label: '实物帮扶'
+
+            }, {
+                label: '服务帮扶'
+
+            }]
+        }];
         return {
             getCityData: function() {
                 return CityData;
@@ -539,6 +669,9 @@ angular.module('starter.services', ['ngCordova'])
             },
             getIntentionData: function() {
                 return IntentionData;
+            },
+            getHelpTypeData: function() {
+                return HelpTypeData;
             }
         }
     });

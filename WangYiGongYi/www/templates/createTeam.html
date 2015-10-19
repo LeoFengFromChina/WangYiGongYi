@@ -1,55 +1,42 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear" ng-click="closeCreateTeamModal()">关闭</button>
+            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeCreateTeamModal()"></button>
         </div>
-        <h1 class="title">发布活动</h1>
+        <h1 class="title">创建团队</h1>
         <div class="buttons">
-            <button class="button button-clear icon " ng-click="showCreateTeamSheet()">提交</button>
+            <button class="button button-clear icon " ng-click="showCreateTeamSheet('创建')">提交</button>
         </div>
     </ion-header-bar>
     <ion-content padding="false" class="has-header no-footer" has-bouncing="true">
         <div class="list">
             <label class="item item-input">
-                <span class="input-label">主题:</span>
-                <input type="text" ng-model="activity.title" placeholder="请输入主题" required>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">发起人:</span>
-                <input type="text" ng-model="activity.sponsor" placeholder="请输入发起人" required>
+                <span class="input-label">团队名:</span>
+                <input type="text" ng-model='createTeam.name' placeholder="请输入团队名" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">联系人:</span>
-                <input type="text" ng-model="activity.contacts" placeholder="请输入联系人" required>
+                <input type="text" ng-model="createTeam.linkman" placeholder="请输入联系人" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">电话:</span>
-                <input type="text" ng-model="activity.phone" placeholder="请输入电话" required>
-            </label>
-              <label class="item item-input">
-                <span class="input-label">活动类型:</span>
-                <input type="text" ng-model="activity.type" placeholder="请输入类型" required>
+                <input type="tel" ng-model="createTeam.linkphone" placeholder="11位数字" maxlength='11' ng-pattern="/^[0-9]{11}$/" required>
             </label>
             <label class="item item-input">
-                <span class="input-label">所属区域:</span>
-                <input type="text" ng-model="activity.region" placeholder="请输所属区域" required>
+                <span class="input-label">地址:</span>
+                <input type="text" ng-model="createTeam.linkaddress" placeholder="请输入地址" required>
             </label>
             <label class="item item-input">
-                <span class="input-label">活动时间:</span>
-                <input type="text" ng-model="activity.activityTime" placeholder="请输入活动时间" required>
+                <span class="input-label">服务意愿:</span>
+                <input type="text" ng-model="createTeam.serviceintention" placeholder="请输入服务意愿" required>
             </label>
-          
             <label class="item item-input">
-                <span class="input-label">活动地点:</span>
-                <input type="text" ng-model="activity.location" placeholder="请输入活动地点" required>
-            </label>
-              <label class="item item-input">
-                <span class="input-label">参与人数:</span>
-                <input type="text" ng-model="activity.totalNumber" placeholder="请输入参与人数" required>
+                <span class="input-label">区域:</span>
+                <input type="text" ng-model="createTeam.region" placeholder="请输入活动地点" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">详细介绍:</span>
-                <textarea placeholder="请输入您的活动信息......" ng-model="activity.content"></textarea>
+                <textarea placeholder="请输入您的团队详情......" ng-model="createTeam.teamaim" required></textarea>
             </label>
         </div>
     </ion-content>

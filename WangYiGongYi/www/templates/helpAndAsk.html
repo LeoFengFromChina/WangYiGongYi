@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-close" ng-click="closeHelpAndAskModal()"></button>
+            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeHelpAndAskModal()"></button>
         </div>
         <h1 class="title title-center">求助与帮助</h1>
         </div>
@@ -20,13 +20,12 @@
             <div class="item item-avatar" collection-repeat="topic in activeConfig.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.HelpRequest._id)">
                 <img ng-src="{{topic.Author._photourl|avatarFilter}}" reset-img />
                 <!-- reset-img   -->
-                <h2>{{topic.HelpRequest._title}}</h2>
+                <h2>{{topic.HelpRequest._title}} <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span></h2>
                 <p class="summary">
-                    <span ng-if="topic.HelpRequest._status==0" class="tab status1">求助中</span>
-                    <span ng-if="topic.HelpRequest._status==1" class="tab status2">已配对</span>
-                    <span ng-if="topic.HelpRequest._status==2" class="tab status4">已完成</span>
-                    <span class="tab">发起人:</span> {{topic.Author._name}}
-                    <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span>
+                    <span class="tab">发起人:</span> {{topic.Author._nickname}}
+                    <span ng-if="topic.HelpRequest._status==0" class="tab status1 item-note">求助中</span>
+                    <span ng-if="topic.HelpRequest._status==1" class="tab status2 item-note">已配对</span>
+                    <span ng-if="topic.HelpRequest._status==2" class="tab status4 item-note">已完成</span>
                 </p>
             </div>
         </div>

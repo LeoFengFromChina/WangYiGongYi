@@ -10,7 +10,7 @@ var Patterns = {
 
 var MideApp = function() {
     var API_Host = 'http://oukeye.github.io/'; //http://api.yibeiban.com:8888';
-    var API_Home = "http://120.24.230.139/AppData/";
+    var API_Home = "http://120.24.230.139/AppData/";//"http://192.168.1.105/datainterface/";//
     var API_Lock = false;
 
     /* To be inited or changed in ctrl */
@@ -173,7 +173,7 @@ var MideApp = function() {
             prev && prev();
             $ionicLoading.hide();
             post && post();
-        }, timeout || 2000);
+        }, timeout || 1500);
         return false;
     }
 
@@ -181,7 +181,7 @@ var MideApp = function() {
         if (!isOnline()) {
             return myLogger('Connection.NONE');
         }
-        var lock = target; //var lock = API_Host+target + ":" + JSON.stringify(params);
+        var lock = API_Home+target + ":" + JSON.stringify(params);
         if (API_Lock == lock) {
             return myLogger('Http Locked:' + API_Lock);
         }
@@ -211,7 +211,7 @@ var MideApp = function() {
             API_Lock = false;
             if (true) {
                 $ionicLoading.hide();
-                fail ? fail(data) : myNotice(data ? data.errmsg : '网络错误');
+                fail ? fail(data, status) : myNotice(data ? data.errmsg : '网络错误');
             }
         });
 

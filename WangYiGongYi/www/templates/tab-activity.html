@@ -1,0 +1,50 @@
+<ion-view view-title="网益公益">
+ <ion-nav-buttons side="right">
+        <button class="button  button-clear button-linght" ng-click="showPushActivityModal()" ng-if="mideApp_user._flag>0">发布活动</button>
+    </ion-nav-buttons>
+    <div class="tabs-striped  tabs-color-positive tabs-top tabs-light tabs-icon-top">
+        <div class="tabs">
+            <a ng-class="{all: 'tab-item active', join: 'tab-item', create: 'tab-item'}[Tab_isActive]" data-active="all" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">所有活动</a>
+            <a ng-class="{all: 'tab-item', join: 'tab-item active', create: 'tab-item'}[Tab_isActive]" data-active="join" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">我参与的活动</a>
+            <a ng-class="{all: 'tab-item', join: 'tab-item', create: 'tab-item active'}[Tab_isActive]" data-active="create" ng-click="changeTab($event)" style="font-size:16px;line-height:48px;">我发布的活动</a>
+        </div>
+    </div>
+    <ion-content class="has-tabs has-subheader has-header " has-bouncing="true">
+        <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
+        </ion-refresher>
+        <div class="list " collection-repeat="activity in activityConfig.activitys" collection-item-height="250px" ng-click="showActivityModal(activity._id)">
+            <div class="card">
+                <div class="item ">
+                    <h2>{{activity._title}}</h2>
+                    <!-- <p>November 05, 1955</p> -->
+                </div>
+                <div class="item item-body" style="height:134px;">
+                    <!-- <img class="full-image" src="img/delorean.jpg"> -->
+                    <p style='margin-top:0;'>
+                        {{activity._detail}}
+                    </p>
+                   <!--  <p>
+                        <a href="#" class="subdued">1 Like</a>
+                        <a href="#" class="subdued">5 Comments</a>
+                    </p> -->
+                </div>
+                <div class="item tabs tabs-secondary tabs-icon-left">
+                    <a class="tab-item left" href="#">
+                        <i class="icon ion-ios-person positive"></i>{{activity._linkman}}
+                    </a>
+                    <a class="tab-item" href="#">
+                     <i class="icon ion-ios-telephone positive"></i>{{activity._linkphone}}
+                    </a>
+                    <a class="tab-item right" href="#">
+                        <i class="icon ion-ios-alarm positive"></i>{{activity._status | activityStatus}}
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div ng-if="activityConfig.activitys.length==0" style="height:100%;color:#e6e6e6;padding:20px;">
+            <i class="ion-chatbubble-working center" style="font-size:80px;"></i>
+            <div class="center" style="font-size:20px;color:#afafaf;">没有活动</div>
+        </div>
+        <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="activityConfig.infinite" spinner="spiral" class="wg_spinner"></ion-infinite-scroll>
+    </ion-content>
+</ion-view>

@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-close" ng-click="closeBasicInfoModal()"></button>
+            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeBasicInfoModal()"></button>
         </div>
         <h1 class="title title-center">修改个人信息</h1>
         </div>
@@ -16,53 +16,14 @@
     <ion-content class="has-subheader" delegate-handle="basicInfoScroll">
         <div ng-if="isActive == 'a'">
             <form ng-submit="changeBasic()" name="changeBasicForm">
-                <!--  <div class="list padding">
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">账号:</span>
-                        <input type="text" ng-model="mideApp_user_basic._name" placeholder="请输入账号" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">性别:</span>
-                        <input type="text" ng-model="mideApp_user_basic._sex" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff" required>
-                    </label>
-                    <label class="item-input padding-left padding-right" ng-click="getDate()">
-                        <span class="input-label">出身年月:</span>
-                        <span class="" ng-show="mideApp_user_basic._birthday">{{mideApp_user_basic._birthday|date:"yyyy-MM-dd"}}</span>
-                        <span class="tips-info" ng-show="!mideApp_user_basic._birthday">请选择日期</span>
-                        <input type="text" ng-model="mideApp_user_basic.birthday" placeholder="请选择日期" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">联系电话:</span>
-                        <input type="text" ng-model="mideApp_user_basic._phone" placeholder="请输入电话号码" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">邮箱:</span>
-                        <input type="text" ng-model="mideApp_user_basic._email" placeholder="请输入邮箱" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">QQ:</span>
-                        <input type="text" ng-model="mideApp_user_basic._qq" placeholder="请输入QQ号码" required>
-                    </label>
-                    <label class="padding">
-                        <button class="button button-block button-positive" ng-disabled=changeBasicForm.$invalid type="submit">保存修改</button>
-                    </label>
-                </div> -->
                 <div class="list css-valid-form">
                     <div class="item item-input item-avatar-right headImg_40 text-midel" style="padding-top:6px;padding-bottom:6px;" ng-click="showGetImagesheet()">
                         <img ng-src="{{mideApp_user_basic._photourl||'img/commentfailure.jpg'}}" style="width:100%"> 头像
                     </div>
-                   <!--  <label class="item item-input">
-                        <span class="input-label">账号:</span>
-                        <input type="text" ng-model="mideApp_user_basic._name" placeholder="长度6~32位，字母或数字组合" required ng-minlength="6" ng-maxlength="32">
-                    </label> -->
-                    <!--  <label class="item item-input">
-                        <span class="input-label">密码:</span>
-                        <input type="password" ng-model="mideApp_user_basic.password" placeholder="至少6位，字母或数字组合" ng-minlength="6" required>
-                    </label>
                     <label class="item item-input">
-                        <span class="input-label">确认密码:</span>
-                        <input type="password" ng-model="mideApp_user_basic.confirmPassword" placeholder="再输入密码" required>
-                    </label>-->
+                        <span class="input-label">姓名:</span>
+                        <input type="tel" ng-model="mideApp_user_basic._nickname" placeholder="请输入姓名" minlength='2' maxlength='4'  required>
+                    </label>
                     <label class="item item-input">
                         <span class="input-label">性别:</span>
                         <input type="text" ng-model="mideApp_user_basic._sex" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff">
@@ -93,65 +54,22 @@
         </div>
         <div ng-if="isActive == 'b'">
             <form ng-submit="changeForHelp()" name="changeForHelpFrom">
-                <!-- <div class="list padding">
-                    <label class="item item-input ">
-                        <span class="input-label">国家:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic.country" ng-options="country.label for country in mideApp_user_basic.countries">
-                            <option value="">请选择国家</option>
-                        </select>
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">省份:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic.province" ng-options="province.label for province in mideApp_user_basic.country.provinces">
-                            <option value="">请选择省份</option>
-                        </select>
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">城市:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic.city" ng-options="city.label for city in mideApp_user_basic.province.cities">
-                            <option value="">请选择城市</option>
-                        </select>
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">区:</span>
-                        <input type="text" ng-model="mideApp_user_basic.district" placeholder="请输入所属区" required>
-                    </label>
-                    <label class="item item-input">
-                        <span class="input-label">社区:</span>
-                        <input type="text" ng-model="mideApp_user_basic.community" placeholder="请输入社区" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">身份证号:</span>
-                        <input type="text" ng-model="mideApp_user_basic.identity " placeholder="请输入身份证号" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">常住地址:</span>
-                        <input type="text" ng-model="mideApp_user_basic.address" placeholder="再输入常住地址" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">微信号码:</span>
-                        <input type="text" ng-model="mideApp_user_basic.weixinNumber" placeholder="请输入微信号码" required>
-                    </label>
-                    <label class="padding">
-                        <button class="button button-block button-positive" ng-disabled=changeForHelpFrom.$invalid type="submit">保存修改</button>
-                    </label>
-                </div> -->
                 <div class="list">
                     <label class="item item-input ">
                         <span class="input-label">国家:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic._country" ng-options="_country.label for _country in mideApp_user_basic.countries">
+                        <select ng-model="mideApp_user_basic.this_country" ng-options="country.label for country in mideApp_user_basic.countries">
                             <option value="">请选择国家</option>
                         </select>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">省份:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic._province" ng-options="_province.label for _province in mideApp_user_basic.country.provinces">
+                        <select class="form-control" ng-model="mideApp_user_basic.this_provinces" ng-options="_province.label for _province in mideApp_user_basic.this_country.provinces" required>
                             <option value="">请选择省份</option>
                         </select>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">城市:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic._city" ng-options="_city.label for _city in mideApp_user_basic.province.cities">
+                        <select class="form-control" ng-model="mideApp_user_basic.this_city" ng-options="_city.label for _city in mideApp_user_basic.this_provinces.cities" required>
                             <option value="">请选择城市</option>
                         </select>
                     </label>
@@ -165,7 +83,7 @@
                     </label>
                     <label class="item item-input">
                         <span class="input-label">身份证号:</span>
-                        <input type="text" ng-model="mideApp_user_basic._personalid " placeholder="请输入身份证号" required>
+                        <input type="text" ng-model="mideApp_user_basic._personalid " placeholder="请输入身份证号" maxlength='18'  ng-pattern="/^[0-9]{18}$/" required>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">常住地址:</span>
@@ -177,43 +95,16 @@
                     </label>
                 </div>
                 <div class="padding">
-                     <button class="button button-block button-positive" ng-disabled=changeForHelpFrom.$invalid type="submit">保存修改</button>
+                    <button class="button button-block button-positive" ng-disabled=changeForHelpFrom.$invalid type="submit">{{mideApp_user_basic._flag==0?'申请为求助者':'保存修改'}}</button>
                 </div>
             </form>
         </div>
         <div ng-if="isActive == 'c'">
-            <!-- <form ng-submit="changeVolunteer()" name="changeVolunteerForm">
-                <div class="list padding">
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">学历:</span>
-                        <input type="text" ng-model="mideApp_user_basic.education" placeholder="请输入学历" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">专业:</span>
-                        <input type="text" ng-model="mideApp_user_basic.profession" placeholder="请输入专业" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">特长:</span>
-                        <input type="text" ng-model="mideApp_user_basic.speciality" placeholder="请输入特长" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">选择服务意愿:</span>
-                        <input type="text" ng-model="mideApp_user_basic.intention" placeholder="选择服务意愿" required>
-                    </label>
-                    <label class="item-input padding-left padding-right">
-                        <span class="input-label">选择服务时间:</span>
-                        <input type="text" ng-model="mideApp_user_basic.intentionTime" placeholder="选择服务时间" required>
-                    </label>
-                    <label class="padding">
-                        <button class="button button-block button-positive" ng-disabled=changeVolunteerForm.$invalid type="submit">保存修改</button>
-                    </label>
-                </div>
-            </form> -->
-            <form name=changeVolunteerForm>
+            <form name=changeVolunteerForm ng-submit="changeVolunteer()">
                 <div class="list">
                     <label class="item item-input">
                         <span class="input-label">学历:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic._education" ng-options="_education.label for _education in mideApp_user_basic.educationData">
+                        <select class="form-control" ng-model="mideApp_user_basic.this_education" ng-options="_education.label for _education in mideApp_user_basic.educations">
                             <option value="">请选择学历</option>
                         </select>
                     </label>
@@ -228,18 +119,17 @@
                     <label class="item item-input">
                         <span class="input-label">服务意愿:</span>
                         <!-- <input type="text" ng-model="mideApp_user_basic.intention" placeholder="选择服务意愿" required> -->
-                        <select class="form-control" ng-model="mideApp_user_basic._serviceintention" ng-options="_serviceintention.label for _serviceintention in mideApp_user_basic.intentionData">
+                        <select class="form-control" ng-model="mideApp_user_basic.this_serviceintention" ng-options="_serviceintention.label for _serviceintention in mideApp_user_basic.serviceintentions">
                             <option value="">请选择服务意愿</option>
                         </select>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">服务时间:</span>
-                        <input type="text" ng-model="mideApp_user_basic._servicetimeinterval" placeholder="选择服务时间" required>
+                        <input type="text" ng-model="mideApp_user_basic._servicetimeinterval" placeholder="选择服务时段" required>
                     </label>
-
                 </div>
                 <div class="padding">
-                     <button class="button button-block button-positive" ng-disabled=changeVolunteerForm.$invalid type="submit">保存修改</button>
+                    <button class="button button-block button-positive" ng-disabled=changeVolunteerForm.$invalid type="submit">{{mideApp_user_basic._flag<2?'申请为志愿者':'保存修改'}}</button>
                 </div>
             </form>
         </div>

@@ -1,0 +1,48 @@
+<ion-modal-view>
+    <ion-header-bar class=" bar-positive nav-title-slide-full">
+        <div class="buttons">
+            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeActivityModal()"></button>
+        </div>
+        <h1 class="title title-center">网益公益</h1>
+        <div class="buttons">
+            <button class="button button-clear icon " ng-click="showUpdateActivity()" ng-if="buttonName!=''">{{buttonName}}</button>
+        </div>
+    </ion-header-bar>
+    <ion-content has-bouncing="true" padding="false" class="has-header  no-footer" delegate-handle="activityMainScroll">
+        <div ng-if="current_activitys">
+            <div class="list card topics ">
+                <div class="item">
+                    <h2>{{current_activitys._title}}</h2>
+                </div>
+                <div class="item summary" style="padding:4px;">
+                    <div class="row">
+                        <div class="col text-ellipsis"><span>联系人:</span> {{current_activitys._linkman}}</div>
+                        <div class="col text-ellipsis text-right  contactPhone"> <a href="tel:{{current_activitys._linkphone}}"><i class="ion-ios-telephone "> </i>{{current_activitys._linkphone}}</a></div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span>活动类型:</span> {{current_activitys._activitytype}}</div>
+                        <div class="col text-right">人数:{{current_activitys._needmenbercount}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span>区域:</span> {{current_activitys._region}}</div>
+                        <div class="col text-right">开始时间:{{current_activitys._begintime | CdateTime }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span>状态:</span> {{current_activitys._statusName}}</div>
+                        <div class="col text-right">发布时间:{{current_activitys._createdate | CdateTime }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col"><span>地址:</span> {{current_activitys._address}}</div>
+                    </div>
+                </div>
+                <div class="item item-body" ng-bind-html="current_activitys._detail">
+                </div>
+                <div class="item  item-divider">报名列表</div>
+                <a href="tel:{{member._phone}}" class="item item-avatar item-icon-right" collection-repeat="member in current_activitys.menberlist">
+                    <img ng-src="{{member._photourl}}">{{member._name}}
+                    <span class="item-note"><i class="icon ion-ios-telephone positive"></i></span>
+                </a>
+            </div>
+        </div>
+    </ion-content>
+</ion-modal-view>

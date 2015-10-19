@@ -1,4 +1,7 @@
 <ion-view view-title="网益公益">
+  <ion-nav-buttons side="left">
+        <button class="button icon-left ion-ios-arrow-left button-clear button-linght" ng-click="back()"></button>
+    </ion-nav-buttons>
     <ion-content class="has-tabs "  has-bouncing="true">
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
@@ -13,19 +16,19 @@
                 </ion-option-button>
             </ion-item>
         </ion-list> -->
-        <ion-list show-delete="flag.showDelete" ng-if="chats">
-            <ion-item ng-repeat="chat in chats">
+        <ion-list show-delete="flag.showDelete" ng-if="chatsConfig.chats">
+            <ion-item ng-repeat="chat in chatsConfig.chats">
                 <p>{{chat.addtime}}</p>
-                <p style="color:#000;font-weight:bold">{{chat.title}}</p>
-                <p style="color:#000;white-space: pre">{{chat.content}}</p>
-                <ion-option-button class="button-assertive icon ion-close-round" ng-click="deleteItem(chat,chat.id)"></ion-option-button>
-                <ion-delete-button class="ion-minus-circled" ng-click="deleteItem(chat,chat.id)"></ion-delete-button>
+                <p style="color:#000;font-weight:bold">{{chat._title}}</p>
+                <p style="color:#000;white-space: pre">{{chat._noticecontent}}</p>
+                <ion-option-button class="button-assertive icon ion-close-round" ng-click="deleteItem(chat,chat._id)"></ion-option-button>
+                <ion-delete-button class="ion-minus-circled" ng-click="deleteItem(chat,chat._id)"></ion-delete-button>
             </ion-item>
         </ion-list>
-        <div ng-if="!chats"  style="height:100%;color:#e6e6e6;padding:20px;">
+        <div ng-if="!chatsConfig.chats"  style="height:100%;color:#e6e6e6;padding:20px;">
             <i class="ion-chatbubble-working center" style="font-size:80px;"></i>
             <div  class="center"  style="font-size:20px;color:#afafaf;">您没有消息</div>
         </div>
-        
+        <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="chatsConfig.infinite" spinner="spiral" class="wg_spinner"></ion-infinite-scroll>
     </ion-content>
 </ion-view>
