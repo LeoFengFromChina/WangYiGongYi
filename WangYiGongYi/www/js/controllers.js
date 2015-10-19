@@ -1084,9 +1084,10 @@ angular.module('starter.controllers', [])
 
                             if (data.code == 0) {
                                 // $scope.activityConfig.activitys.push($scope.pushActivity);
-                                MideApp.LocCache.save('activityList', $scope.myteamCconfig);
-                                $rootScope.$broadcast('activityList.update');
-
+                                // MideApp.LocCache.save('activityList', $scope.pushActivity);
+                                
+                                // $rootScope.$broadcast('activityList.update');
+                                $scope.doRefresh();
                                 MideApp.myNotice('发布成功', 1500, function() {
                                     $scope.pushActivity = {};
                                     $scope.closePushActivityModal();
