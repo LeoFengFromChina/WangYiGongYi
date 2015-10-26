@@ -1837,9 +1837,6 @@ angular.module('starter.controllers', [])
                     }
                     $scope.mideApp_user.privilege = privilege_list;
 
-                    $scope.mideApp_user._status = 0;
-                    $scope.mideApp_user._flag = 2;
-
                     switch ($scope.mideApp_user._flag) {
                         case 0:
                             $scope.mideApp_user._flagName = '游客';
