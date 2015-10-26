@@ -10,7 +10,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         template: '<div class="ion-load-c loading-icon"></div>加载中...'
     })
 
-.run(function($ionicHistory, $rootScope, $ionicPlatform, $http, $ionicLoading, $timeout, amMoment) {
+.run(function($ionicHistory, $rootScope, $ionicPlatform, $http, $ionicLoading, $timeout, $cordovaToast,$location, amMoment) {
     $ionicPlatform.ready(function() {
         // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
         // for form inputs)
@@ -28,8 +28,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
 
     });
 
-        // db = $cordovaSQLite.openDB({ name: "wygy.db" });
-        // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS banner (id integer primary key, username text, password text)");
+    // db = $cordovaSQLite.openDB({ name: "wygy.db" });
+    // $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS banner (id integer primary key, username text, password text)");
 
     MideApp.setMyIonicLoading($ionicLoading);
     MideApp.setMyHttp($http);
@@ -40,8 +40,19 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         disableBack: true
     });
     $ionicPlatform.registerBackButtonAction(function() {
-        MideApp.backward('tabs-show');
-    }, 5000);
+        MideApp.backward(function() {
+            if ($rootScope.backButtonPressedOnceToExit) {
+                // ionic.Platform.exitApp();
+                navigator.app.exitApp();
+            } else {
+                $rootScope.backButtonPressedOnceToExit = true;
+                $cordovaToast.showShortBottom('再按一次退出系统');
+                setTimeout(function() {
+                    $rootScope.backButtonPressedOnceToExit = false;
+                }, 2000);
+            }
+        });
+    }, 101);
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
@@ -364,6 +375,6 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         });
 
     // if none of the above states are matched, use this as the fallback
-    $urlRouterProvider.otherwise('/start');
+    $urlRouterProvider.otherwise('/tab/topics');
 
 });

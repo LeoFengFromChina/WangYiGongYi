@@ -8,7 +8,7 @@
         <ion-slide-box  class="slidebox"  auto-play="true" slide-interval="4000" does-continue="true" style="overflow: hidden;width:100%;" ng-if="banners" delegate-handle="topicsBanner">
             <div class="slider-slide" ng-repeat="banner in banners">
                 <div class="box" style="position: relative;">
-                    <img ng-src="{{banner._iconurl}}" alt="微光公益" style="width:100%;height:auto;" />
+                    <img  src="img/defaultImg.png" defaultsrc="{{banner._iconurl}}" alt="微光公益" id="banner{{banner._id}}" style="width:100%;height:auto;" default-img />
                 </div>
             </div>
         </ion-slide-box>
@@ -26,16 +26,22 @@
                 </div>
             </div>
         </div>
+        <div ng-if="config.topics.length <1"  style="height:100%;color:#e6e6e6;padding:20px;">
+            <i class="ion-chatbubble-working center" style="font-size:80px;"></i>
+            <div  class="center"  style="font-size:20px;color:#afafaf;">没有获取到数据,请下拉刷新</div>
+        </div>
         <div class=" list topics" ng-if="config.topics">
             <!--    <div class="item item-divider">求助列表</div> -->
             <div class="item item-avatar" collection-repeat="topic in config.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.HelpRequest._id)">
-                <img ng-src="{{topic.Author._photourl|avatarFilter}}" reset-img />
+                <img src='img/commentfailure.jpg' defaultsrc="{{topic.Author._photourl|avatarFilter}}" default-img />
                 <!-- reset-img   -->
                 <h2>
-                <span style="padding-right:20px;">{{topic.HelpRequest._title}}</span> <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span></h2>
+                <span style="padding-right:20px;">{{topic.HelpRequest._title}}</span> <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix" style="position: absolute;right: 10px;"></span></h2>
                 <p class="summary">
+                    <span ng-if="topic.HelpRequest._type==1" class="tab status1">求助</span>
+                    <span ng-if="topic.HelpRequest._type==2" class="tab status3">助人</span>
                     <span class="tab">发起人:</span> {{topic.Author._nickname}}
-                     <span ng-if="topic.HelpRequest._status==0" class="tab status1 item-note">求助中</span>
+                    <span ng-if="topic.HelpRequest._status==0" class="tab status1 item-note">寻找中</span>
                     <span ng-if="topic.HelpRequest._status==1" class="tab status2 item-note">已配对</span>
                     <span ng-if="topic.HelpRequest._status==2" class="tab status4 item-note">已完成</span>
                    

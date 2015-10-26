@@ -1,5 +1,5 @@
 angular.module('starter.services', ['ngCordova'])
-    .factory('Tools', function($cordovaFile) {
+    .factory('Tools', function($cordovaFile, $cordovaToast, $cordovaNetwork) {
         var MD5 = function(string) {
 
             function RotateLeft(lValue, iShiftBits) {
@@ -245,7 +245,59 @@ angular.module('starter.services', ['ngCordova'])
             // 按【2012-02-13 09:09:09】的格式返回日期
             return d.format("yyyy-MM-dd hh:mm:ss");
         }
+        var isOnline = function() {
+            return $cordovaNetwork.isOnline();
+        }
+        var showShortTop = function(message) {
+            $cordovaToast.showShortTop(message);
+        }
+        var showShortCenter = function(message) {
+            $cordovaToast.showShortCenter(message);
+        }
+        var showShortBottom = function(message) {
+            $cordovaToast.showShortBottom(message);
+        }
+        var showLongTop = function(message) {
+            $cordovaToast.showLongTop(message);
+        }
+        var showLongCenter = function(message) {
+            $cordovaToast.showLongCenter(message);
+        }
+        var showLongBottom = function(message) {
+            $cordovaToast.showLongBottom(message);
+        }
+        var inArray = function(elem, array, i) {
+            var len;
+
+            if (array) {
+                //indexOf ：jQuery开始定义了 indexOf = Array.prototype.indexOf 如果有indexOf 方法则用改方法返回，核心为indexOf方法  
+                // if (typeof(indexOf)!=) {
+                //     return indexOf.call(array, elem, i);
+                // }
+
+                len = array.length;
+                /* 
+                    注意该条语句是给i赋值用的，猛的一看该语句可能产生混淆 
+                    首先判断i的值，i ? （i < 0 ? Math.max( 0, len + i ) : i ）: 0 如果 i 未定义 或者i为0 则 把0赋值给i 
+                    如果i 定义了并且不为0 执行 i < 0 ? Math.max( 0, len + i ) : i 
+                    如果i 为负数，加上则为其加上数组长度，且其值不能小于0 
+                */
+                i = i ? i < 0 ? Math.max(0, len + i) : i : 0;
+
+                for (; i < len; i++) {
+                    // Skip accessing in sparse arrays 这么判断主要是考虑数组下标不连续的情况注意学习这种方式 i in arry 的判断方式  
+                    if (i in array && array[i] === elem) {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
         return {
+            inArray: function(elem, array, i) {
+                return inArray(elem, array, i);
+            },
             MD5: function(string) {
                 return MD5(string);
             },
@@ -254,6 +306,24 @@ angular.module('starter.services', ['ngCordova'])
             },
             formatTime: function(val) {
                 return formatTime(val);
+            },
+            showShortTop: function(message) {
+                showShortTop(message);
+            },
+            showShortCenter: function(message) {
+                showShortCenter(message);
+            },
+            showShortBottom: function(message) {
+                showShortBottom(message);
+            },
+            showLongTop: function(message) {
+                showLongTop(message);
+            },
+            showLongCenter: function(message) {
+                showLongCenter(message);
+            },
+            showLongBottom: function(message) {
+                showLongBottom(message);
             }
         };
     })
@@ -314,7 +384,6 @@ angular.module('starter.services', ['ngCordova'])
                             ("00" + o[k]).substr(("" + o[k]).length));
                 return format;
             }
-        console.log('CdateTime');
         return function(val, type) {
             var re = /-?\d+/;
             var m = re.exec(val);
@@ -400,7 +469,7 @@ angular.module('starter.services', ['ngCordova'])
             scope: {
                 buyCount: '=buycount'
             },
-            template: '<div class="input-group" style="width:65%">' + '<span class="input-group-addon ion-minus-round positive" ng-click="minusBuyCount($event)"></span>' + '<input type="tel" class="form-control" placeholder="手数" ng-model="buyCount">' + '<span class="input-group-addon ion-plus-round button-positive plus"  ng-click="plusBuyCount($event)"></span>' + '</div>',
+            template: '<div class="input-group" style="width: 145px; position: absolute;right: 10px;">' + '<span class="input-group-addon ion-minus-round positive" ng-click="minusBuyCount($event)"></span>' + '<input type="tel" class="form-control" placeholder="手数" ng-model="buyCount">' + '<span class="input-group-addon ion-plus-round button-positive plus"  ng-click="plusBuyCount($event)"></span>' + '</div>',
             link: function(scope, element, attrs, accordionController) {
                 var _attrs = attrs;
                 var myelement = element;
@@ -427,6 +496,7 @@ angular.module('starter.services', ['ngCordova'])
     .directive('errSrc', function() {
         return {
             link: function(scope, element, attrs) {
+
                 element.bind('errSrc', function() {
                     if (attrs.src != attrs.errSrc) {
                         attrs.$set('src', attrs.errSrc);
@@ -435,13 +505,34 @@ angular.module('starter.services', ['ngCordova'])
             }
         }
     })
+    .directive('defaultImg', function() {
+        return {
+            restrict: 'A',
+            link: function($scope, $element, $attributes) {
+
+                var applyNewSrc = function(src) {
+                    var newImg = $element.clone(true);
+
+                    newImg.attr('src', src);
+                    newImg[0].addEventListener("load", function() {
+                        $element.replaceWith(newImg);
+                        $element = newImg;
+                    });
+
+                };
+
+                // $attributes.$observe('src', applyNewSrc);
+                $attributes.$observe('defaultsrc', applyNewSrc);
+            }
+        };
+    })
     .factory('Storage', function() {
 
-        
+
         var saveStorage = function(key, val) {
             try {
                 key = ('&' == key.substring(0, 1)) ? key : '~' + key;
-                var data=[];
+                var data = [];
                 data[key] = {
                     'ttl': Date.now(),
                     'val': val
@@ -455,7 +546,7 @@ angular.module('starter.services', ['ngCordova'])
         var loadStorage = function(key, ttl) {
             try {
                 key = ('&' == key.substring(0, 1)) ? key : '~' + key;
-                var data=[];
+                var data = [];
                 data[key] = window.JSON.parse(window.localStorage.getItem(key));;
                 return (data[key] && (data[key].ttl > Date.now() - (ttl || 60 * 60 * 24 * 365) * 1000)) ? data[key].val : false;
             } catch (e) {
@@ -493,13 +584,13 @@ angular.module('starter.services', ['ngCordova'])
     .factory('UserCache', function(Storage) {
         var storageKey = 'User';
         return {
-            getUser: function(key) {
+            getUser: function() {
                 return Storage.load(storageKey) || {};
             },
-            setUser:function(userValue){
-                Storage.save(storageKey,userValue);
+            setUser: function(userValue) {
+                Storage.save(storageKey, userValue);
             },
-            clearUser:function(){
+            clearUser: function() {
                 Storage.clear(storageKey)
             }
         };

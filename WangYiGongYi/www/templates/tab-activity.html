@@ -1,6 +1,6 @@
 <ion-view view-title="网益公益">
  <ion-nav-buttons side="right">
-        <button class="button  button-clear button-linght" ng-click="showPushActivityModal()" ng-if="mideApp_user._flag>0">发布活动</button>
+        <button class="button  button-clear button-linght" ng-click="showPushActivityModal()" ng-if="PublishActivity">发布活动</button>
     </ion-nav-buttons>
     <div class="tabs-striped  tabs-color-positive tabs-top tabs-light tabs-icon-top">
         <div class="tabs">
@@ -43,7 +43,7 @@
         </div>
         <div ng-if="activityConfig.activitys.length==0" style="height:100%;color:#e6e6e6;padding:20px;">
             <i class="ion-chatbubble-working center" style="font-size:80px;"></i>
-            <div class="center" style="font-size:20px;color:#afafaf;">没有活动</div>
+            <div class="center" style="font-size:20px;color:#afafaf;">没有获取到内容,请下拉刷新</div>
         </div>
         <ion-infinite-scroll on-infinite="infinite()" distance="1%" ng-if="activityConfig.infinite" spinner="spiral" class="wg_spinner"></ion-infinite-scroll>
     </ion-content>

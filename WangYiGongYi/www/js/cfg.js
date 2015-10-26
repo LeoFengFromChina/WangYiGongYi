@@ -10,7 +10,7 @@ var Patterns = {
 
 var MideApp = function() {
     var API_Host = 'http://oukeye.github.io/'; //http://api.yibeiban.com:8888';
-    var API_Home = "http://120.24.230.139/AppData/";//"http://192.168.1.105/datainterface/";//
+    var API_Home = "http://120.24.230.139/AppData/"; //"http://192.168.1.105/datainterface/";//
     var API_Lock = false;
 
     /* To be inited or changed in ctrl */
@@ -27,17 +27,18 @@ var MideApp = function() {
     var $timeout = null;
     /* End */
 
-    var backward = function(tabshow) {
+    var backward = function(callback) {
         switch (BackManner) {
             case 'exit':
-                navigator.app.exitApp();
+                callback && callback()
+
                 break;
             case 'appBack':
                 navigator.app.backHistory();
                 break;
             case 'back':
                 $ionicHistory.goBack();
-                getMyRootScope().tabsHidden = tabshow;
+                setBackManner('exit');
                 break;
             case 'wait':
                 $state.go('menus.job-main');
@@ -48,8 +49,20 @@ var MideApp = function() {
     }
 
     var isOnline = function() {
-        return true;
-        // return navigator && navigator.connection && navigator.connection.type != Connection.NONE;
+        // return true;
+        // var networkState = navigator.connection.type;
+        // return networkState !== Connection.UNKNOWN && networkState !== Connection.NONE;
+        if(typeof(Connection)=='undefined'){
+            return true;
+        }
+        try {
+            return navigator && navigator.connection && navigator.connection.type != Connection.NONE;
+        } catch (e) {
+            alert("isOnline e is " + e);
+            // return true;
+        }
+
+
     };
     //var myLogger = function(i){return console.log(JSON.stringify(i));};
     var myLogger = function() {
@@ -167,7 +180,8 @@ var MideApp = function() {
     }();
     var myNotice = function(msg, timeout, prev, post) {
         $ionicLoading.show({
-            template: msg
+            template: msg,
+            noBackdrop: true
         });
         $timeout(function() {
             prev && prev();
@@ -181,7 +195,7 @@ var MideApp = function() {
         if (!isOnline()) {
             return myLogger('Connection.NONE');
         }
-        var lock = API_Home+target + ":" + JSON.stringify(params);
+        var lock = API_Home + target + ":" + JSON.stringify(params);
         if (API_Lock == lock) {
             return myLogger('Http Locked:' + API_Lock);
         }
@@ -407,33 +421,48 @@ var MideApp = function() {
     }
 
     var writeFile = function(cordovaFile, targetFileName, data, replace) {
-        document.addEventListener('deviceready', function() {
+        if (typeof(cordova) != 'undefined') {
+            document.addEventListener('deviceready', function() {
+                var _dataCache = {
+                    'addtime': Math.round(new Date().getTime() / 1000),
+                    'data': data
+                }
+                cordovaFile.writeFile(cordova.file.externalDataDirectory, targetFileName, JSON.stringify(_dataCache), replace)
+                    .then(function(success) {
 
-            cordovaFile.writeFile(cordova.file.externalDataDirectory, targetFileName, data, replace)
-                .then(function(success) {
-                    // alert("success is "+success);
-                    // for (var o in success) {
-                    //     alert("cordovaFile.writeFile success：" + success[o]);
+                    }, function(error) {
 
-                    // }
-                }, function(error) {
-                    // alert("error is "+error);
-                    // for (var o in error) {
-                    //     alert("cordovaFile.writeFile error" + error[o]);
+                    }, replace || true);
+            }, false);
+        } else {
 
-                    // }
-                }, true);
-        });
+        }
+
     };
 
+
     var readAsText = function(cordovaFile, targetFileName, successCallback, errorCallback) {
-        cordovaFile.readAsText(cordova.file.externalDataDirectory, targetFileName)
-            .then(function(success) {
-                successCallback && successCallback(success);
-            }, function(error) {
-                errorCallback && errorCallback(error);
-            });
+        if (typeof(cordova) != 'undefined') {
+            document.addEventListener('deviceready', function() {
+                if (typeof(cordova.file) == 'undefined') {
+                    errorCallback && errorCallback(error);
+                } else {
+                    cordovaFile.readAsText(cordova.file.externalDataDirectory, targetFileName)
+                        .then(function(success) {
+                            successCallback && successCallback(success);
+                        }, function(error) {
+                            errorCallback && errorCallback(error);
+                        });
+                }
+
+
+            }, false);
+        } else {
+            errorCallback && errorCallback();
+        }
+
     }
+
     initWebSocket();
 
     var mideapp = {}

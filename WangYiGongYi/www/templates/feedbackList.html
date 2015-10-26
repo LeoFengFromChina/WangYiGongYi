@@ -1,25 +1,27 @@
 <!-- <ion-header-bar class="bar-positive">
-    <a class="button icon-left ion-ios-arrow-left button-clear button-linght" ng-click="back()"></a>
+    <a class="button icon-left ion-android-arrow-back button-clear button-linght" ng-click="back()"></a>
     <h1 class="title">意见反馈</h1>
 </ion-header-bar> -->
 <ion-view view-title="意见反馈">
     <ion-nav-buttons side="left">
-        <button class="button button-clear icon ion-android-arrow-back" ng-click="back()"></button>
+        <button class="button button-clear icon-left ion-android-arrow-back" ng-click="back()"></button>
     </ion-nav-buttons>
-    <ion-content class="light-bg" has-bouncing="true">
-        <ion-item style="margin-top:15px;background-color:#fafafa" ng-repeat="item in items | orderBy: '-id'  " ng-click="showFeedbackModal(item.id)">
-            <p>{{item.addtime}}</p>
-            <p style="color:#000">{{item.content}}</p>
-        </ion-item>
-    </ion-content>
-    <ion-footer-bar align-title="left" class="bar-assertive">
-        <form ng-submit="feedbackSend()">
-            <div class="bar bar-footer bar-stable item-input-inset">
-                <label class="item-input-wrapper relative">
-                    <input type="text" ng-model="feedbackData" placeholder="亲，感谢您的支持，期待您的吐槽">
-                    <button type="submit" class="feedback-send">发送</button>
+    <ion-content class="light-bg  has-header" has-bouncing="true">
+        <div class="list">
+            <form  name="fedbackForm">
+                <label class="item item-input item-stacked-label">
+                    <textarea placeholder="亲，感谢您的支持，期待您的吐槽(至少6个字)" ng-model="feedbackData.detail" ng-minlength="6" required></textarea>
                 </label>
-            </div>
-        </form>
-    </ion-footer-bar>
+                <!-- <div class="bar  bar-stable item-input-inset">
+                    <label class="item-input-wrapper relative">
+                        <input type="text" ng-model="feedbackData" placeholder="亲，感谢您的支持，期待您的吐槽">
+                        <button type="submit" class="feedback-send">发送</button>
+                    </label>
+                </div> -->
+                <div class="padding">
+                    <a class="button button-block button-positive " ng-click="feedbackSend()" ng-disabled=fedbackForm.$invalid>提交</a>
+                </div>
+            </form>
+        </div>
+    </ion-content>
 </ion-view>

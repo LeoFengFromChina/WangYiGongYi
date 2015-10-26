@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-arrow-back" ng-click="closePushActivityModal()"></button>
+            <button class="button button-clear  icon-left ion-android-arrow-back" ng-click="closePushActivityModal()"></button>
         </div>
         <h1 class="title">发布活动</h1>
         <div class="buttons">
@@ -34,13 +34,19 @@
                 <span class="input-label">区域:</span>
                 <input type="text" ng-model="pushActivity.region" placeholder="请输入区域" required>
             </label>
-             <label class="item item-input">
+            <!--  <label class="item item-input">
                 <span class="input-label">开始时间:</span>
                 <input type="date" ng-model="pushActivity.begintime" placeholder="请输入开始时间" required>
+            </label> -->
+            <label class="item item-input" ng-click="getDate()">
+                <span class="input-label">开始时间:</span>
+                <span class="" ng-show="pushActivity.begintime">{{pushActivity.begintime|date:"yyyy-MM-dd hh:mm"}}</span>
+                <span class="tips-info" ng-show="!pushActivity.begintime">请选择时间</span>
+                <input type="hidden" ng-model="pushActivity.begintime" placeholder="请选择时间" required/>
             </label>
              <label class="item item-input">
                 <span class="input-label">人数:</span>
-                <input type="text" ng-model="pushActivity.needmenbercount" placeholder="请输入人数" required>
+                <input type="number" ng-model="pushActivity.needmenbercount" placeholder="请输入人数" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">详细介绍:</span>

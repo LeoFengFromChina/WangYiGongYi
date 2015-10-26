@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeHelpAndAskModal()"></button>
+            <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeHelpAndAskModal()"></button>
         </div>
         <h1 class="title title-center">求助与帮助</h1>
         </div>
@@ -15,13 +15,20 @@
     <ion-content class=" has-subheader " has-bouncing="true" delegate-handle="helpAndAskScroll">
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
+         <div ng-if="activeConfig.topics.length <1"  style="height:100%;color:#e6e6e6;padding:20px;">
+            <i class="ion-chatbubble-working center" style="font-size:80px;"></i>
+            <div  class="center"  style="font-size:20px;color:#afafaf;">没有数据</div>
+        </div>
         <div class=" list topics" ng-if="activeConfig.topics">
             <!--    <div class="item item-divider">求助列表</div> -->
             <div class="item item-avatar" collection-repeat="topic in activeConfig.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.HelpRequest._id)">
-                <img ng-src="{{topic.Author._photourl|avatarFilter}}" reset-img />
+               
+                <img src='img/commentfailure.jpg' defaultsrc="{{topic.Author._photourl|avatarFilter}}" default-img />
                 <!-- reset-img   -->
                 <h2>{{topic.HelpRequest._title}} <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span></h2>
                 <p class="summary">
+                    <span ng-if="topic.HelpRequest._type==1" class="tab status1">求助</span>
+                    <span ng-if="topic.HelpRequest._type==2" class="tab status3">助人</span>
                     <span class="tab">发起人:</span> {{topic.Author._nickname}}
                     <span ng-if="topic.HelpRequest._status==0" class="tab status1 item-note">求助中</span>
                     <span ng-if="topic.HelpRequest._status==1" class="tab status2 item-note">已配对</span>

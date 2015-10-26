@@ -11,7 +11,7 @@
             </a>
             <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow " ng-if="mideApp_user.islogin" ng-click="showBasicInfoModal('a')" style='padding-top: 0;
     padding-bottom: 0;'>
-                <img ng-src="{{mideApp_user._photourl}}" style="width:100%;top: 14px;left: 14px;">
+                <img src='img/commentfailure.jpg' defaultsrc="{{mideApp_user._photourl}}" default-img style="width:100%;top: 14px;left: 14px;">
                 <div class="row">
                     <div class="col">
                         <h2 ng-bind="mideApp_user._nickname">-</h2>
@@ -47,6 +47,7 @@
         <div class="list">
             <a class="item item-icon-left item-icon-right  " ng-click="gotoState('tab.chats')">
                 <i class="icon ion-ios-chatbubble assertive"></i>系统消息
+                 <span class="badge badge-assertive">1</span>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
             <a class="item item-icon-left item-icon-right wg-box-shadow " ng-click="gotoState('tab.feedback')">

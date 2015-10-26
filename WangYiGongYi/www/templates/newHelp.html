@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeNewHelpModal()"></button>
+            <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeNewHelpModal()"></button>
         </div>
         <h1 class="title title-center">我要助人发布</h1>
         <div class="buttons">
@@ -22,21 +22,36 @@
                 <span class="input-label">电话:</span>
                 <input type="tel" ng-model="newHelp.phone" placeholder="请输入电话" required>
             </label>
-            <label class="item item-input">
+            <!-- <label class="item item-input">
                 <span class="input-label">时间:</span>
                 <input type="date" ng-model="newHelp.topicTime" placeholder="请输入时间" required>
+            </label> -->
+            <label class="item item-input" ng-click="getDate()">
+                <span class="input-label">开始时间:</span>
+                <span class="" ng-show="mydateTime">{{mydateTime|date:"yyyy-MM-dd hh:mm"}}</span>
+                <span class="tips-info" ng-show="!mydateTime">请选择时间</span>
+                <input type="hidden" ng-model="mydateTime" placeholder="请选择时间" required/>
             </label>
             <label class="item item-input">
                 <span class="input-label">区域:</span>
                 <input type="text" ng-model="newHelp.region" placeholder="请输入区域" required>
             </label>
-            <label class="item item-input">
-                <span class="input-label">类型:</span>
-                <input type="text" ng-model="newHelp.type" placeholder="请输入类型" required>
+            
+            <label class="item item-input ">
+                <span class="input-label">总类:</span>
+                <select class="form-control" ng-model="helpType.type1" ng-class="{'tips-info':helpType.type1==null}" ng-options="type.label for type in  helpTypeData.type1" required>
+                    <option value="">请选择类型</option>
+                </select>
+            </label>
+            <label class="item item-input ">
+                <span class="input-label">分类:</span>
+                <select class="form-control" ng-model="helpType.value"  ng-class="{'tips-info':helpType.value==null}" ng-options="type2.label for type2 in helpType.type1.value" required>
+                    <option value="">请选择类型</option>
+                </select>
             </label>
             <label class="item item-input">
                 <span class="input-label">时长:</span>
-                <input type="text" ng-model="newHelp.long" placeholder="请输入时长" required>
+                <input type="number" ng-model="newHelp.duration" placeholder="请输入时长" required>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">详细:</span>

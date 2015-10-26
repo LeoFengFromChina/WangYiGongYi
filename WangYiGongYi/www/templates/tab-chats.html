@@ -5,17 +5,6 @@
     <ion-content class="has-tabs "  has-bouncing="true">
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
-        <!-- <ion-list>
-            <ion-item class="item-remove-animate item-avatar item-icon-right" collection-repeat="chat in chats" type="item-text-wrap" ng-click="showChatModal(chat.id)">
-                <img ng-src="{{chat.face}}">
-                <h2>{{chat.name}}</h2>
-                <p>{{chat.lastText}}</p>
-                <i class="icon ion-chevron-right icon-accessory"></i>
-                <ion-option-button class="button-assertive" ng-click="remove(chat)">
-                    Delete
-                </ion-option-button>
-            </ion-item>
-        </ion-list> -->
         <ion-list show-delete="flag.showDelete" ng-if="chatsConfig.chats">
             <ion-item ng-repeat="chat in chatsConfig.chats">
                 <p>{{chat.addtime}}</p>
@@ -25,7 +14,7 @@
                 <ion-delete-button class="ion-minus-circled" ng-click="deleteItem(chat,chat._id)"></ion-delete-button>
             </ion-item>
         </ion-list>
-        <div ng-if="!chatsConfig.chats"  style="height:100%;color:#e6e6e6;padding:20px;">
+        <div ng-if="chatsConfig.chats.length <1"  style="height:100%;color:#e6e6e6;padding:20px;">
             <i class="ion-chatbubble-working center" style="font-size:80px;"></i>
             <div  class="center"  style="font-size:20px;color:#afafaf;">您没有消息</div>
         </div>

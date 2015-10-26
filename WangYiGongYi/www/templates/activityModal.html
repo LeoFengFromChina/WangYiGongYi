@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeActivityModal()"></button>
+            <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeActivityModal()"></button>
         </div>
         <h1 class="title title-center">网益公益</h1>
         <div class="buttons">
@@ -38,7 +38,7 @@
                 <div class="item item-body" ng-bind-html="current_activitys._detail">
                 </div>
                 <div class="item  item-divider">报名列表</div>
-                <a href="tel:{{member._phone}}" class="item item-avatar item-icon-right" collection-repeat="member in current_activitys.menberlist">
+                <a href="tel:{{member._phone}}" class="item item-avatar item-icon-right" ng-repeat="member in current_activitys.menberlist">
                     <img ng-src="{{member._photourl}}">{{member._name}}
                     <span class="item-note"><i class="icon ion-ios-telephone positive"></i></span>
                 </a>

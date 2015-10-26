@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeBasicInfoModal()"></button>
+            <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeBasicInfoModal()"></button>
         </div>
         <h1 class="title title-center">修改个人信息</h1>
         </div>
@@ -22,14 +22,14 @@
                     </div>
                     <label class="item item-input">
                         <span class="input-label">姓名:</span>
-                        <input type="tel" ng-model="mideApp_user_basic._nickname" placeholder="请输入姓名" minlength='2' maxlength='4'  required>
+                        <input type="text" ng-model="mideApp_user_basic._nickname" placeholder="请输入姓名" minlength='2' maxlength='4'  required>
                     </label>
                     <label class="item item-input">
                         <span class="input-label">性别:</span>
                         <input type="text" ng-model="mideApp_user_basic._sex" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff">
                     </label>
                     <label class="item item-input" ng-click="getDate()">
-                        <span class="input-label">出身年月:</span>
+                        <span class="input-label">出生年月:</span>
                         <span class="" ng-show="mideApp_user_basic._birthday">{{mideApp_user_basic._birthday|date:"yyyy-MM-dd"}}</span>
                         <span class="tips-info" ng-show="!mideApp_user_basic._birthday">请选择日期</span>
                         <input type="hidden" ng-model="mideApp_user_basic._birthday" placeholder="请选择日期" />
@@ -119,7 +119,7 @@
                     <label class="item item-input">
                         <span class="input-label">服务意愿:</span>
                         <!-- <input type="text" ng-model="mideApp_user_basic.intention" placeholder="选择服务意愿" required> -->
-                        <select class="form-control" ng-model="mideApp_user_basic.this_serviceintention" ng-options="_serviceintention.label for _serviceintention in mideApp_user_basic.serviceintentions">
+                        <select class="form-control" ng-model="mideApp_user_basic.this_serviceintention" ng-options="_serviceintention.label for _serviceintention in mideApp_user_basic.serviceintentions" required>
                             <option value="">请选择服务意愿</option>
                         </select>
                     </label>

@@ -3,7 +3,7 @@
         <button class="button icon-left ion-android-arrow-back button-clear button-linght" ng-click="back()"></button>
     </ion-nav-buttons>
     <ion-nav-buttons side="right">
-        <button class="button  button-clear button-linght" ng-click="showCreateTeamModal()">创建团队</button>
+        <button class="button  button-clear button-linght" ng-if="show_CreateTeam" ng-click="showCreateTeamModal()">创建团队</button>
     </ion-nav-buttons>
     <div class="tabs-striped  tabs-color-positive tabs-top tabs-light tabs-icon-top">
         <div class="tabs">
@@ -15,15 +15,6 @@
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
         <div class="search" ng-show="Tab_isActive=='search'">
-            <!-- <div class="list" style="margin-top:10px;">
-                <div class=" item-input-inset assertive-bg-new">
-                    <label class="item-input-wrapper text-center" style="background-color:#e12f32;position:relative;height:28px;border-radius:5px" ng-click="focusSearch()" on-release="focusSearch()">
-                        <p class="text-center" style="color:#fff;font-size:12px;width:100%;margin:0">
-                            <i class="icon ion-search placeholder-icon light"></i>查找团队</p>
-                    </label>
-               
-                </div>
-            </div> -->
             <div class="list">
                 <div class="item item-input-inset">
                     <label class="item-input-wrapper">

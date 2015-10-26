@@ -1,7 +1,7 @@
 <ion-modal-view>
     <ion-header-bar class=" bar-positive nav-title-slide-full">
         <div class="buttons">
-            <button class="button button-clear icon ion-android-arrow-back" ng-click="closeTopicModal()"></button>
+            <button class="button icon-left ion-android-arrow-back button-clear" ng-click="closeTopicModal()"></button>
         </div>
         <h1 class="title title-center">网益公益</h1>
         <div class="buttons">
@@ -12,9 +12,12 @@
         <div ng-if="current_topic">
             <div class="list card topics ">
                 <div class="item item-avatar">
-                    <img ng-src="{{current_topic.Author._photourl|avatarFilter}}" reset-img>
+                    <!-- <img ng-src="{{current_topic.Author._photourl|avatarFilter}}" reset-img> -->
+                    <img src='img/commentfailure.jpg' defaultsrc="{{current_topic.Author._photourl|avatarFilter}}" default-img />
                     <h2>{{current_topic.HelpRequest._title}}</h2>
                     <p class="summary">
+                        <span ng-if="current_topic.HelpRequest._type==1" class="tab status1">求助</span>
+                        <span ng-if="current_topic.HelpRequest._type==2" class="tab status3">助人</span>
                         <span class="tab">发起人:</span> {{current_topic.Author._nickname}}
                         <span ng-if="current_topic.HelpRequest._status==0" class="tab status1 item-note">求助中</span>
                         <span ng-if="current_topic.HelpRequest._status==1" class="tab status2 item-note">已配对</span>
@@ -31,11 +34,11 @@
                         <div class="col  text-ellipsis text-right contactPhone"><a href="tel:{{current_topic.HelpRequest._linkphone}}"><i class="ion-ios-telephone "> </i>{{current_topic.HelpRequest._linkphone}}</a></div>
                     </dov>
                     <div class="row">
-                        <div class="col"><span>开始时间:</span> {{current_topic.HelpRequest._begintime}}</div>
-                        <div class="col text-right"><span>时长:</span> {{current_topic.HelpRequest._serviceintention}}</div>
+                        <div class="col"><span>开始时间:</span> {{current_topic.HelpRequest._begintime  | CdateTime}}</div>
+                        <div class="col text-right"><span>时长:</span> {{current_topic.HelpRequest._duration}}</div>
                     </div>
                     <div class="row">
-                        <div class="col"><span>服务类型:</span> {{current_topic.HelpRequest.serviceType}}</div>
+                        <div class="col"><span>服务类型:</span> {{current_topic.HelpRequest._serviceintention}}</div>
                         <div class="col text-right">发布时间:<span class="item-note ago" am-time-ago="current_topic.HelpRequest._createdate" vam-preprocess="unix"></span></div>
                     </div>
                 </div>
