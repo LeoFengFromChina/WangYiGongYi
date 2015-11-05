@@ -1,16 +1,19 @@
 <ion-view view-title="网益公益">
+    <ion-nav-buttons side="left">
+        <button class="button icon-left ion-android-arrow-back button-clear button-linght" ng-click="back()"></button>
+    </ion-nav-buttons>
     <ion-content class="stable-bg has-tabs" has-bouncing="true">
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
         <ion-slide-box on-slide-changed="slideHasChanged($index)" class="slidebox" auto-play="true" slide-interval="4000" does-continue="true"  delegate-handle="giftBanner" style="overflow: hidden;" ng-if="giftBanner">
             <div class="slider-slide" ng-repeat="banner in giftBanner">
                 <div class="box" style="width:100%;">
-                    <img src='img/defaultimg.png' defaultsrc="{{banner._iconurl}}" default-img alt="微光公益" style="width:100%;height:auto;" /></div>
+                    <img src='img/defaultimg.png' defaultsrc="banner._iconurl" default-img alt="微光公益" style="width:100%;height:auto;" /></div>
             </div>
         </ion-slide-box>
         <div style="width:100%;" ng-if="gifts">
             <div class="" ng-repeat="gift in gifts" style="width:33%; display:block; float:left;padding:4px;text-decoration: none;" ng-click="showGiftModal(gift._id)">
-                <img src='img/defaultImg220x220.png' defaultsrc="{{gift._photourl}}" default-img style="width:100%;border:1px solid #ccc;">
+                <img src='img/defaultImg220x220.png' defaultsrc="gift._photourl" default-img style="width:100%;border:1px solid #ccc;">
                 <div style="color:#000000;text-align: center;font-size:12px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{gift._title}}</div>
             </div>
         </div>

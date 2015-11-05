@@ -16,7 +16,7 @@
     <ion-nav-buttons side="right">
     <button class="button button-clear button-light" ng-click="openRankPopover($event)">{{currentRank.label}}</button>
   </ion-nav-buttons>
-    <ion-content class="light-bg has-header no-footer" has-bouncing="true">
+    <ion-content class="light-bg has-header has-tabs " has-bouncing="true">
           <div class="list">
             <a class="item item-icon-left rank-icon" href="#"  collection-repeat="rank in rankList ">
                 <i class="icon  myicon-medal-{{rank.Rank}}">{{rank.Rank}}</i>{{rank.Name}}

@@ -493,36 +493,389 @@ angular.module('starter.services', ['ngCordova'])
             }
         }
     })
-    .directive('errSrc', function() {
+   
+    .directive("selectTabs", function($filter, $ionicScrollDelegate) {
         return {
-            link: function(scope, element, attrs) {
+            restrict: 'AE',
+            scope: {
+                data1: '=',
+                contentid: "@",
+                scrollheight: '@',
+                closemodal: '&'
+            },
+            template: 
+            '<div class="row selectList" ng-show="data1">' +
+                '<div class="col selectLeft">' +
+                '<ion-scroll zooming="false" direction="y" scrollbar-y="false" has-bouncing="true" style="height:{{scrollheight}}px;" delegate-handle="selectLeftScroll">' +
+                '<div class="list">' +
+                '<div class="item item-icon-right" ng-repeat="selectLeft in data1" ng-click="changeActive(\'{{selectLeft.label}}\')" ng-class="{\'{{selectLeft.label}}\': \'isActive\'}[selectlabel]">' +
+                '{{selectLeft.label}}<i class="icon ion-arrow-left-b"></i>' +
+                '</div>' +
+                '</div>' +
+                '</ion-scroll>' +
+                '</div>' +
+                '<div class="col selectRight">' +
+                '<ion-scroll zooming="false" direction="y" scrollbar-y="false" has-bouncing="true" style="height:{{scrollheight}}px;" delegate-handle="selectRightScroll">' +
+                '<div class="list">' +
+                '<div class="item " ng-repeat="selectRight in data2.childrens" ng-click="selectActive(\'{{selectRight.label}}\')" ng-class="{\'{{selectRight.label}}\': \'isActive\'}[selectactivelabel]">{{selectRight.label}}</div>' +
+                '</div>' +
+                '</ion-scroll>' +
+                '</div>' +
+            '</div> '+
+            '<div ng-show="!data1" class="center">加载中...</div>',
 
-                element.bind('errSrc', function() {
-                    if (attrs.src != attrs.errSrc) {
-                        attrs.$set('src', attrs.errSrc);
+            link: function(scope, element, attr) {
+                scope.$watch('data1',function(newdata,olddata){
+                    if(!angular.isUndefined(newdata)){
+                        if (newdata.length>0&&angular.isUndefined(scope.data2)) {
+                            scope.data2 =newdata[0];
+                            if(angular.isUndefined(scope.selectlabel)&&!angular.isUndefined(newdata[0].label)){
+                                scope.selectlabel = newdata[0].label;
+                            }
+                           
+                        } 
                     }
+                    scope.scrollheight = window.screen.height;
+                    
                 });
+
+                scope.changeActive = function(label) {
+                    scope.selectlabel = label;
+                    scope.data2 = $filter('filter')(scope.data1, {
+                        label: label
+                    })[0];
+                    scope.selectactivelabel = '';
+                    scope.selelcttext = '';
+                    $ionicScrollDelegate.$getByHandle('selectRightScroll').scrollTop();
+                };
+
+                scope.selectActive = function(label) {
+                    scope.selectactivelabel = label;
+                    if (angular.isUndefined(scope.selectlabel) || angular.isUndefined(scope.selectactivelabel)) {
+                        scope.selelcttext = '';
+                    } else {
+                        scope.selelcttext = scope.selectlabel + '-' + scope.selectactivelabel;
+                        scope.closemodal({
+                            text: scope.selelcttext
+                        });
+                    }
+
+
+                }
+                
             }
+
         }
     })
+    .directive("selectTabs4", function($filter, $ionicScrollDelegate) {
+        return {
+            restrict: 'AE',
+            scope: {
+                data1: '=',
+                contentid: "@",
+                scrollheight: '@',
+                activelabel1:'=',
+                activelabel2:'=',
+                activelabel3:'=',
+                activelabel4:'='
+            },
+            template: 
+                '<div class="row selectList4" ng-show="data1">' +
+                    '<div class="col selectLeft">' +
+                        '<ion-scroll zooming="false" direction="y" scrollbar-y="false" has-bouncing="true" style="height:{{scrollheight}}px;" delegate-handle="select1Scroll">' +
+                            '<div class="list">' +
+                            '<div class="item item-icon-right" ng-repeat="selectLeft in data1" ng-click="changeActive1(\'{{selectLeft.label}}\')" ng-class="{\'{{selectLeft.label}}\': \'isActive\'}[activelabel1]">' +
+                            '{{selectLeft.label}}<i class="icon ion-arrow-left-b"></i>' +
+                            '</div>' +
+                            '</div>' +
+                        '</ion-scroll>' +
+                    '</div>' +
+                    '<div class="col selectRight">' +
+                        '<ion-scroll zooming="false" direction="y" scrollbar-y="false" has-bouncing="true" style="height:{{scrollheight}}px;" delegate-handle="select2Scroll">' +
+                            '<div class="list">' +
+                            '<div class="item item-icon-right" ng-repeat="selectRight in data2" ng-click="changeActive2(\'{{selectRight.label}}\')" ng-class="{\'{{selectRight.label}}\': \'isActive\'}[activelabel2]">'+
+                            '{{selectRight.label}}<i class="icon ion-arrow-left-b"></i>' +
+                            '</div>' +
+                            '</div>' +
+                        '</ion-scroll>' +
+                    '</div>' +
+                    '<div class="col selectLeft">' +
+                        '<ion-scroll zooming="false" direction="y" scrollbar-y="false" has-bouncing="true" style="height:{{scrollheight}}px;" delegate-handle="select3Scroll">' +
+                            '<div class="list">' +
+                            '<div class="item item-icon-right" ng-repeat="selectLeft in data3" ng-click="changeActive3(\'{{selectLeft.label}}\')" ng-class="{\'{{selectLeft.label}}\': \'isActive\'}[activelabel3]">' +
+                            '{{selectLeft.label}}<i class="icon ion-arrow-left-b"></i>' +
+                            '</div>' +
+                            '</div>' +
+                        '</ion-scroll>' +
+                    '</div>' +
+                    '<div class="col selectRight">' +
+                        '<ion-scroll zooming="false" direction="y" scrollbar-y="false" has-bouncing="true" style="height:{{scrollheight}}px;" delegate-handle="select4Scroll">' +
+                            '<div class="list">' +
+                            '<div class="item " ng-repeat="selectRight in data4" ng-click="changeActive4(\'{{selectRight.label}}\')" ng-class="{\'{{selectRight.label}}\': \'isActive\'}[activelabel4]">{{selectRight.label}}</div>' +
+                            '</div>' +
+                        '</ion-scroll>' +
+                    '</div>' +
+                '</div> '+
+                '<div ng-show="!data1" class="center">加载中...</div>',
+
+            link: function(scope, element, attr) {
+
+                scope.$watch('data1',function(newdata,olddata){
+                    if(angular.isArray(newdata)&&newdata.length>0){
+                        _init(newdata,newdata[0].label);
+                    }
+                     scope.scrollheight = window.screen.height;
+                    
+                });
+                var _init = function(data,lable){
+
+                    if(angular.isArray(data)&&data.length>0){        
+                        var _data = $filter('filter')( data, {
+                                label: lable
+                            });               
+                        //如果_data(筛选出来的结果)是个数组，且长度大于0
+                        if(angular.isArray(_data)&&_data.length>0){
+                            scope.activelabel1 = _data[0].label;
+                            //如果_data第一个元素的childrens是个数组，且长度大于0
+                            if(angular.isArray(_data[0].childrens)&&_data[0].childrens.length>0){
+                            
+                                scope.data2 =  _data[0].childrens;//将父级的第一个元素 赋值
+
+                                scope.activelabel2 = scope.data2[0].label;
+
+                                if(angular.isArray(scope.data2[0].childrens)&&scope.data2[0].childrens.length>0){
+
+                                    scope.data3 =  scope.data2[0].childrens;//将父级的第一个元素 赋值
+
+                                    scope.activelabel3 = scope.data3[0].label;
+
+                                    if(angular.isArray(scope.data3[0].childrens)&&scope.data3[0].childrens.length>0){
+
+                                        scope.data4 =  scope.data3[0].childrens;//将父级的第一个元素 赋值
+
+                                        scope.activelabel4 = scope.data4[0].label;
+                                    }else{
+
+                                        scope.activelabel4 = '';
+                                        scope.data4=[];
+                                    }
+
+                                }else{
+                                    scope.activelabel3 = '';
+                                    scope.activelabel4 = '';
+                                    scope.data3=[];
+                                    scope.data4=[];
+                                }
+
+                                
+                            }else{
+                                scope.activelabel2 = '';
+                                scope.activelabel3 = '';
+                                scope.activelabel4 = '';
+                                scope.data2=[];
+                                scope.data3=[];
+                                scope.data4=[];
+                            }
+
+                        }                       
+                        $ionicScrollDelegate.$getByHandle('select2Scroll').scrollTop();
+                        $ionicScrollDelegate.$getByHandle('select3Scroll').scrollTop();
+                        $ionicScrollDelegate.$getByHandle('select4Scroll').scrollTop();
+                    }else{
+                       scope.activelabel1=='';
+                       scope.activelabel2=='';
+                       scope.activelabel3=='';
+                       scope.activelabel4=='';   
+                    }
+                };
+                scope.$watch('activelabel1',function(newdata,olddata){
+                    if(newdata==''){
+                       scope.activelabel2='';
+                       return false;
+                    }
+                    _init(scope.data1,newdata);
+                });
+                scope.$watch('activelabel2',function(newdata,olddata){
+                    if(newdata==''){
+                       scope.activelabel3='';
+                       scope.data2=[]; 
+                       return false;
+                    }
+
+                    if(angular.isArray(scope.data2)&& scope.data2.length>0){
+
+                       var _data = $filter('filter')( scope.data2, {
+                            label: newdata
+                        });
+
+                        //如果_data(筛选出来的结果)是个数组，且长度大于0
+                        if(angular.isArray(_data)&&_data.length>0){
+                       
+                            //如果_data第一个元素的childrens是个数组，且长度大于0
+                            if(angular.isArray(_data[0].childrens)&&_data[0].childrens.length>0){
+                            
+                                scope.data3 =  _data[0].childrens;//将父级的第一个元素 赋值
+
+                                scope.activelabel3 = scope.data3[0].label;
+
+                                if(angular.isArray(scope.data3[0].childrens)&&scope.data3[0].childrens.length>0){
+
+                                    scope.data4 =  scope.data3[0].childrens;//将父级的第一个元素 赋值
+
+                                    scope.activelabel4 = scope.data4[0].label;
+
+                                }else{
+                                    scope.activelabel4 = '';
+                                    scope.data4=[];
+                                }
+
+                                
+                            }else{
+                                scope.activelabel3 = '';
+                                scope.activelabel4 = '';
+                                scope.data3=[];
+                                scope.data4=[];
+                            }
+
+                        }                       
+                        $ionicScrollDelegate.$getByHandle('select2Scroll').scrollTop();
+                        $ionicScrollDelegate.$getByHandle('select3Scroll').scrollTop();
+                        $ionicScrollDelegate.$getByHandle('select4Scroll').scrollTop();
+
+
+                    }
+                });
+                scope.$watch('activelabel3',function(newdata,olddata){
+                    if(newdata==''){
+                       scope.activelabel4='';
+                       scope.data3=[]; 
+                       return false;
+                    }
+                    if(angular.isArray(scope.data3)&& scope.data3.length>0){
+
+                       var _data = $filter('filter')( scope.data3, {
+                            label: newdata
+                        });
+
+                        //如果_data(筛选出来的结果)是个数组，且长度大于0
+                        if(angular.isArray(_data)&&_data.length>0){
+                       
+                            //如果_data第一个元素的childrens是个数组，且长度大于0
+                            if(angular.isArray(_data[0].childrens)&&_data[0].childrens.length>0){
+                            
+                                scope.data4 =  _data[0].childrens;//将父级的第一个元素 赋值
+
+                                scope.activelabel4 = scope.data4[0].label;
+                                                                
+                            }else{
+                                scope.activelabel4 = '';
+                                scope.data4=[];
+                            }
+
+                        }                       
+                        $ionicScrollDelegate.$getByHandle('select2Scroll').scrollTop();
+                        $ionicScrollDelegate.$getByHandle('select3Scroll').scrollTop();
+                        $ionicScrollDelegate.$getByHandle('select4Scroll').scrollTop();
+                    }
+                });
+                scope.$watch('activelabel4',function(newdata,olddata){
+                    if(newdata==''){
+                       scope.data4=[]; 
+                       return false;
+                    }
+                });
+
+
+                scope.changeActive1 = function(label) {
+                    if(scope.activelabel1 == label){
+                        scope.activelabel1='';
+                    }else{
+                       scope.activelabel1 = label 
+                    }
+                };
+                scope.changeActive2 = function(label) {
+                    if(scope.activelabel2 == label){
+                        scope.activelabel2='';
+                    }else{
+                       scope.activelabel2 = label 
+                    }
+                };
+                scope.changeActive3 = function(label) {
+                    if(scope.activelabel3 == label){
+                        scope.activelabel3='';
+                    }else{
+                       scope.activelabel3 = label 
+                    } 
+                };
+                scope.changeActive4 = function(label) {
+                    if(scope.activelabel4 == label){
+                        scope.activelabel4='';
+                    }else{
+                       scope.activelabel4 = label 
+                    } 
+                };
+
+            }
+
+        }
+    })
+
     .directive('defaultImg', function() {
         return {
             restrict: 'A',
-            link: function($scope, $element, $attributes) {
+            scope:{
+                defaultsrc:'='
+            },
+            link: function(scope, element, attributes) {
 
-                var applyNewSrc = function(src) {
-                    var newImg = $element.clone(true);
+                var applyNewSrc = function() {
+                    var newImg = element.clone(true);
 
-                    newImg.attr('src', src);
+                    newImg.attr('src', scope.defaultsrc);
                     newImg[0].addEventListener("load", function() {
-                        $element.replaceWith(newImg);
-                        $element = newImg;
+                        element.replaceWith(newImg);
+                        element = newImg;
                     });
 
                 };
 
                 // $attributes.$observe('src', applyNewSrc);
-                $attributes.$observe('defaultsrc', applyNewSrc);
+                scope.$watch('defaultsrc', applyNewSrc);
+            }
+        };
+    })
+    .directive('textEllipsis', function() {
+        return {
+            restrict: 'A',
+            scope:{
+                defaultsrc:'='
+            },
+            link: function(scope, element, attributes) {
+                var _e = element;
+                var applyNewSrc = function() {
+                    var oBox =element;// document.getElementById('demo');
+                    // slice() 方法可从已有的数组中返回选定的元素。
+                    // 您可使用负值从数组的尾部选取元素。
+                    // 如果 end 未被规定，那么 slice() 方法会选取从 start 到数组结尾的所有元素。
+                    // 此处需要根据需求自行修改slice()的值，以达到要显示的内容
+                    var _p = element[0].textContent.split('</p>');
+                    if(element.find("p").length>0){
+                        var _h =element.find("p")[0].innerHTML;
+                        if(_h.length>50){
+                             var demoHtml = element.find("p")[0].innerHTML.slice(0,50) + '...';
+                             element.find("p")[0].innerHTML=demoHtml
+                        }
+                        
+                    }
+                   
+                   
+                    // 填充至指定位置
+                    // element[0].textContent = demoHtml;
+
+                };
+
+                // $attributes.$observe('src', applyNewSrc);
+                scope.$watch('defaultsrc', applyNewSrc);
             }
         };
     })
@@ -595,165 +948,130 @@ angular.module('starter.services', ['ngCordova'])
             }
         };
     })
-    .factory("Data", function() {
-        var CityData = [{
-            label: '中国',
-            provinces: [{
-                label: '广东省',
-                cities: [{
-                    label: '广州'
-                }, {
-                    label: '深圳'
-                }, {
-                    label: '佛山'
-                }, {
-                    label: '东莞'
-                }, {
-                    label: '中山'
-                }, {
-                    label: '珠海'
-                }, {
-                    label: '江门'
-                }, {
-                    label: '肇庆'
-                }, {
-                    label: '惠州'
-                }, {
-                    label: '汕头'
-                }, {
-                    label: '潮州'
-                }, {
-                    label: '揭阳'
-                }, {
-                    label: '汕尾'
-                }, {
-                    label: '湛江'
-                }, {
-                    label: '茂名'
-                }, {
-                    label: '阳江'
-                }, {
-                    label: '韶关'
-                }, {
-                    label: '清远'
-                }, {
-                    label: '云浮'
-                }, {
-                    label: '梅州'
-                }, {
-                    label: '河源'
-                }]
-            }, {
-                label: '河北',
-                cities: [{
-                    label: '石家庄'
-                }, {
-                    label: '承德'
-                }, {
-                    label: '唐山'
-                }]
-            }]
-        }];
+    .factory("Data", function($rootScope,Storage) {
+        
         var EducationData = [{
-            label: '博士及以上'
-        }, {
-            label: '硕士'
-        }, {
-            label: '本科'
-        }, {
-            label: '大专'
-        }, {
-            label: '中专'
-        }, {
-            label: '高中'
-        }, {
-            label: '初中'
-        }, {
-            label: '小学'
-        }, {
-            label: '其它'
+                    'label': '博士及以上'
+                }, {
+                    'label': '硕士'
+                }, {
+                    'label': '本科'
+                }, {
+                    'label': '大专'
+                }, {
+                    'label': '中专'
+                }, {
+                    'label': '高中'
+                }, {
+                    'label': '初中'
+                }, {
+                    'label': '小学'
+                }, {
+                    'label': '其它'
         }];
-        var IntentionData = [{
-            label: '家政服务'
+       
+        var DurationData = [{
+            'label': '1小时',
+            'value': '1'
         }, {
-            label: '医院护理'
+            'label': '2小时',
+            'value': '2'
         }, {
-            label: '课余补习'
+            'label': '3小时',
+            'value': '3'
         }, {
-            label: '声乐助学'
+            'label': '4小时',
+            'value': '4'
         }, {
-            label: '其它'
+            'label': '5小时',
+            'value': '5'
+        }, {
+            'label': '6小时',
+            'value': '6'
+        }, {
+            'label': '7小时',
+            'value': '7'
+        }, {
+            'label': '8小时',
+            'value': '8'
+        }, {
+            'label': '9小时',
+            'value': '9'
+        }, {
+            'label': '10小时',
+            'value': '10'
+        }, {
+            'label': '11小时',
+            'value': '11'
+        }, {
+            'label': '12小时',
+            'value': '12'
+        }, {
+            'label': '13小时',
+            'value': '13'
+        }, {
+            'label': '14小时',
+            'value': '14'
+        }, {
+            'label': '15小时',
+            'value': '15'
+        }, {
+            'label': '16小时',
+            'value': '16'
+        }, {
+            'label': '17小时',
+            'value': '17'
+        }, {
+            'label': '18小时',
+            'value': '18'
+        }, {
+            'label': '19小时',
+            'value': '19'
+        }, {
+            'label': '20小时',
+            'value': '20'
+        }, {
+            'label': '21小时',
+            'value': '21'
+        }, {
+            'label': '22小时',
+            'value': '22'
+        }, {
+            'label': '23小时',
+            'value': '23'
+        }, {
+            'label': '24小时',
+            'value': '24'
         }];
-        var HelpTypeData = [{
-            label: '弱势帮扶',
-            value: [{
-                label: '思想引导'
-
-            }, {
-                label: '政策帮扶'
-
-            }, {
-                label: '资金帮扶'
-
-            }, {
-                label: '人才培养'
-
-            }, {
-                label: '实物帮扶'
-
-            }, {
-                label: '服务帮扶'
-
-            }, {
-                label: '其他'
-
-            }]
-        }, {
-            label: '公益慈善',
-            value: [{
-                label: '环保节能'
-
-            }, {
-                label: '教育助学'
-
-            }, {
-                label: '扶贫救灾'
-
-            }, {
-                label: '心理健康'
-
-            }, {
-                label: '社区服务'
-
-            }, {
-                label: '其他'
-
-            }]
-        }, {
-            label: '社会服务',
-            value: [{
-                label: '思想引导'
-
-            }, {
-                label: '政策帮扶'
-
-            }, {
-                label: '资金帮扶'
-
-            }, {
-                label: '人才培养'
-
-            }, {
-                label: '实物帮扶'
-
-            }, {
-                label: '服务帮扶'
-
-            }]
-        }];
+        var DistrictData = null;
         return {
-            getCityData: function() {
-                return CityData;
+            getDurationData:function(){
+                return DurationData;
+            },
+            getDistrictData:function(){
+                
+                if(DistrictData){
+                    return DistrictData;
+                }else{
+                    var _DistrictData = Storage.load('DistrictData.json',60*30);
+
+                    if (!_DistrictData) {
+                        if (MideApp.isOnline()) {
+                            MideApp.ajaxPost('GetDistrict.ashx', {}, function(data) {
+                                if(data.code==0){
+                                    DistrictData = data.data;
+                                    Storage.save('DistrictData.json',DistrictData);
+                                    $rootScope.$broadcast('DistrictData.update',DistrictData);
+                                }
+                            }, function(data, status) {
+                                MideApp.myNotice("网络异常:" + status)
+                            });
+
+                        } 
+                    }
+                }    
+                
+                  return _DistrictData; 
             },
             getEducationData: function() {
                 return EducationData;
@@ -762,7 +1080,25 @@ angular.module('starter.services', ['ngCordova'])
                 return IntentionData;
             },
             getHelpTypeData: function() {
-                return HelpTypeData;
+
+                var _IntentionList = Storage.load('IntentionList.json',60*30);
+                if (!_IntentionList) {
+                    if (MideApp.isOnline()) {
+                        MideApp.ajaxPost('GetServiceIntentionList.ashx', {}, function(data) {
+                            if(data.code==0){
+                                var HelpTypeData = data.data;
+                                Storage.save('IntentionList.json',HelpTypeData);
+                                $rootScope.$broadcast('IntentionList.update',HelpTypeData);
+                            }
+                        }, function(data, status) {
+                            MideApp.myNotice("网络异常:" + status)
+                        });
+
+                    } 
+                }
+                  return _IntentionList;  
+                
             }
+
         }
     });

@@ -17,34 +17,40 @@
         <div ng-if="isActive == 'a'">
             <form ng-submit="changeBasic()" name="changeBasicForm">
                 <div class="list css-valid-form">
-                    <div class="item item-input item-avatar-right headImg_40 text-midel" style="padding-top:6px;padding-bottom:6px;" ng-click="showGetImagesheet()">
-                        <img ng-src="{{mideApp_user_basic._photourl||'img/commentfailure.jpg'}}" style="width:100%"> 头像
-                    </div>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right " ng-click='showGetImagesheet()'>
+                        <span class="input-label">头像:</span>
+                        <span class="headImg_40 text-midel"><img src='img/commentfailure.jpg' defaultsrc="mideApp_user_basic._photourl"  default-img style="width:100%;"></span>
+                    </label>
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">姓名:</span>
-                        <input type="text" ng-model="mideApp_user_basic._nickname" placeholder="请输入姓名" minlength='2' maxlength='4'  required>
+                        <input type="text" ng-model="mideApp_user_basic._nickname" name='_nickname' placeholder="请输入姓名" minlength='2'   required>
+                        <i class="icon ion-close-circled error_icon" ng-show='changeBasicForm._nickname.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeBasicForm._nickname.$invalid'></i> 
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">性别:</span>
-                        <input type="text" ng-model="mideApp_user_basic._sex" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff">
+                        <input type="text" ng-model="mideApp_user_basic._sex" name="_sex" placeholder="请选择性别" ng-click="showGendersheet()" readonly="readonly" class="light" style="background:#fff" required>
+                        <i class="icon ion-close-circled error_icon" ng-show='changeBasicForm._sex.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeBasicForm._sex.$invalid'></i>
                     </label>
-                    <label class="item item-input" ng-click="getDate()">
-                        <span class="input-label">出生年月:</span>
-                        <span class="" ng-show="mideApp_user_basic._birthday">{{mideApp_user_basic._birthday|date:"yyyy-MM-dd"}}</span>
-                        <span class="tips-info" ng-show="!mideApp_user_basic._birthday">请选择日期</span>
-                        <input type="hidden" ng-model="mideApp_user_basic._birthday" placeholder="请选择日期" />
-                    </label>
-                    <label class="item item-input">
+                  
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">联系电话:</span>
-                        <input type="tel" ng-model="mideApp_user_basic._phone" placeholder="11位数字" maxlength='11' ng-pattern="/^[0-9]{11}$/" required>
+                        <input type="tel" ng-model="mideApp_user_basic._phone" name="_phone" placeholder="11位数字" maxlength='11' ng-pattern="/^[0-9]{11}$/" required>
+                        <i class="icon ion-close-circled error_icon" ng-show='changeBasicForm._phone.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeBasicForm._phone.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">邮箱:</span>
-                        <input type="email" ng-model="mideApp_user_basic._email" placeholder="请输入邮箱" ng-pattern="/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/" required>
+                        <input type="email" ng-model="mideApp_user_basic._email" name="_email" placeholder="请输入邮箱" ng-pattern="/^[\w-]+(\.[\w-]+)*@[\w-]+(\.[\w-]+)+$/" required>
+                        <i class="icon ion-close-circled error_icon" ng-show='changeBasicForm._email.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeBasicForm._email.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">QQ:</span>
-                        <input type="text" ng-model="mideApp_user_basic._qq" placeholder="请输入QQ号码" ng-pattern="/^[0-9]*$/" ng-minlength="5" required>
+                        <input type="text" ng-model="mideApp_user_basic._qq" name="_qq" placeholder="请输入QQ号码" ng-pattern="/^[0-9]*$/" ng-minlength="5" >
+                        <i class="icon ion-close-circled error_icon" ng-show='changeBasicForm._qq.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeBasicForm._qq.$invalid'></i>
                     </label>
                 </div>
                 <div class="padding">
@@ -54,44 +60,77 @@
         </div>
         <div ng-if="isActive == 'b'">
             <form ng-submit="changeForHelp()" name="changeForHelpFrom">
-                <div class="list">
-                    <label class="item item-input ">
+                <div class="list css-valid-form">
+                    <!-- <label class="item item-input ">
                         <span class="input-label">国家:</span>
-                        <select ng-model="mideApp_user_basic.this_country" ng-options="country.label for country in mideApp_user_basic.countries">
+                        <select ng-model="mideApp_user_basic.this_country" ng-options="country.label for country in mideApp_user_basic.countries" ng-class="{'tips-info':mideApp_user_basic.this_country==null}">
                             <option value="">请选择国家</option>
                         </select>
-                    </label>
-                    <label class="item item-input">
+                    </label> -->
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">省份:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic.this_provinces" ng-options="_province.label for _province in mideApp_user_basic.this_country.provinces" required>
+                        <select class="form-control" ng-model="mideApp_user_basic.this_provinces" name="this_provinces" ng-options="_province.label for _province in mideApp_user_basic.provinces" ng-class="{'tips-info':mideApp_user_basic.this_provinces==null}" required>
                             <option value="">请选择省份</option>
                         </select>
+                        <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom.this_provinces.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom.this_provinces.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">城市:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic.this_city" ng-options="_city.label for _city in mideApp_user_basic.this_provinces.cities" required>
+                        <select class="form-control" ng-model="mideApp_user_basic.this_city" name="this_city" ng-options="_city.label for _city in mideApp_user_basic.this_provinces.childrens" ng-class="{'tips-info':mideApp_user_basic.this_city==null}" required>
                             <option value="">请选择城市</option>
                         </select>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom.this_city.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom.this_city.$invalid'></i>
                     </label>
-                    <label class="item item-input">
-                        <span class="input-label">区:</span>
-                        <input type="text" ng-model="mideApp_user_basic._district" placeholder="请输入所属区" required>
+                    <label class="item item-input item-icon-right">
+                        <span class="input-label">县市区:</span>
+                        <!-- <input type="text" ng-model="mideApp_user_basic._district" placeholder="请输入所属区" required> -->
+                        <select class="form-control" ng-model="mideApp_user_basic.this_district" name="this_district" ng-options="_district.label for _district in mideApp_user_basic.this_city.childrens" ng-class="{'tips-info':mideApp_user_basic.this_district==null}" required>
+                            <option value="">请选县市区</option>
+                        </select>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom.this_district.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom.this_district.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                     <label class="item item-input item-icon-right">
+                        <span class="input-label">镇:</span>
+                         <select class="form-control" ng-model="mideApp_user_basic.this_town" name="this_town" ng-options="_town.label for _town in mideApp_user_basic.this_district.childrens" ng-class="{'tips-info':mideApp_user_basic.this_town==null}" required>
+                            <option value="">请选镇</option>
+                        </select>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom.this_town.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom.this_town.$invalid'></i>
+                    </label>
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">社区:</span>
-                        <input type="text" ng-model="mideApp_user_basic._community" placeholder="请输入社区" required>
+                        <input type="text" ng-model="mideApp_user_basic._community" name="_community" placeholder="请输入社区" required>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom._community.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom._community.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">身份证号:</span>
-                        <input type="text" ng-model="mideApp_user_basic._personalid " placeholder="请输入身份证号" maxlength='18'  ng-pattern="/^[0-9]{18}$/" required>
+                        <input type="tel" ng-model="mideApp_user_basic._personalid " name="_personalid" placeholder="请输入身份证号"  maxlength='18'  ng-pattern="/^[0-9]{15,18}$/" required>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom._personalid.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom._personalid.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                      <label class="item item-input item-icon-right" ng-click="getDate()">
+                        <span class="input-label">出生年月:</span>
+                        <span class="" ng-show="mideApp_user_basic._birthday">{{mideApp_user_basic._birthday|date:"yyyy-MM-dd"}}</span>
+                        <span class="tips-info" ng-show="!mideApp_user_basic._birthday">请选择日期</span>
+                        <input type="hidden" ng-model="mideApp_user_basic._birthday" name="_birthday" placeholder="请选择日期" />
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom._birthday.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom._birthday.$invalid'></i>
+                    </label>
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">常住地址:</span>
-                        <input type="text" ng-model="mideApp_user_basic._address" placeholder="再输入常住地址" required>
+                        <input type="text" ng-model="mideApp_user_basic._address" name="_address" placeholder="再输入常住地址" required>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom._address.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom._address.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">微信号码:</span>
-                        <input type="text" ng-model="mideApp_user_basic._wechat" placeholder="请输入微信号码" required>
+                        <input type="text" ng-model="mideApp_user_basic._wechat" name="_wechat" placeholder="请输入微信号码" >
+                         <i class="icon ion-close-circled error_icon" ng-show='changeForHelpFrom._wechat.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeForHelpFrom._wechat.$invalid'></i>
                     </label>
                 </div>
                 <div class="padding">
@@ -101,32 +140,53 @@
         </div>
         <div ng-if="isActive == 'c'">
             <form name=changeVolunteerForm ng-submit="changeVolunteer()">
-                <div class="list">
-                    <label class="item item-input">
+                <div class="list css-valid-form">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">学历:</span>
-                        <select class="form-control" ng-model="mideApp_user_basic.this_education" ng-options="_education.label for _education in mideApp_user_basic.educations">
+                        <select class="form-control" ng-model="mideApp_user_basic.this_education" name="this_education" ng-options="_education.label for _education in mideApp_user_basic.educations" ng-class="{'tips-info':mideApp_user_basic.this_education==null}">
                             <option value="">请选择学历</option>
                         </select>
+                        <i class="icon ion-close-circled error_icon" ng-show='changeVolunteerForm.this_education.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeVolunteerForm.this_education.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">专业:</span>
-                        <input type="text" ng-model="mideApp_user_basic._major" placeholder="请输入专业" required>
+                        <input type="text" ng-model="mideApp_user_basic._major" name="_major" placeholder="请输入专业" required>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeVolunteerForm._major.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeVolunteerForm._major.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                    <label class="item item-input item-icon-right">
                         <span class="input-label">特长:</span>
-                        <input type="text" ng-model="mideApp_user_basic._specialskill" placeholder="请输入特长" required>
+                        <input type="text" ng-model="mideApp_user_basic._specialskill" name="_specialskill" placeholder="请输入特长" required>
+                         <i class="icon ion-close-circled error_icon" ng-show='changeVolunteerForm._specialskill.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!changeVolunteerForm._specialskill.$invalid'></i>
                     </label>
-                    <label class="item item-input">
+                   <!--  <label class="item item-input item-icon-right">
                         <span class="input-label">服务意愿:</span>
-                        <!-- <input type="text" ng-model="mideApp_user_basic.intention" placeholder="选择服务意愿" required> -->
                         <select class="form-control" ng-model="mideApp_user_basic.this_serviceintention" ng-options="_serviceintention.label for _serviceintention in mideApp_user_basic.serviceintentions" required>
                             <option value="">请选择服务意愿</option>
                         </select>
-                    </label>
-                    <label class="item item-input">
+                    </label> -->
+                     <label class="item item-input item-icon-right " ng-click="showIntentionTypeModal()">
+                    <span class="input-label">服务意愿:</span>
+                    <span class="ng-binding ng-hide" ng-show="mideApp_user_basic._serviceintention">{{mideApp_user_basic._serviceintention}}</span>
+                    <span class="tips-info" ng-show="!mideApp_user_basic._serviceintention">请选服务意愿</span>
+                    <input  type="hidden" ng-model="mideApp_user_basic._serviceintention" name="_serviceintention" placeholder="请选择类型" required/>
+                     <i class="icon ion-close-circled error_icon" ng-show='changeVolunteerForm._serviceintention.$invalid' ></i>
+                     <i class="icon ion-checkmark-circled success_icon" ng-show='!changeVolunteerForm._serviceintention.$invalid'></i>
+                </label>
+                   <!--  <label class="item item-input item-icon-right" ng-click='getStartTime()'>
                         <span class="input-label">服务时间:</span>
                         <input type="text" ng-model="mideApp_user_basic._servicetimeinterval" placeholder="选择服务时段" required>
-                    </label>
+                    </label> -->
+                     <label class="item item-input item-icon-right" ng-click='getStartTime()'>
+                    <span class="input-label">服务时段:</span>
+                    <span class="ng-binding ng-hide" ng-show="mideApp_user_basic._servicetimeinterval">{{mideApp_user_basic._servicetimeinterval}}</span>
+                    <span class="tips-info" ng-show="!mideApp_user_basic._servicetimeinterval">请选服务时段</span>
+                    <input  type="hidden" ng-model="mideApp_user_basic._servicetimeinterval" name="_servicetimeinterval" placeholder="请选择时段" required/>
+                    <i class="icon ion-close-circled error_icon" ng-show='changeVolunteerForm._servicetimeinterval.$invalid' ></i>
+                     <i class="icon ion-checkmark-circled success_icon" ng-show='!changeVolunteerForm._servicetimeinterval.$invalid'></i>
+                </label>
                 </div>
                 <div class="padding">
                     <button class="button button-block button-positive" ng-disabled=changeVolunteerForm.$invalid type="submit">{{mideApp_user_basic._flag<2?'申请为志愿者':'保存修改'}}</button>

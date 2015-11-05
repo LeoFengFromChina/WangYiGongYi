@@ -26,13 +26,26 @@
                 <span class="input-label">地址:</span>
                 <input type="text" ng-model="createTeam.linkaddress" placeholder="请输入地址" required>
             </label>
-            <label class="item item-input">
+           <!--  <label class="item item-input">
                 <span class="input-label">服务意愿:</span>
                 <input type="text" ng-model="createTeam.serviceintention" placeholder="请输入服务意愿" required>
             </label>
             <label class="item item-input">
                 <span class="input-label">区域:</span>
                 <input type="text" ng-model="createTeam.region" placeholder="请输入活动地点" required>
+            </label> -->
+
+             <label class="item item-input " ng-click="showTeamRegionTypeModal()">
+                <span class="input-label">区域:</span>
+                <span class="ng-binding ng-hide" ng-show="createTeam.region">{{createTeam.region}}</span>
+                <span class="tips-info" ng-show="!createTeam.region">请选择区域</span>
+                <input type="hidden" ng-model="createTeam.region" placeholder="请选择类型" required/>
+            </label>
+            <label class="item item-input " ng-click="showTeamServiceTypeModal()">
+                <span class="input-label">服务意愿:</span>
+                <span class="ng-binding ng-hide" ng-show="createTeam.serviceintention">{{createTeam.serviceintention}}</span>
+                <span class="tips-info" ng-show="!createTeam.serviceintention">请选择类型</span>
+                <input type="hidden" ng-model="createTeam.serviceintention" placeholder="请选择类型" required/>
             </label>
             <label class="item item-input item-stacked-label">
                 <span class="input-label">详细介绍:</span>

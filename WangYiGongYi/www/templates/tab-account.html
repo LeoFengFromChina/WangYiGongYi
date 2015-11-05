@@ -9,16 +9,16 @@
                 <p ng-if="!processing" style="height:68px;line-height:68px;">立即登录</p>
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
-            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow " ng-if="mideApp_user.islogin" ng-click="showBasicInfoModal('a')" style='padding-top: 0;
+            <a class="item item-avatar item-thumbnail-left item-icon-right wg-box-shadow center" ng-if="mideApp_user.islogin" ng-click="showBasicInfoModal('a')" style='padding-top: 0;
     padding-bottom: 0;'>
-                <img src='img/commentfailure.jpg' defaultsrc="{{mideApp_user._photourl}}" default-img style="width:100%;top: 14px;left: 14px;">
+                <img src='img/commentfailure.jpg' defaultsrc="mideApp_user._photourl"  default-img style="width:100%;top: 22px;left: 18px;" >
                 <div class="row">
                     <div class="col">
                         <h2 ng-bind="mideApp_user._nickname">-</h2>
-                        <p>身份:{{mideApp_user._flagName}}</p>
-                        <p>状态:{{mideApp_user._statusName}}</p>
-                        <p>积分:{{mideApp_user._scores}}</p>
-                        <!--  <p>等级:5星</p> -->
+                        <p style="font-size:12px;">身份:{{mideApp_user._flagName}}</p>
+                        <p style="font-size:12px;">状态:{{mideApp_user._statusName}}</p>
+                        <p style="font-size:12px;">积分:{{mideApp_user._scores}}</p>
+                        <p style="font-size:12px;">服务时长:{{mideApp_user._servicehours}}小时</p>
                     </div>
                 </div>
                 <i class="icon ion-chevron-right icon-accessory"></i>
@@ -30,7 +30,12 @@
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
             <a class="item item-icon-left item-icon-right wg-box-shadow" ng-click="gotoState('tab.myGift')">
-                <i class="icon ion-ios-cart calm"></i>我的礼品
+                <i class="icon ion-ios-list calm"></i>我的礼品
+                <i class="icon ion-chevron-right icon-accessory"></i>
+            </a>
+             <a class="item item-icon-left item-icon-right  " ng-click="gotoState('tab.gift')">
+                <i class="icon icon ion-ios-cart calm"></i>礼品店
+                <!--  <span class="badge badge-assertive">1</span> -->
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
         </div>
@@ -45,28 +50,20 @@
             </a>
         </div>
         <div class="list">
-            <a class="item item-icon-left item-icon-right  " ng-click="gotoState('tab.chats')">
-                <i class="icon ion-ios-chatbubble assertive"></i>系统消息
-                 <span class="badge badge-assertive">1</span>
-                <i class="icon ion-chevron-right icon-accessory"></i>
-            </a>
+           
             <a class="item item-icon-left item-icon-right wg-box-shadow " ng-click="gotoState('tab.feedback')">
                 <i class="icon ion-android-list calm"></i>意见反馈
                 <i class="icon ion-chevron-right icon-accessory"></i>
             </a>
         </div>
         <div class="list" ng-if="mideApp_user.islogin" ng-click="showBasicInfoModal('a')">
-            <div class="item  item-divider item-icon-left item-icon-right ">
-                <i class="icon ion-ios-list positive"></i>个人信息
-                <i class="icon ion-ios-gear-outline "></i>
+            <div class="item  item-divider item-icon-left  ">
+                <i class="icon ion-ios-gear positive"></i>个人信息
+                <!-- <i class="icon ion-ios-gear-outline "></i> -->
             </div>
             <div class="item ">
                 性别:
                 <span class="item-note">{{mideApp_user._sex}}</span>
-            </div>
-            <div class="item ">
-                生日日期:
-                <span class="item-note">{{mideApp_user._birthday |date:"yyyy-MM-dd"}}</span>
             </div>
             <div class="item ">
                 联系电话:
@@ -95,8 +92,12 @@
                 <span class="item-note">{{mideApp_user._city}}</span>
             </div>
             <div class="item ">
-                区:
+                县市区:
                 <span class="item-note">{{mideApp_user._district}}</span>
+            </div>
+             <div class="item ">
+                镇:
+                <span class="item-note">{{mideApp_user._town}}</span>
             </div>
             <div class="item ">
                 社区:
@@ -105,6 +106,10 @@
             <div class="item ">
                 身份证号:
                 <span class="item-note">{{mideApp_user._personalid}}</span>
+            </div>
+             <div class="item ">
+                生日日期:
+                <span class="item-note">{{mideApp_user._birthday |date:"yyyy-MM-dd"}}</span>
             </div>
             <div class="item ">
                 常住地址:

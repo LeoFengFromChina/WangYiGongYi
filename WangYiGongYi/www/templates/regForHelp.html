@@ -7,44 +7,76 @@
     </ion-header-bar>
     <ion-content has-bouncing="true" padding="false" class="has-header  no-footer">
         <form name=regForHelp>
-            <div class="list">
-                <label class="item item-input ">
+            <div class="list css-valid-form">
+                <!-- <label class="item item-input ">
                     <span class="input-label">国家:</span>
-                    <select class="form-control" ng-model="mideApp_user_reg.country" ng-options="country.label for country in mideApp_user_reg.countries">
+                    <select class="form-control" ng-model="mideApp_user_reg.country" ng-options="country.label for country in mideApp_user_reg.countries" ng-class="{'tips-info':mideApp_user_reg.country==null}">
                         <option value="">请选择国家</option>
                     </select>
-                </label>
-                <label class="item item-input">
+                </label> -->
+                <label class="item item-input item-icon-right">
                     <span class="input-label">省份:</span>
-                    <select class="form-control" ng-model="mideApp_user_reg.province" ng-options="province.label for province in mideApp_user_reg.country.provinces">
+                    <select class="form-control" ng-model="mideApp_user_reg.province" name="province" ng-options="province.label for province in mideApp_user_reg.provinces" ng-class="{'tips-info':mideApp_user_reg.province==null}" required>
                         <option value="">请选择省份</option>
                     </select>
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.province.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.province.$invalid'></i>   
                 </label>
-                <label class="item item-input">
+                <label class="item item-input item-icon-right">
                     <span class="input-label">城市:</span>
-                    <select class="form-control" ng-model="mideApp_user_reg.city" ng-options="city.label for city in mideApp_user_reg.province.cities">
+                    <select class="form-control" ng-model="mideApp_user_reg.city" name="city" ng-options="city.label for city in mideApp_user_reg.province.childrens" ng-class="{'tips-info':mideApp_user_reg.city==null}" required>
                         <option value="">请选择城市</option>
                     </select>
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.city.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.city.$invalid'></i> 
                 </label>
-                <label class="item item-input">
-                    <span class="input-label">区:</span>
-                    <input type="text" ng-model="mideApp_user_reg.district" placeholder="请输入所属区" required>
+                <label class="item item-input item-icon-right">
+                    <span class="input-label">县市区:</span>
+                    <select class="form-control" ng-model="mideApp_user_reg.district" name="district" ng-options="district.label for district in mideApp_user_reg.city.childrens" ng-class="{'tips-info':mideApp_user_reg.district==null}" required>
+                        <option value="">请选择城市</option>
+                    </select>
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.district.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.district.$invalid'></i> 
                 </label>
-                <label class="item item-input">
+                <label class="item item-input item-icon-right">
+                    <span class="input-label">镇:</span>
+                    <select class="form-control" ng-model="mideApp_user_reg.town" name="town" ng-options="town.label for town in mideApp_user_reg.district.childrens" ng-class="{'tips-info':mideApp_user_reg.town==null}" required>
+                        <option value="">请选镇</option>
+                    </select>
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.town.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.town.$invalid'></i> 
+                </label>
+                <label class="item item-input item-icon-right">
                     <span class="input-label">社区:</span>
-                    <input type="text" ng-model="mideApp_user_reg.community" placeholder="请输入社区" required>
+                    <input type="text" ng-model="mideApp_user_reg.community" name="community" placeholder="请输入社区"  required>
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.community.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.community.$invalid'></i> 
                 </label>
-                <label class="item item-input">
+                <label class="item item-input item-icon-right">
                     <span class="input-label">身份证号:</span>
-                    <input type="text" ng-model="mideApp_user_reg.identity " placeholder="请输入身份证号" required>
+                    <input type="tel" ng-model="mideApp_user_reg.identity " name="identity" placeholder="请输入身份证号15-18位"  maxlength='18'  ng-pattern="/^[0-9]{15,18}$/" required>
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.identity.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.identity.$invalid'></i>
                 </label>
-                <label class="item item-input">
+                  <label class="item item-input item-icon-right" ng-click="getDate()">
+                        <span class="input-label">出生年月:</span>
+                        <span class="" ng-show="mideApp_user_reg.birthday">{{mideApp_user_reg.birthday|date:"yyyy-MM-dd"}}</span>
+                        <span class="tips-info" ng-show="!mideApp_user_reg.birthday">请选择日期</span>
+                        <input type="hidden" ng-model="mideApp_user_reg.birthday" name="birthday" placeholder="请选择日期" required/>
+                        <i class="icon ion-close-circled error_icon" ng-show='regForHelp.birthday.$invalid' ></i>
+                        <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.birthday.$invalid'></i>
+                    </label>
+                <label class="item item-input item-icon-right">
                     <span class="input-label">常住地址:</span>
-                    <input type="text" ng-model="mideApp_user_reg.address" placeholder="再输入常住地址" required>
+                    <input type="text" ng-model="mideApp_user_reg.address" name="address" placeholder="再输入常住地址" required>
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.address.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.address.$invalid'></i>
                 </label>
-                <label class="item item-input">
+                <label class="item item-input item-icon-right">
                     <span class="input-label">微信号码:</span>
-                    <input type="text" ng-model="mideApp_user_reg.weixinNumber" placeholder="请输入微信号码" required>
+                    <input type="text" ng-model="mideApp_user_reg.weixinNumber" name="weixinNumber" placeholder="请输入微信号码">
+                    <i class="icon ion-close-circled error_icon" ng-show='regForHelp.weixinNumber.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regForHelp.weixinNumber.$invalid'></i>
                 </label>
             </div>
             <div class="padding">

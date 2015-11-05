@@ -3,64 +3,83 @@
         <div class="buttons">
             <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeNewHelpModal()"></button>
         </div>
-        <h1 class="title title-center">我要助人发布</h1>
+        <h1 class="title title-center">助人发布</h1>
         <div class="buttons">
             <button class="button button-clear icon " ng-click="showNewHelpsheet()">提交</button>
         </div>
     </ion-header-bar>
     <ion-content padding="false" class="has-header no-footer" has-bouncing="true">
-        <div class="list">
-            <label class="item item-input">
-                <span class="input-label">主题:</span>
-                <input type="text" ng-model="newHelp.title" placeholder="请输入主题" required>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">联系人:</span>
-                <input type="text" ng-model="newHelp.contacts" placeholder="请输入联系人" required>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">电话:</span>
-                <input type="tel" ng-model="newHelp.phone" placeholder="请输入电话" required>
-            </label>
-            <!-- <label class="item item-input">
-                <span class="input-label">时间:</span>
-                <input type="date" ng-model="newHelp.topicTime" placeholder="请输入时间" required>
-            </label> -->
-            <label class="item item-input" ng-click="getDate()">
-                <span class="input-label">开始时间:</span>
-                <span class="" ng-show="mydateTime">{{mydateTime|date:"yyyy-MM-dd hh:mm"}}</span>
-                <span class="tips-info" ng-show="!mydateTime">请选择时间</span>
-                <input type="hidden" ng-model="mydateTime" placeholder="请选择时间" required/>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">区域:</span>
-                <input type="text" ng-model="newHelp.region" placeholder="请输入区域" required>
-            </label>
-            
-            <label class="item item-input ">
-                <span class="input-label">总类:</span>
-                <select class="form-control" ng-model="helpType.type1" ng-class="{'tips-info':helpType.type1==null}" ng-options="type.label for type in  helpTypeData.type1" required>
-                    <option value="">请选择类型</option>
-                </select>
-            </label>
-            <label class="item item-input ">
-                <span class="input-label">分类:</span>
-                <select class="form-control" ng-model="helpType.value"  ng-class="{'tips-info':helpType.value==null}" ng-options="type2.label for type2 in helpType.type1.value" required>
-                    <option value="">请选择类型</option>
-                </select>
-            </label>
-            <label class="item item-input">
-                <span class="input-label">时长:</span>
-                <input type="number" ng-model="newHelp.duration" placeholder="请输入时长" required>
-            </label>
-            <label class="item item-input item-stacked-label">
-                <span class="input-label">详细:</span>
-                <textarea placeholder="请发布您的助人信息......" ng-model="newHelp.content"></textarea>
-            </label>
-            <div class="item " ng-click="showGetImagesheet(newHelp)">上传图片</div>
-            <div class="item" ng-repeat="img in newHelp.images_list">
-                <img src="{{img}}" width="100%">
+        <form name="newHelpForm">
+            <div class="list css-valid-form">
+                <label class="item item-input item-icon-right">
+                    <span class="input-label">主题:</span>
+                    <input type="text" ng-model="newHelp.title" name="title" placeholder="请输入主题" required>
+                    <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.title.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.title.$invalid'></i>
+                </label>
+                <label class="item item-input item-icon-right">
+                    <span class="input-label">联系人:</span>
+                    <input type="text" ng-model="newHelp.contacts" name="contacts" placeholder="请输入联系人" required>
+                    <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.contacts.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.contacts.$invalid'></i>
+                </label>
+                <label class="item item-input item-icon-right">
+                    <span class="input-label">电话:</span>
+                    <input type="tel" ng-model="newHelp.phone" name="phone" length='11' placeholder="请输入电话" placeholder="11位数字" maxlength='11' ng-pattern="/^[0-9]{11}$/" required>
+                    <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.phone.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.phone.$invalid'></i>
+                </label>
+                <label class="item item-input item-icon-right" ng-click="getDate()">
+                    <span class="input-label">开始时间:</span>
+                    <span class="" ng-show="mydateTime">{{mydateTime|date:"yyyy-MM-dd HH:mm"}}</span>
+                    <span class="tips-info" ng-show="!mydateTime">请选择时间</span>
+                    <input type="hidden" ng-model="mydateTime" name="startTime" placeholder="请选择时间" required/>
+                     <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.startTime.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.startTime.$invalid'></i>
+                </label>
+
+                <label class="item item-input item-icon-right " ng-click="showRegionTypeModal()">
+                    <span class="input-label">区域:</span>
+                    <span class="ng-binding ng-hide" ng-show="regionType">{{regionType}}</span>
+                    <span class="tips-info" ng-show="!regionType">请选择区域</span>
+                    <input type="hidden" ng-model="regionType" name="regionType" placeholder="请选择类型" required/>
+                     <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.regionType.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.regionType.$invalid'></i>
+                </label>
+               <label class="item item-input item-icon-right " ng-click="showServiceTypeModal()">
+                    <span class="input-label">类型:</span>
+                    <span class="ng-binding ng-hide" ng-show="newTopic.serviceIntention">{{newTopic.serviceIntention}}</span>
+                    <span class="tips-info" ng-show="!newTopic.serviceIntention">请选择类型</span>
+                    <input type="hidden" ng-model="newTopic.serviceIntention" name="serviceIntention" placeholder="请选择类型" required/>
+                     <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.serviceIntention.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.serviceIntention.$invalid'></i>
+                </label>
+    
+                <label class="item item-input item-icon-right" >
+                    <span class="input-label">时长:</span>
+                    <select class="form-control" ng-model="newHelp.duration" name="duration" ng-options=" druation.value as druation.label for druation  in   DurationData" ng-class="{'tips-info':newHelp.duration==null}" required>
+                            <option value="">请选择时长</option>
+                        </select>
+                    <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.duration.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.duration.$invalid'></i>
+                </label>
+                <label class="item item-input item-icon-right item-stacked-label">
+                    <span class="input-label">详细:</span>
+                    <textarea placeholder="请发布您的助人信息......" ng-model="newHelp.content" name="content" required></textarea>
+                     <i class="icon ion-close-circled error_icon" ng-show='newHelpForm.content.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!newHelpForm.content.$invalid'></i>
+                </label>
+                <label class="item item-input item-icon-right " ng-click="showGetImagesheet('help')" >
+                    <span class="input-label">上传图片(最多3张):</span>
+                    <i class="ion ion-plus-circled" style="font-size: 30px;color: #dfe0e0;" ng-show="newHelp.images_list.length<1" ></i>
+                    <i class="ion ion-checkmark-circled balanced" style="font-size: 30px;" ng-show="newHelp.images_list.length>0"></i>
+
+                </label>
+               
+                <div class="item" ng-repeat="img in newHelp.images_list">
+                        <img src="{{img.url}}" width="100%" ng-click="showDelectImg('{{img.label}}')">
+                </div>
             </div>
-        </div>
+        </form>    
     </ion-content>
 </ion-modal-view>

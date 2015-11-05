@@ -23,14 +23,16 @@
             <!--    <div class="item item-divider">求助列表</div> -->
             <div class="item item-avatar" collection-repeat="topic in activeConfig.topics" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.HelpRequest._id)">
                
-                <img src='img/commentfailure.jpg' defaultsrc="{{topic.Author._photourl|avatarFilter}}" default-img />
-                <!-- reset-img   -->
-                <h2>{{topic.HelpRequest._title}} <span class="item-note ago" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix"></span></h2>
+                <img src='img/commentfailure.jpg' defaultsrc="topic.Author._photourl" default-img />
+                <h2 class='row row_wrap'>
+                <span class='col title_col' >{{topic.HelpRequest._title}}</span>
+                 <span class=" ago time_col" am-time-ago="topic.HelpRequest._createdate" vam-preprocess="unix" ></span>
+                </h2>
                 <p class="summary">
                     <span ng-if="topic.HelpRequest._type==1" class="tab status1">求助</span>
-                    <span ng-if="topic.HelpRequest._type==2" class="tab status3">助人</span>
+                    <span ng-if="topic.HelpRequest._type==2" class="tab status5">助人</span>
                     <span class="tab">发起人:</span> {{topic.Author._nickname}}
-                    <span ng-if="topic.HelpRequest._status==0" class="tab status1 item-note">求助中</span>
+                    <span ng-if="topic.HelpRequest._status==0" class="tab status3 item-note">待配对</span>
                     <span ng-if="topic.HelpRequest._status==1" class="tab status2 item-note">已配对</span>
                     <span ng-if="topic.HelpRequest._status==2" class="tab status4 item-note">已完成</span>
                 </p>

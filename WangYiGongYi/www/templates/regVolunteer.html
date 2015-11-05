@@ -7,32 +7,45 @@
     </ion-header-bar>
     <ion-content has-bouncing="true" padding="false" class="has-header  no-footer">
         <form name=regVolunteer>
-            <div class="list">
-                <label class="item item-input">
+            <div class="list css-valid-form">
+                <label class="item item-input item-icon-right">
                     <span class="input-label">学历:</span>
-                     <select class="form-control" ng-model="mideApp_user_reg.education" ng-options="education.label for education in mideApp_user_reg.educationData">
+                    <select class="form-control" ng-model="mideApp_user_reg.education" name="education" ng-options="education.label for education in mideApp_user_reg.educationData" ng-class="{'tips-info':mideApp_user_reg.education==null}" required>
                         <option value="">请选择学历</option>
                     </select>
+                    <i class="icon ion-close-circled error_icon" ng-show='regVolunteer.education.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regVolunteer.education.$invalid'></i> 
                 </label>
-                <label class="item item-input">
+                <label class="item item-input item-icon-right">
                     <span class="input-label">专业:</span>
-                    <input type="text" ng-model="mideApp_user_reg.profession" placeholder="请输入专业" required>
+                    <input type="text" ng-model="mideApp_user_reg.profession" name="profession" placeholder="请输入专业" required>
+                    <i class="icon ion-close-circled error_icon" ng-show='regVolunteer.profession.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regVolunteer.profession.$invalid'></i> 
                 </label>
-                <label class="item item-input">
+                <label class="item item-input item-icon-right">
                     <span class="input-label">特长:</span>
-                    <input type="text" ng-model="mideApp_user_reg.speciality" placeholder="请输入特长" required>
+                    <input type="text" ng-model="mideApp_user_reg.speciality" name="speciality" placeholder="请输入特长" required>
+                    <i class="icon ion-close-circled error_icon" ng-show='regVolunteer.speciality.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regVolunteer.speciality.$invalid'></i> 
                 </label>
-                <label class="item item-input">
+
+                <label class="item item-input item-icon-right " ng-click="showIntentionTypeModal()">
                     <span class="input-label">服务意愿:</span>
-                    <!-- <input type="text" ng-model="mideApp_user_reg.intention" placeholder="选择服务意愿" required> -->
-                     <select class="form-control" ng-model="mideApp_user_reg.intention" ng-options="intention.label for intention in mideApp_user_reg.intentionData">
-                        <option value="">请选择服务意愿</option>
-                    </select>
+                    <span class="ng-binding ng-hide" ng-show="mideApp_user_reg.intention">{{mideApp_user_reg.intention}}</span>
+                    <span class="tips-info" ng-show="!mideApp_user_reg.intention">请选服务意愿</span>
+                    <input  type="hidden" ng-model="mideApp_user_reg.intention" name="intention" placeholder="请选择类型" required/>
+                    <i class="icon ion-close-circled error_icon" ng-show='regVolunteer.intention.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regVolunteer.intention.$invalid'></i> 
                 </label>
-                <label class="item item-input">
-                    <span class="input-label">服务时间:</span>
-                    <input type="text" ng-model="mideApp_user_reg.intentionTime" placeholder="选择服务时间" required>
+                <label class="item item-input item-icon-right" ng-click='getStartTime()'>
+                    <span class="input-label">服务时段:</span>
+                    <span class="ng-binding ng-hide" ng-show="mideApp_user_reg.intentionTime">{{mideApp_user_reg.intentionTime}}</span>
+                    <span class="tips-info" ng-show="!mideApp_user_reg.intentionTime">请选服务时段</span>
+                    <input  type="hidden" ng-model="mideApp_user_reg.intentionTime" name="intentionTime" placeholder="请选择时段" required/>
+                    <i class="icon ion-close-circled error_icon" ng-show='regVolunteer.intentionTime.$invalid' ></i>
+                    <i class="icon ion-checkmark-circled success_icon" ng-show='!regVolunteer.intentionTime.$invalid'></i> 
                 </label>
+               
             </div>
             <div class="padding">
                 <button class="button button-block button-positive" ng-click=doReg(2) ng-disabled=regVolunteer.$invalid>提交</button>

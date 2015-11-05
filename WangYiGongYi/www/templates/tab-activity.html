@@ -12,16 +12,16 @@
     <ion-content class="has-tabs has-subheader has-header " has-bouncing="true">
         <ion-refresher pulling-text="下拉刷新..." spinner="spiral" on-refresh="doRefresh()" class="wg_spinner">
         </ion-refresher>
-        <div class="list " collection-repeat="activity in activityConfig.activitys" collection-item-height="250px" ng-click="showActivityModal(activity._id)">
+        <div class="list activity" ng-repeat="activity in activityConfig.activitys"  ng-click="showActivityModal(activity._id)">
             <div class="card">
                 <div class="item ">
                     <h2>{{activity._title}}</h2>
                     <!-- <p>November 05, 1955</p> -->
                 </div>
-                <div class="item item-body" style="height:134px;">
+                <div class="item item-body" >
                     <!-- <img class="full-image" src="img/delorean.jpg"> -->
-                    <p style='margin-top:0;'>
-                        {{activity._detail}}
+                    <p class="mini_detail" style='margin-top:0;' ng-bind-html="activity._detail" text-ellipsis>
+                       
                     </p>
                    <!--  <p>
                         <a href="#" class="subdued">1 Like</a>

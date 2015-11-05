@@ -1,0 +1,17 @@
+<ion-modal-view style="z-index:12">
+    <ion-header-bar class=" bar-positive nav-title-slide-full">
+        <div class="buttons">
+            <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeTopicRegionTypeModal()"></button>
+        </div>
+        <h1 class="title title-center">区域选择</h1>
+        <div class="buttons">
+            <button class="button button-clear " ng-click="onSelectTopicRegion()">确定</button>
+        </div>
+    </ion-header-bar>
+    <ion-content padding="false" class="has-header no-footer" has-bouncing="false" delegate-handle="TopicRegionTypeScroll" id="TopicRegionTypeContent">
+
+        <select-tabs4 data1='TopicRegionTypeData1' activelabel1='selectRegion.activelabel1' activelabel2='selectRegion.activelabel2' activelabel3='selectRegion.activelabel3' activelabel4='selectRegion.activelabel4' contentid="TopicRegionTypeScroll" scrollheight='{{TopicRegionTypeHeight}}'>
+          
+        </select-tabs>
+    </ion-content>
+</ion-modal-view>

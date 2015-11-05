@@ -5,9 +5,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', 'ngCordova', 'angularMoment', 'ngSanitize'])
+angular.module('starter', ['ionic','starter.controllers', 'starter.services', 'ngCordova', 'angularMoment', 'ngSanitize'])
     .constant("$ionicLoadingConfig", {
-        template: '<div class="ion-load-c loading-icon"></div>加载中...'
+        template: '<div class="ion-load-c loading-icon" style="z-index:999;"></div>加载中...'
     })
 
 .run(function($ionicHistory, $rootScope, $ionicPlatform, $http, $ionicLoading, $timeout, $cordovaToast,$location, amMoment) {
@@ -100,7 +100,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         .state('tab.chats', {
             url: '/chats',
             views: {
-                'tab-account': {
+                'tab-chats': {
                     templateUrl: 'templates/tab-chats.html',
                     controller: 'ChatsCtrl'
                 }
@@ -109,7 +109,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'starter.services', '
         .state('tab.gift', {
             url: '/gift',
             views: {
-                'tab-gift': {
+                'tab-account': {
                     templateUrl: 'templates/tab-gift.html',
                     controller: 'GitfCtrl'
                 }

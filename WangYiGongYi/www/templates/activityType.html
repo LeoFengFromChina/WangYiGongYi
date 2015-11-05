@@ -1,0 +1,18 @@
+<ion-modal-view style="z-index:12">
+    <ion-header-bar class=" bar-positive nav-title-slide-full">
+        <div class="buttons">
+            <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeActivityTypeModal()"></button>
+        </div>
+        <h1 class="title title-center">类型选择</h1>
+       <!--  <div class="buttons">
+            <button class="button button-clear icon " ng-click="onchangeNewTopic()">确定</button>
+        </div> -->
+    </ion-header-bar>
+    <ion-content padding="false" class="has-header no-footer" has-bouncing="false" delegate-handle="ActivityTypeScroll" id="ActivityTypeContent" >
+    
+        <!-- <span>{{heightSelect}}</span> -->
+        <select-tabs data1='ActivityTypeData' closemodal='onchangeActivityType(text)' contentid="ActivityTypeContent" scrollheight='{{heightSelect}}'>
+          
+        </select-tabs>
+    </ion-content>
+</ion-modal-view>

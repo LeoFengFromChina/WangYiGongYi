@@ -180,7 +180,8 @@ var MideApp = function() {
     }();
     var myNotice = function(msg, timeout, prev, post) {
         $ionicLoading.show({
-            template: msg,
+            template: '<div style="z-index:999;">'+msg+'</div>',
+
             noBackdrop: true
         });
         $timeout(function() {
@@ -225,7 +226,7 @@ var MideApp = function() {
             API_Lock = false;
             if (true) {
                 $ionicLoading.hide();
-                fail ? fail(data, status) : myNotice(data ? data.errmsg : '网络错误');
+                fail ? fail(data, status) : myNotice(data ? data.errmsg : '网络异常:');
             }
         });
 
@@ -279,7 +280,7 @@ var MideApp = function() {
             API_Lock = false;
             if (true) {
                 $ionicLoading.hide();
-                fail ? fail(data) : myNotice(data ? data.errmsg : '网络错误' + status);
+                fail ? fail(data) : myNotice(data ? data.errmsg : '网络异常:' + status);
             }
         });
 
@@ -498,6 +499,8 @@ var MideApp = function() {
 
     mideapp.writeFile = writeFile;
     mideapp.readAsText = readAsText;
+
+    mideapp.API_Home = API_Home;
     return mideapp;
 }();
 

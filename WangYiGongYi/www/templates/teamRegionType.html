@@ -1,0 +1,20 @@
+<ion-modal-view style="z-index:12">
+    <ion-header-bar class=" bar-positive nav-title-slide-full">
+        <div class="buttons">
+            <button class="button button-clear icon-left ion-android-arrow-back" ng-click="closeTeamRegionTypeModal()"></button>
+        </div>
+        <h1 class="title title-center">区域选择</h1>
+        <div class="buttons">
+            <button class="button button-clear " ng-click="onSelectTeamRegionType()">确定</button>
+        </div>
+    </ion-header-bar>
+    <ion-content padding="false" class="has-header no-footer" has-bouncing="false" delegate-handle="serviceTypeScroll" id="TeamRegionTypeContent">
+
+        <!-- <select-tabs data1='TeamRegionTypeData' closemodal='onchangeTeamRegionType(text)' contentid="TeamRegionTypeContent" scrollheight='{{heightSelect}}'>
+          
+        </select-tabs> -->
+         <select-tabs4 data1='TeamRegionTypeData'  activelabel1='selectTeamRegion.activelabel1' activelabel2='selectTeamRegion.activelabel2' activelabel3='selectTeamRegion.activelabel3' activelabel4='selectTeamRegion.activelabel4' contentid="TeamRegionTypeContent" scrollheight='{{heightSelect}}'>
+          
+        </select-tabs>
+    </ion-content>
+</ion-modal-view>

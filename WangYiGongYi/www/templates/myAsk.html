@@ -8,7 +8,7 @@
         <div class=" list topics">
             <!--    <div class="item item-divider">求助列表</div> -->
             <div class="item item-avatar" collection-repeat="topic in AskConfig.myAsk" collection-item-width="'100%'" collection-item-height="65px" ng-click="showTopicModal(topic.id)">
-                <img ng-src="{{topic.author.avatar_url|avatarFilter}}" reset-img>
+                <img ng-src="{{topic.author.avatar_url}}" reset-img>
                 <!-- reset-img   -->
                 <h2>{{topic.title}}</h2>
                 <p class="summary">
